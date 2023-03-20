@@ -1,5 +1,5 @@
-#ifndef CUBECRAFT3_CLIENT_CLIENT_BASE_HPP
-#define CUBECRAFT3_CLIENT_CLIENT_BASE_HPP
+#ifndef HYPERCRAFT_CLIENT_CLIENT_BASE_HPP
+#define HYPERCRAFT_CLIENT_CLIENT_BASE_HPP
 
 #include <client/TerrainBase.hpp>
 #include <client/World.hpp>

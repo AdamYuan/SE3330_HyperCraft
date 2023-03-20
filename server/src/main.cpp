@@ -19,7 +19,7 @@ int main() {
 		spdlog::error("Failed to open open server in port {}", kPort);
 		return EXIT_FAILURE;
 	}
-	spdlog::info("Welcome to CubeCraft3 server!! (db: {}, port: {})", kLevelDBFilename, kPort);
+	spdlog::info("Welcome to HyperCraft server!! (db: {}, port: {})", kLevelDBFilename, kPort);
 	server->RunShell();
 	server->Join();
 	enet_deinitialize();

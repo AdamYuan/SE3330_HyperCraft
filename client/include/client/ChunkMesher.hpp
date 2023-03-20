@@ -1,5 +1,5 @@
-#ifndef CUBECRAFT3_CLIENT_CHUNK_MESHER_HPP
-#define CUBECRAFT3_CLIENT_CHUNK_MESHER_HPP
+#ifndef HYPERCRAFT_CLIENT_CHUNK_MESHER_HPP
+#define HYPERCRAFT_CLIENT_CHUNK_MESHER_HPP
 
 #include <client/ChunkMesh.hpp>
 #include <client/ChunkWorkerBase.hpp>

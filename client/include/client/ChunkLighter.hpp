@@ -1,5 +1,5 @@
-#ifndef CUBECRAFT3_CLIENT_CHUNK_LIGHTER_HPP
-#define CUBECRAFT3_CLIENT_CHUNK_LIGHTER_HPP
+#ifndef HYPERCRAFT_CLIENT_CHUNK_LIGHTER_HPP
+#define HYPERCRAFT_CLIENT_CHUNK_LIGHTER_HPP
 
 #include <client/ChunkWorkerBase.hpp>
 #include <common/Light.hpp>

@@ -1,5 +1,5 @@
-#ifndef CUBECRAFT3_CLIENT_CHUNK_HPP
-#define CUBECRAFT3_CLIENT_CHUNK_HPP
+#ifndef HYPERCRAFT_CLIENT_CHUNK_HPP
+#define HYPERCRAFT_CLIENT_CHUNK_HPP
 
 #include <common/Block.hpp>
 #include <common/Light.hpp>

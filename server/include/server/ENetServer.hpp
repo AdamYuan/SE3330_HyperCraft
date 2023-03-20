@@ -1,5 +1,5 @@
-#ifndef CUBECRAFT3_SERVER_ENET_SERVER_HPP
-#define CUBECRAFT3_SERVER_ENET_SERVER_HPP
+#ifndef HYPERCRAFT_SERVER_ENET_SERVER_HPP
+#define HYPERCRAFT_SERVER_ENET_SERVER_HPP
 
 #include <common/WorldDatabase.hpp>
 #include <thread>

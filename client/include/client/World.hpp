@@ -1,5 +1,5 @@
-#ifndef CUBECRAFT3_CLIENT_WORLD_HPP
-#define CUBECRAFT3_CLIENT_WORLD_HPP
+#ifndef HYPERCRAFT_CLIENT_WORLD_HPP
+#define HYPERCRAFT_CLIENT_WORLD_HPP
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>

@@ -1,5 +1,5 @@
-#ifndef CUBECRAFT3_COMMON_BLOCK_HPP
-#define CUBECRAFT3_COMMON_BLOCK_HPP
+#ifndef HYPERCRAFT_COMMON_BLOCK_HPP
+#define HYPERCRAFT_COMMON_BLOCK_HPP
 
 #include <cinttypes>
 #include <common/BlockMesh.hpp>

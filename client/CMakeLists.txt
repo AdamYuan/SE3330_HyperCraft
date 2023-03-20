@@ -1,18 +1,18 @@
 cmake_minimum_required(VERSION 3.15)
-project(CubeCraft3)
+project(HyperCraft)
 
 set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory(dep)
 add_subdirectory(shader)
-if (NOT TARGET CubeCraft3_resource)
+if (NOT TARGET HyperCraft_resource)
     add_subdirectory(../resource ../resource)
 endif ()
-if (NOT TARGET CubeCraft3_common)
+if (NOT TARGET HyperCraft_common)
     add_subdirectory(../common ../common)
 endif ()
 
-add_executable(CubeCraft3_client
+add_executable(HyperCraft_client
         src/main.cpp
         include/client/Config.hpp
         src/Application.cpp
@@ -50,5 +50,5 @@ add_executable(CubeCraft3_client
         include/client/ChunkLighter.hpp
         )
 
-target_link_libraries(CubeCraft3_client PRIVATE client_dep client_shader CubeCraft3_resource CubeCraft3_common)
-target_include_directories(CubeCraft3_client PRIVATE include)
+target_link_libraries(HyperCraft_client PRIVATE client_dep client_shader HyperCraft_resource HyperCraft_common)
+target_include_directories(HyperCraft_client PRIVATE include)

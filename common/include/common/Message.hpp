@@ -1,5 +1,5 @@
-#ifndef CUBECRAFT3_COMMON_MESSAGE_HPP
-#define CUBECRAFT3_COMMON_MESSAGE_HPP
+#ifndef HYPERCRAFT_COMMON_MESSAGE_HPP
+#define HYPERCRAFT_COMMON_MESSAGE_HPP
 
 #include <algorithm>
 #include <cinttypes>

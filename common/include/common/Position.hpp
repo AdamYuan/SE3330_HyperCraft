@@ -2,8 +2,8 @@
 // Created by adamyuan on 1/25/22.
 //
 
-#ifndef CUBECRAFT3_COMMON_POSITION_HPP
-#define CUBECRAFT3_COMMON_POSITION_HPP
+#ifndef HYPERCRAFT_COMMON_POSITION_HPP
+#define HYPERCRAFT_COMMON_POSITION_HPP
 
 #include <cinttypes>
 #include <glm/glm.hpp>

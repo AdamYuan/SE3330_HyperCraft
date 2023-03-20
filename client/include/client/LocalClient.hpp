@@ -1,5 +1,5 @@
-#ifndef CUBECRAFT3_CLIENT_LOCAL_CLIENT_HPP
-#define CUBECRAFT3_CLIENT_LOCAL_CLIENT_HPP
+#ifndef HYPERCRAFT_CLIENT_LOCAL_CLIENT_HPP
+#define HYPERCRAFT_CLIENT_LOCAL_CLIENT_HPP
 
 #include <client/ClientBase.hpp>
 #include <common/WorldDatabase.hpp>

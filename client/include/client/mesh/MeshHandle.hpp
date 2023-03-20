@@ -1,5 +1,5 @@
-#ifndef CUBECRAFT3_CLIENT_MESH_HPP
-#define CUBECRAFT3_CLIENT_MESH_HPP
+#ifndef HYPERCRAFT_CLIENT_MESH_HPP
+#define HYPERCRAFT_CLIENT_MESH_HPP
 
 #include <memory>
 #include <vk_mem_alloc.h>

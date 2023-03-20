@@ -1,5 +1,5 @@
-#ifndef CUBECRAFT3_COMMON_AABB_HPP
-#define CUBECRAFT3_COMMON_AABB_HPP
+#ifndef HYPERCRAFT_COMMON_AABB_HPP
+#define HYPERCRAFT_COMMON_AABB_HPP
 
 #include <cinttypes>
 #include <glm/glm.hpp>

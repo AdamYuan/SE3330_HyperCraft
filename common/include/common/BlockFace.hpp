@@ -1,5 +1,5 @@
-#ifndef CUBECRAFT3_COMMON_BLOCK_FACE_HPP
-#define CUBECRAFT3_COMMON_BLOCK_FACE_HPP
+#ifndef HYPERCRAFT_COMMON_BLOCK_FACE_HPP
+#define HYPERCRAFT_COMMON_BLOCK_FACE_HPP
 
 #include <cinttypes>
 #include <glm/glm.hpp>

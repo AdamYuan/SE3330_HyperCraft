@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(CubeCraft3)
+project(HyperCraft)
 
 set(SHADER_SRC
         chunk.vert

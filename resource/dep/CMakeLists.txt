@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(CubeCraft3)
+project(HyperCraft)
 
 add_library(resource_dep STATIC
         stb_image.cpp

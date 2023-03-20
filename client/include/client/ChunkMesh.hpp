@@ -1,5 +1,5 @@
-#ifndef CUBECRAFT3_COMMON_CHUNK_MESH_HPP
-#define CUBECRAFT3_COMMON_CHUNK_MESH_HPP
+#ifndef HYPERCRAFT_COMMON_CHUNK_MESH_HPP
+#define HYPERCRAFT_COMMON_CHUNK_MESH_HPP
 
 #include <common/AABB.hpp>
 #include <common/Block.hpp>

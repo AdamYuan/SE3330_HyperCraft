@@ -1,5 +1,5 @@
-#ifndef CUBECRAFT3_CLIENT_CHUNK_WORKER_HPP
-#define CUBECRAFT3_CLIENT_CHUNK_WORKER_HPP
+#ifndef HYPERCRAFT_CLIENT_CHUNK_WORKER_HPP
+#define HYPERCRAFT_CLIENT_CHUNK_WORKER_HPP
 
 #include <client/Chunk.hpp>
 #include <client/WorkerBase.hpp>
