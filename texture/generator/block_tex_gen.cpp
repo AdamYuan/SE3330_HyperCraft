@@ -19,7 +19,7 @@ constexpr int kTextureLength = kTextureSize * kTextureSize;
 #include "write_png.hpp"
 
 enum ID {
-#include <block_texture_enum.inl>
+#include "../register/block_textures"
 };
 
 std::set<uint32_t> transparent_pass_textures = {

@@ -5,10 +5,10 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory(dep)
 add_subdirectory(shader)
-if (NOT TARGET HyperCraft_resource)
-    add_subdirectory(../resource ../resource)
+if (NOT TARGET hc::texture)
+    add_subdirectory(../texture ../texture)
 endif ()
-if (NOT TARGET HyperCraft_common)
+if (NOT TARGET hc::common)
     add_subdirectory(../common ../common)
 endif ()
 
@@ -50,5 +50,6 @@ add_executable(HyperCraft_client
         include/client/ChunkLighter.hpp
         )
 
-target_link_libraries(HyperCraft_client PRIVATE client_dep client_shader HyperCraft_resource HyperCraft_common)
+target_link_libraries(HyperCraft_client
+        PRIVATE hc::client::dep hc::client::shader hc::texture hc::common)
 target_include_directories(HyperCraft_client PRIVATE include)

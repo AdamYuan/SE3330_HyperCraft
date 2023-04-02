@@ -3,7 +3,7 @@
 
 #include <client/ChunkMesh.hpp>
 #include <client/ChunkWorkerBase.hpp>
-#include <common/AABB.hpp>
+#include <AABB.hpp>
 #include <queue>
 
 class ChunkMesher : public ChunkWorkerS26Base {

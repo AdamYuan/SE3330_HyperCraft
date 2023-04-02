@@ -1,7 +1,7 @@
 #include <client/GlobalTexture.hpp>
 
-#include <resource/texture/BlockTexture.hpp>
-#include <resource/texture/MiscTexture.hpp>
+#include <texture/BlockTexture.hpp>
+#include <texture/MiscTexture.hpp>
 
 #include <myvk/Buffer.hpp>
 #include <myvk/CommandBuffer.hpp>

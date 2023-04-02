@@ -1,10 +1,8 @@
-#ifndef HYPERCRAFT_RESOURCE_BLOCK_MESH_HPP
-#define HYPERCRAFT_RESOURCE_BLOCK_MESH_HPP
+#pragma once
 
 #include <AABB.hpp>
-#include <common/BlockFace.hpp>
-
-#include <texture/BlockTexture.hpp>
+#include "../texture/BlockTexture.hpp"
+#include "BlockFace.hpp"
 
 #include <cinttypes>
 #include <limits>
@@ -175,5 +173,3 @@ struct BlockMeshes {
 		        1u};
 	}
 };
-
-#endif

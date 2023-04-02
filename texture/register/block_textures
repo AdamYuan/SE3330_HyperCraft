@@ -1,4 +1,3 @@
-// clang-format off
 kNone = 0,
 kStone,
 kCobblestone,

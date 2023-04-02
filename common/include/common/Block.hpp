@@ -6,7 +6,7 @@
 #include <common/Endian.hpp>
 #include <iterator>
 #include <limits>
-#include <resource/texture/BlockTexture.hpp>
+#include <texture/BlockTexture.hpp>
 #include <type_traits>
 
 using BlockID = uint8_t;

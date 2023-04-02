@@ -4,7 +4,7 @@ project(HyperCraft)
 set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory(dep)
-if (NOT TARGET HyperCraft_common)
+if (NOT TARGET hc::common)
     add_subdirectory(../common ../common)
 endif ()
 
@@ -14,5 +14,6 @@ add_executable(HyperCraft_server
         include/server/ENetServer.hpp
         )
 
-target_link_libraries(HyperCraft_server PRIVATE server_dep HyperCraft_common)
+target_link_libraries(HyperCraft_server
+        PRIVATE hc::server::dep hc::common)
 target_include_directories(HyperCraft_server PRIVATE include)

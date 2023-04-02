@@ -1,7 +1,7 @@
 #ifndef HYPERCRAFT_COMMON_CHUNK_MESH_HPP
 #define HYPERCRAFT_COMMON_CHUNK_MESH_HPP
 
-#include <common/AABB.hpp>
+#include <AABB.hpp>
 #include <common/Block.hpp>
 #include <common/Light.hpp>
 

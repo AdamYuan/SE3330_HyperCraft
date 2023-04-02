@@ -8,7 +8,7 @@ using BlockTexTrans = uint8_t;
 
 struct BlockTextures {
 	enum : BlockTexID {
-#include <block_texture_enum.inl>
+#include "../../register/block_textures"
 	};
 	enum : BlockTexTrans { kTransSwapUV = 1u, kTransNegU = 2u, kTransNegV = 4u };
 };

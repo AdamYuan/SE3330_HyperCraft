@@ -3,6 +3,10 @@ project(HyperCraft)
 
 set(CMAKE_CXX_STANDARD 17)
 
+if (NOT TARGET hc::dep)
+    add_subdirectory(../dep ../dep)
+endif ()
+
 file(GLOB BLOCK_TEXTURES texture/block/*.png)
 file(GLOB MISC_TEXTURES texture/misc/*.png)
 
@@ -12,12 +16,12 @@ add_subdirectory(dep)
 
 find_package(PNG)
 if (PNG_FOUND)
-    add_executable(HyperCraft_block_tex_gen generator/block_tex_gen.cpp)
-    target_link_libraries(HyperCraft_block_tex_gen PRIVATE resource_dep PNG::PNG)
+    add_executable(HyperCraft_block_tex_gen generator/block_tex_gen.cpp register/blocks)
+    target_link_libraries(HyperCraft_block_tex_gen PRIVATE hc::resource::dep hc::dep PNG::PNG)
     target_include_directories(HyperCraft_block_tex_gen PRIVATE internal)
 
     add_executable(HyperCraft_misc_tex_gen generator/misc_tex_gen.cpp)
-    target_link_libraries(HyperCraft_misc_tex_gen PRIVATE resource_dep PNG::PNG)
+    target_link_libraries(HyperCraft_misc_tex_gen PRIVATE hc::resource::dep hc::dep PNG::PNG)
 
     add_custom_command(
             OUTPUT ${GENERATED_DIR}/block_texture_png.inl
@@ -36,14 +40,20 @@ if (PNG_FOUND)
 endif ()
 
 add_library(HyperCraft_resource_header INTERFACE
+        include/resource/block/BlockFace.hpp
+        include/resource/block/BlockMesh.hpp
+        include/resource/block/BlockProperty.hpp
         include/resource/texture/BlockTexture.hpp
         include/resource/texture/MiscTexture.hpp
         ${GENERATED_DIR}/block_texture_png.inl
         ${GENERATED_DIR}/block_texture_transparency.inl
         ${GENERATED_DIR}/misc_texture_png.inl
         )
+add_library(hc::resource::header ALIAS HyperCraft_resource_header)
 target_include_directories(HyperCraft_resource_header INTERFACE include internal)
+target_link_libraries(HyperCraft_resource_header INTERFACE hc::dep)
 
 add_library(HyperCraft_resource INTERFACE)
-target_link_libraries(HyperCraft_resource INTERFACE HyperCraft_resource_header resource_dep)
+add_library(hc::resource ALIAS HyperCraft_resource)
+target_link_libraries(HyperCraft_resource INTERFACE hc::resource::header hc::resource::dep)
 
