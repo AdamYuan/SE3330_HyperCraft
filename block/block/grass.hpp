@@ -8,28 +8,28 @@ template <> struct BlockTrait<Blocks::kGrass> : public MultiBlockTrait<Blocks::k
 	        BLOCK_TEXTURE_NONE,
 	        BlockTransparencies::kTransparent,
 	        BlockCollisionBits::kNone,
-	        BlockMeshes::Cross(BlockTextures::kGrassPlain, 8, 0, 16),
+	        BlockMeshes::kCross<BlockTextures::kGrassPlain, 8, 0, 16>,
 	    },
 	    {
 	        "Grass",
 	        BLOCK_TEXTURE_NONE,
 	        BlockTransparencies::kTransparent,
 	        BlockCollisionBits::kNone,
-	        BlockMeshes::Cross(BlockTextures::kGrassSavanna, 8, 0, 16),
+	        BlockMeshes::kCross<BlockTextures::kGrassSavanna, 8, 0, 16>,
 	    },
 	    {
 	        "Grass",
 	        BLOCK_TEXTURE_NONE,
 	        BlockTransparencies::kTransparent,
 	        BlockCollisionBits::kNone,
-	        BlockMeshes::Cross(BlockTextures::kGrassTropical, 8, 0, 16),
+	        BlockMeshes::kCross<BlockTextures::kGrassTropical, 8, 0, 16>,
 	    },
 	    {
 	        "Grass",
 	        BLOCK_TEXTURE_NONE,
 	        BlockTransparencies::kTransparent,
 	        BlockCollisionBits::kNone,
-	        BlockMeshes::Cross(BlockTextures::kGrassBoreal, 8, 0, 16),
+	        BlockMeshes::kCross<BlockTextures::kGrassBoreal, 8, 0, 16>,
 	    },
 	};
 };

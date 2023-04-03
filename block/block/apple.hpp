@@ -7,6 +7,6 @@ template <> struct BlockTrait<Blocks::kApple> : public SingleBlockTrait<Blocks::
 	    BLOCK_TEXTURE_NONE,
 	    BlockTransparencies::kTransparent,
 	    BlockCollisionBits::kNone,
-	    BlockMeshes::Cross(BlockTextures::kApple, 5, 1, 15, BlockFaces::kBottom),
+	    BlockMeshes::kCross<BlockTextures::kApple, 5, 1, 15, BlockFaces::kBottom>,
 	};
 };

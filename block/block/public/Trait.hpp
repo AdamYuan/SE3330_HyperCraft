@@ -23,32 +23,40 @@ enum : BlockID {
 	{ s, s, t, b, s, s }
 
 template <BlockID> struct BlockTrait {
-	inline static constexpr uint32_t kVariantBits = 0;
-	inline static constexpr uint32_t kTransformBits = 0;
-	inline static constexpr BlockProperty GetProperty(BlockMeta variant, BlockMeta transform) {
+	inline static constexpr uint8_t kVariantBits = 0;
+	inline static constexpr uint8_t kTransformBits = 0;
+
+	template <BlockMeta Variant, BlockMeta Transform> inline static constexpr BlockProperty GetProperty() {
 		return {"None", BLOCK_TEXTURE_NONE, BlockTransparencies::kTransparent, BlockCollisionBits::kNone};
 	}
 };
 
 template <BlockID ID> struct SingleBlockTrait {
-	inline static constexpr uint32_t kVariantBits = 0;
-	inline static constexpr uint32_t kTransformBits = 0;
-	inline static constexpr BlockProperty TransformProperty(BlockProperty property, BlockMeta transform) {
+	inline static constexpr uint8_t kVariantBits = 0;
+	inline static constexpr uint8_t kTransformBits = std::countr_zero(std::bit_ceil(BlockTrait<ID>::kTransforms));
+
+	inline static constexpr uint8_t kTransforms = 0;
+	template <BlockMeta Transform> inline static constexpr BlockProperty TransformProperty(BlockProperty property) {
 		return property;
 	}
-	inline static constexpr BlockProperty GetProperty(BlockMeta variant, BlockMeta transform) {
-		return BlockTrait<ID>::TransformProperty(BlockTrait<ID>::kProperty, transform);
+
+	template <BlockMeta Variant, BlockMeta Transform> inline static constexpr BlockProperty GetProperty() {
+		return BlockTrait<ID>::template TransformProperty<Transform>(BlockTrait<ID>::kProperty);
 	}
 };
 
 template <BlockID ID> struct MultiBlockTrait {
-	inline static constexpr uint32_t kVariantBits =
-	    std::countr_zero(std::bit_ceil(sizeof(BlockTrait<ID>::kProperties) / sizeof(BlockProperty)));
-	inline static constexpr uint32_t kTransformBits = 0;
-	inline static constexpr BlockProperty TransformProperty(BlockProperty property, BlockMeta transform) {
+	inline static constexpr uint8_t kVariants = sizeof(BlockTrait<ID>::kProperties) / sizeof(BlockProperty);
+	inline static constexpr uint8_t kVariantBits = std::countr_zero(std::bit_ceil(kVariants));
+	inline static constexpr uint8_t kTransformBits = std::countr_zero(std::bit_ceil(BlockTrait<ID>::kTransforms));
+
+	inline static constexpr uint8_t kTransforms = 0;
+	template <BlockMeta Transform> inline static constexpr BlockProperty TransformProperty(BlockProperty property) {
 		return property;
 	}
-	inline static constexpr BlockProperty GetProperty(BlockMeta variant, BlockMeta transform) {
-		return BlockTrait<ID>::TransformProperty(BlockTrait<ID>::kProperties[variant], transform);
+
+	template <BlockMeta Variant, BlockMeta Transform> inline static constexpr BlockProperty GetProperty() {
+		return BlockTrait<ID>::template TransformProperty<Transform>(
+		    BlockTrait<ID>::kProperties[Variant >= kVariants ? 0 : Variant]);
 	}
 };

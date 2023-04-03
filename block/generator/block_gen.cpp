@@ -48,7 +48,7 @@ private:
 	    (Data >> (8u + BlockDataTrait<Data>::kVariantBits)) & ((1u << BlockDataTrait<Data>::kTransformBits) - 1);
 	template <uint16_t Data>
 	inline static constexpr BlockProperty kBlockDataProperty =
-	    BlockDataTrait<Data>::GetProperty(kBlockDataVariant<Data>, kBlockDataTransform<Data>);
+	    BlockDataTrait<Data>::template GetProperty<kBlockDataVariant<Data>, kBlockDataTransform<Data>>();
 	template <typename DataSequence> struct BlockDataTable;
 	template <std::size_t... DataArray> struct BlockDataTable<std::index_sequence<DataArray...>> {
 		inline static constexpr BlockProperty kProperties[] = {(kBlockDataProperty<DataArray>)...};
@@ -56,23 +56,36 @@ private:
 	inline static constexpr const BlockProperty *kBlockDataProperties =
 	    BlockDataTable<std::make_index_sequence<256>>::kProperties;
 
+	template <typename IDSequence> struct BlockIDTable;
+	template <std::size_t... IDArray> struct BlockIDTable<std::index_sequence<IDArray...>> {
+		inline static constexpr uint8_t kVariantBits[] = {(BlockTrait<IDArray>::kVariantBits)...};
+		inline static constexpr uint8_t kTransformBits[] = {(BlockTrait<IDArray>::kTransformBits)...};
+	};
+	inline static constexpr const uint8_t *kBlockIDVariantBits =
+	    BlockIDTable<std::make_index_sequence<256>>::kVariantBits;
+	inline static constexpr const uint8_t *kBlockIDTransformBits =
+	    BlockIDTable<std::make_index_sequence<256>>::kTransformBits;
+
 	inline static constexpr u8AABB kDefaultAABB{{0, 0, 0}, {16, 16, 16}};
 
 	inline constexpr const BlockProperty *get_property() const { return kBlockDataProperties + m_data; }
 
 public:
 	inline constexpr Block() : m_data{} {}
-	inline constexpr Block(uint16_t data) : m_data{data} {}
-	inline constexpr Block(BlockID id, BlockMeta meta) : m_id{id}, m_meta{meta} {}
-	// inline constexpr Block(BlockID id, BlockMeta variant, BlockMeta transform) : m_id{id}, m_meta{meta} {}
+	// inline constexpr Block(uint16_t data) : m_data{data} {}
+	inline constexpr Block(BlockID id /*, BlockMeta meta*/) : m_id{id} {}
+	inline constexpr Block(BlockID id, BlockMeta variant, BlockMeta transform)
+	    : m_id{id}, m_meta(variant | (transform << kBlockIDVariantBits[id])) {}
 
 	inline constexpr BlockID GetID() const { return m_id; }
-	inline void SetID(BlockID id) { m_id = id; }
-	inline constexpr BlockMeta GetMeta() const { return m_meta; }
-	inline void SetMeta(BlockMeta meta) { m_meta = meta; }
+	// inline void SetID(BlockID id) { m_id = id; }
+	// inline constexpr BlockMeta GetMeta() const { return m_meta; }
+	// inline void SetMeta(BlockMeta meta) { m_meta = meta; }
+	inline constexpr BlockMeta GetVariant() const { return m_meta & ((1u << kBlockIDVariantBits[m_id]) - 1); }
+	inline constexpr BlockMeta GetTransform() const { return m_meta >> kBlockIDVariantBits[m_id]; }
 
 	inline constexpr uint16_t GetData() const { return m_data; }
-	inline void SetData(uint16_t data) { m_data = data; }
+	// inline void SetData(uint16_t data) { m_data = data; }
 
 	inline constexpr bool HaveCustomMesh() const { return get_property()->custom_mesh.face_count; }
 	inline constexpr const BlockMesh *GetCustomMesh() const { return &get_property()->custom_mesh; }
