@@ -1,7 +1,7 @@
 #pragma once
 
 #include <AABB.hpp>
-#include "../texture/BlockTexture.hpp"
+#include <texture/BlockTexture.hpp>
 #include "BlockFace.hpp"
 
 #include <cinttypes>

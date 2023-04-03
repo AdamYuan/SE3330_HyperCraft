@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../texture/BlockTexture.hpp"
+#include <texture/BlockTexture.hpp>
 
-#include "BlockMesh.hpp"
 #include "BlockFace.hpp"
+#include "BlockMesh.hpp"
 
 using BlockTransparency = uint8_t;
 struct BlockTransparencies {
@@ -24,12 +24,12 @@ struct BlockProperty {
 		if (axis == 0) {
 			return {name,
 			        {
-				        textures[0].RotateCW(),
-				        textures[1].RotateCCW(),
-				        textures[BlockFaces::kFront],
-				        textures[BlockFaces::kBack],
-				        textures[BlockFaces::kBottom],
-				        textures[BlockFaces::kTop],
+			            textures[0].RotateCW(),
+			            textures[1].RotateCCW(),
+			            textures[BlockFaces::kFront],
+			            textures[BlockFaces::kBack],
+			            textures[BlockFaces::kBottom],
+			            textures[BlockFaces::kTop],
 			        },
 			        transparency,
 			        collision_mask,
@@ -37,12 +37,12 @@ struct BlockProperty {
 		} else if (axis == 1) {
 			return {name,
 			        {
-				        textures[BlockFaces::kBack],
-				        textures[BlockFaces::kFront],
-				        textures[2].RotateCW(),
-				        textures[3].RotateCCW(),
-				        textures[BlockFaces::kRight],
-				        textures[BlockFaces::kLeft],
+			            textures[BlockFaces::kBack],
+			            textures[BlockFaces::kFront],
+			            textures[2].RotateCW(),
+			            textures[3].RotateCCW(),
+			            textures[BlockFaces::kRight],
+			            textures[BlockFaces::kLeft],
 			        },
 			        transparency,
 			        collision_mask,
@@ -50,12 +50,12 @@ struct BlockProperty {
 		} else {
 			return {name,
 			        {
-				        textures[BlockFaces::kTop],
-				        textures[BlockFaces::kBottom],
-				        textures[BlockFaces::kLeft].TransSwapUV(),
-				        textures[BlockFaces::kRight].TransSwapUV(),
-				        textures[4].RotateCW(),
-				        textures[5].RotateCCW(),
+			            textures[BlockFaces::kTop],
+			            textures[BlockFaces::kBottom],
+			            textures[BlockFaces::kLeft].TransSwapUV(),
+			            textures[BlockFaces::kRight].TransSwapUV(),
+			            textures[4].RotateCW(),
+			            textures[5].RotateCCW(),
 			        },
 			        transparency,
 			        collision_mask,

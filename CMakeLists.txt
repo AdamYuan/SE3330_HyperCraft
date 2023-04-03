@@ -24,4 +24,6 @@ endif ()
 add_subdirectory(client)
 add_subdirectory(server)
 
+add_subdirectory(block)
+
 install(TARGETS HyperCraft_client HyperCraft_server RUNTIME DESTINATION)
