@@ -54,7 +54,7 @@ private:
 		inline static constexpr BlockProperty kProperties[] = {(kBlockDataProperty<DataArray>)...};
 	};
 	inline static constexpr const BlockProperty *kBlockDataProperties =
-	    BlockDataTable<std::make_index_sequence<3>>::kProperties;
+	    BlockDataTable<std::make_index_sequence<256>>::kProperties;
 
 	inline static constexpr u8AABB kDefaultAABB{{0, 0, 0}, {16, 16, 16}};
 
@@ -64,6 +64,7 @@ public:
 	inline constexpr Block() : m_data{} {}
 	inline constexpr Block(uint16_t data) : m_data{data} {}
 	inline constexpr Block(BlockID id, BlockMeta meta) : m_id{id}, m_meta{meta} {}
+	// inline constexpr Block(BlockID id, BlockMeta variant, BlockMeta transform) : m_id{id}, m_meta{meta} {}
 
 	inline constexpr BlockID GetID() const { return m_id; }
 	inline void SetID(BlockID id) { m_id = id; }
