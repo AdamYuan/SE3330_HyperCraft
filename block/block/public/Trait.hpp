@@ -1,10 +1,9 @@
 #pragma once
 
-#include "../../include/block/BlockProperty.hpp"
 #include <bit>
+#include <block/Block.hpp>
 #include <cinttypes>
 #include <texture/BlockTexture.hpp>
-#include <block/Block.hpp>
 
 #define BLOCK_TEXTURE_NONE \
 	{ \
@@ -14,6 +13,10 @@
 	{ x, x, x, x, x, x }
 #define BLOCK_TEXTURE_BOT_SIDE_TOP(b, s, t) \
 	{ s, s, t, b, s, s }
+
+enum : BlockID {
+#include "../../register/blocks"
+};
 
 template <BlockID> struct BlockTrait {
 	inline static constexpr uint8_t kVariants = 0;

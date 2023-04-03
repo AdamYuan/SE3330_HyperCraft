@@ -1,7 +1,7 @@
 #pragma once
 #include "public/Trait.hpp"
 
-template <> struct BlockTrait<Blocks::kApple> : public SingleBlockTrait<Blocks::kApple> {
+template <> struct BlockTrait<kApple> : public SingleBlockTrait<kApple> {
 	constexpr static BlockProperty kProperty = {
 	    "Apple",
 	    BLOCK_TEXTURE_NONE,

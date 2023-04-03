@@ -1,5 +1,6 @@
 #include <block/Block.hpp>
 #include <utility>
+#include <algorithm>
 
 template <uint16_t Data> using BlockDataTrait = BlockTrait<Data & 0xffu>;
 
@@ -20,8 +21,8 @@ template <std::size_t... DataArray> struct BlockDataTable<std::index_sequence<Da
 };
 template <typename IDSequence> struct BlockIDTable;
 template <std::size_t... IDArray> struct BlockIDTable<std::index_sequence<IDArray...>> {
-	inline static constexpr uint8_t kVariantBits[] = {(BlockTrait<IDArray>::kVariantBits)...};
-	inline static constexpr uint8_t kTransformBits[] = {(BlockTrait<IDArray>::kTransformBits)...};
+	inline static constexpr BlockMeta kVariantBits[] = {(BlockTrait<IDArray>::kVariantBits)...};
+	inline static constexpr BlockMeta kTransformBits[] = {(BlockTrait<IDArray>::kTransformBits)...};
 };
 
 const BlockProperty *Block::kBlockDataProperties = BlockDataTable<std::make_index_sequence<65536>>::kProperties;

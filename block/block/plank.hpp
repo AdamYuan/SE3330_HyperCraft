@@ -1,7 +1,7 @@
 #pragma once
 #include "public/Trait.hpp"
 
-template <> struct BlockTrait<Blocks::kPlank> : public MultiBlockTrait<Blocks::kPlank> {
+template <> struct BlockTrait<kPlank> : public MultiBlockTrait<kPlank> {
 	inline static constexpr BlockProperty kProperties[] = {
 	    {
 	        "Oak Plank",
