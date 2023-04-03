@@ -7,6 +7,6 @@ template <> struct BlockTrait<Blocks::kRedMushroom> : public SingleBlockTrait<Bl
 	    BLOCK_TEXTURE_NONE,
 	    BlockTransparencies::kTransparent,
 	    BlockCollisionBits::kNone,
-	    BlockMeshes::kCross<BlockTextures::kRedMushroom, 5, 0, 12, true>,
+	    &BlockMeshes::kCross<BlockTextures::kRedMushroom, 5, 0, 12, true>,
 	};
 };

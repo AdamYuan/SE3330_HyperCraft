@@ -11,7 +11,7 @@ template <> struct BlockTrait<Blocks::kVine> : public SingleBlockTrait<Blocks::k
 
 	inline constexpr static uint8_t kTransforms = 6;
 	template <BlockMeta Transform> inline static constexpr BlockProperty TransformProperty(BlockProperty property) {
-		property.custom_mesh = BlockMeshes::kInnerSurface<BlockTextures::kVine, Transform, 1>;
+		property.p_custom_mesh = &BlockMeshes::kInnerSurface<BlockTextures::kVine, Transform, 1>;
 		return property;
 	}
 };

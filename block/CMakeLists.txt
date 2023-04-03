@@ -10,7 +10,9 @@ if (NOT TARGET hc::texture::block)
     add_subdirectory(../texture ../texture)
 endif ()
 
-set(GENERATED_DIR ${CMAKE_CURRENT_SOURCE_DIR}/internal/generated)
+file(GLOB BLOCK_DEFS block/*.hpp block/public/*)
+
+set(GENERATED_DIR ${CMAKE_CURRENT_SOURCE_DIR}/internal/)
 
 add_executable(HyperCraft_block_gen
         generator/block_gen.cpp
@@ -19,11 +21,19 @@ add_executable(HyperCraft_block_gen
         )
 target_link_libraries(HyperCraft_block_gen PRIVATE hc::texture::block hc::dep)
 
+add_custom_command(
+        OUTPUT ${GENERATED_DIR}/block/Block.hpp
+        COMMAND ${CMAKE_CURRENT_BINARY_DIR}/HyperCraft_block_gen ${GENERATED_DIR}/block/Block.hpp
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/generator
+        DEPENDS HyperCraft_block_gen generator/Block.hpp.in ${BLOCK_DEFS}
+)
+
 add_library(HyperCraft_block INTERFACE
         include/block/BlockFace.hpp
         include/block/BlockMesh.hpp
         include/block/BlockProperty.hpp
+        ${GENERATED_DIR}/block/Block.hpp
         )
 add_library(hc::block ALIAS HyperCraft_block)
-target_include_directories(HyperCraft_block INTERFACE include internal)
+target_include_directories(HyperCraft_block INTERFACE include ${GENERATED_DIR})
 target_link_libraries(HyperCraft_block INTERFACE hc::texture::block)

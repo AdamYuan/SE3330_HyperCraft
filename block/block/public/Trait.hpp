@@ -2,6 +2,7 @@
 
 #include "../../include/block/BlockProperty.hpp"
 #include <bit>
+#include <cinttypes>
 #include <texture/BlockTexture.hpp>
 
 using BlockID = uint8_t;
@@ -12,6 +13,15 @@ enum : BlockID {
 #include "../../register/blocks"
 };
 } // namespace Blocks
+
+namespace BlockMetas {
+namespace Tree {
+enum : BlockMeta { kOak = 0, kAcacia, kJungle, kSpruce, kBirch };
+}
+namespace Grass {
+enum : BlockMeta { kPlain = 0, kSavanna, kTropical, kBoreal };
+}
+} // namespace BlockMetas
 
 #define BLOCK_TEXTURE_NONE \
 	{ \

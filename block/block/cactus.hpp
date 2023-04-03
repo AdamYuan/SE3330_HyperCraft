@@ -7,6 +7,6 @@ template <> struct BlockTrait<Blocks::kCactus> : public SingleBlockTrait<Blocks:
 	    BLOCK_TEXTURE_BOT_SIDE_TOP(BlockTextures::kCactusBottom, 0, BlockTextures::kCactusTop),
 	    BlockTransparencies::kSemiTransparent,
 	    BlockCollisionBits::kSolid,
-	    BlockMeshes::kCactusSides,
+	    &BlockMeshes::kCactusSides,
 	};
 };

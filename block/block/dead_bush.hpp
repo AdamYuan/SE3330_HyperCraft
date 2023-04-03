@@ -7,6 +7,6 @@ template <> struct BlockTrait<Blocks::kDeadBush> : public SingleBlockTrait<Block
 	    BLOCK_TEXTURE_NONE,
 	    BlockTransparencies::kTransparent,
 	    BlockCollisionBits::kNone,
-	    BlockMeshes::kCross<BlockTextures::kDeadBush, 8, 0, 16>,
+	    &BlockMeshes::kCross<BlockTextures::kDeadBush, 8, 0, 16>,
 	};
 };

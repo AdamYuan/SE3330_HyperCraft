@@ -1,7 +1,7 @@
 #ifndef HYPERCRAFT_CLIENT_CHUNK_HPP
 #define HYPERCRAFT_CLIENT_CHUNK_HPP
 
-#include <common/Block.hpp>
+#include <block/Block.hpp>
 #include <common/Light.hpp>
 #include <common/Position.hpp>
 #include <common/Size.hpp>

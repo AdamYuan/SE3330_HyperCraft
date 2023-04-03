@@ -18,7 +18,7 @@ struct BlockProperty {
 	BlockTexture textures[6]{};
 	BlockTransparency transparency{BlockTransparencies::kOpaque};
 	BlockCollisionMask collision_mask{BlockCollisionBits::kSolid};
-	BlockMesh custom_mesh;
+	const BlockMesh *p_custom_mesh{nullptr};
 
 	inline constexpr BlockProperty RotateCW(uint8_t axis) const {
 		if (axis == 0) {
@@ -33,7 +33,7 @@ struct BlockProperty {
 			        },
 			        transparency,
 			        collision_mask,
-			        custom_mesh};
+			        p_custom_mesh};
 		} else if (axis == 1) {
 			return {name,
 			        {
@@ -46,7 +46,7 @@ struct BlockProperty {
 			        },
 			        transparency,
 			        collision_mask,
-			        custom_mesh};
+			        p_custom_mesh};
 		} else {
 			return {name,
 			        {
@@ -59,7 +59,7 @@ struct BlockProperty {
 			        },
 			        transparency,
 			        collision_mask,
-			        custom_mesh};
+			        p_custom_mesh};
 		}
 	}
 };

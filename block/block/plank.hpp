@@ -1,3 +1,4 @@
+#pragma once
 #include "public/Trait.hpp"
 
 template <> struct BlockTrait<Blocks::kPlank> : public MultiBlockTrait<Blocks::kPlank> {

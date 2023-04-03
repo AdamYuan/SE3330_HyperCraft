@@ -1,122 +1,44 @@
+#include <fstream>
 #include <iostream>
+#include <magic_enum.hpp>
 
-#include "../block/air.hpp"
-#include "../block/apple.hpp"
-#include "../block/blue_ice.hpp"
-#include "../block/brown_mushroom.hpp"
-#include "../block/cactus.hpp"
-#include "../block/cobblestone.hpp"
-#include "../block/dead_bush.hpp"
-#include "../block/dirt.hpp"
-#include "../block/glass.hpp"
-#include "../block/grass.hpp"
-#include "../block/grass_block.hpp"
-#include "../block/gravel.hpp"
-#include "../block/ice.hpp"
-#include "../block/leaves.hpp"
-#include "../block/log.hpp"
-#include "../block/plank.hpp"
-#include "../block/red_mushroom.hpp"
-#include "../block/sand.hpp"
-#include "../block/sandstone.hpp"
-#include "../block/snow.hpp"
-#include "../block/stone.hpp"
-#include "../block/vine.hpp"
-#include "../block/water.hpp"
-
-using BlockID = uint8_t;
-using BlockMeta = uint8_t;
-
-class Block {
-private:
-	union {
-		uint16_t m_data;
-		struct {
-#ifdef IS_SMALL_ENDIAN
-			uint8_t m_id, m_meta; // regular order for little endian
-#else
-			uint8_t m_meta, m_id;
-#endif
-		};
-	};
-
-	template <uint16_t Data> using BlockDataTrait = BlockTrait<Data & 0xffu>;
-	template <uint16_t Data>
-	inline static constexpr uint8_t kBlockDataVariant = (Data >> 8u) & ((1u << BlockDataTrait<Data>::kVariantBits) - 1);
-	template <uint16_t Data>
-	inline static constexpr uint8_t kBlockDataTransform =
-	    (Data >> (8u + BlockDataTrait<Data>::kVariantBits)) & ((1u << BlockDataTrait<Data>::kTransformBits) - 1);
-	template <uint16_t Data>
-	inline static constexpr BlockProperty kBlockDataProperty =
-	    BlockDataTrait<Data>::template GetProperty<kBlockDataVariant<Data>, kBlockDataTransform<Data>>();
-	template <typename DataSequence> struct BlockDataTable;
-	template <std::size_t... DataArray> struct BlockDataTable<std::index_sequence<DataArray...>> {
-		inline static constexpr BlockProperty kProperties[] = {(kBlockDataProperty<DataArray>)...};
-	};
-	inline static constexpr const BlockProperty *kBlockDataProperties =
-	    BlockDataTable<std::make_index_sequence<256>>::kProperties;
-
-	template <typename IDSequence> struct BlockIDTable;
-	template <std::size_t... IDArray> struct BlockIDTable<std::index_sequence<IDArray...>> {
-		inline static constexpr uint8_t kVariantBits[] = {(BlockTrait<IDArray>::kVariantBits)...};
-		inline static constexpr uint8_t kTransformBits[] = {(BlockTrait<IDArray>::kTransformBits)...};
-	};
-	inline static constexpr const uint8_t *kBlockIDVariantBits =
-	    BlockIDTable<std::make_index_sequence<256>>::kVariantBits;
-	inline static constexpr const uint8_t *kBlockIDTransformBits =
-	    BlockIDTable<std::make_index_sequence<256>>::kTransformBits;
-
-	inline static constexpr u8AABB kDefaultAABB{{0, 0, 0}, {16, 16, 16}};
-
-	inline constexpr const BlockProperty *get_property() const { return kBlockDataProperties + m_data; }
-
-public:
-	inline constexpr Block() : m_data{} {}
-	// inline constexpr Block(uint16_t data) : m_data{data} {}
-	inline constexpr Block(BlockID id /*, BlockMeta meta*/) : m_id{id} {}
-	inline constexpr Block(BlockID id, BlockMeta variant, BlockMeta transform)
-	    : m_id{id}, m_meta(variant | (transform << kBlockIDVariantBits[id])) {}
-
-	inline constexpr BlockID GetID() const { return m_id; }
-	// inline void SetID(BlockID id) { m_id = id; }
-	// inline constexpr BlockMeta GetMeta() const { return m_meta; }
-	// inline void SetMeta(BlockMeta meta) { m_meta = meta; }
-	inline constexpr BlockMeta GetVariant() const { return m_meta & ((1u << kBlockIDVariantBits[m_id]) - 1); }
-	inline constexpr BlockMeta GetTransform() const { return m_meta >> kBlockIDVariantBits[m_id]; }
-
-	inline constexpr uint16_t GetData() const { return m_data; }
-	// inline void SetData(uint16_t data) { m_data = data; }
-
-	inline constexpr bool HaveCustomMesh() const { return get_property()->custom_mesh.face_count; }
-	inline constexpr const BlockMesh *GetCustomMesh() const { return &get_property()->custom_mesh; }
-	inline constexpr const u8AABB *GetAABBs() const {
-		return HaveCustomMesh() ? GetCustomMesh()->aabbs : &kDefaultAABB;
+inline static constexpr const char *kBlockHppInFilename = "Block.hpp.in";
+inline std::string make_block_hpp_filename(std::string_view x) {
+	std::string ret;
+	bool first_upper = true;
+	for (auto i = x.begin() + 1; i != x.end(); ++i) {
+		if (isupper(*i)) {
+			if (first_upper)
+				first_upper = false;
+			else
+				ret.push_back('_');
+			ret.push_back((char)tolower(*i));
+		} else
+			ret.push_back(*i);
 	}
-	inline constexpr uint32_t GetAABBCount() const { return HaveCustomMesh() ? GetCustomMesh()->aabb_count : 1; }
-	inline constexpr const char *GetName() const { return get_property()->name; }
-	inline constexpr BlockTexture GetTexture(BlockFace face) const { return get_property()->textures[face]; }
-	// Vertical Sunlight
-	inline constexpr BlockTransparency GetTransparency() const { return get_property()->transparency; }
-	inline constexpr bool GetVerticalLightPass() const {
-		return GetTransparency() == BlockTransparencies::kTransparent;
-	}
-	inline constexpr bool GetIndirectLightPass() const { return GetTransparency() != BlockTransparencies::kOpaque; }
+	ret += ".hpp";
+	return "../../block/" + ret;
+}
 
-	inline constexpr BlockCollisionMask GetCollisionMask() const { return get_property()->collision_mask; }
-
-	inline constexpr bool ShowFace(BlockFace face, Block neighbour) const {
-		BlockTexture tex = GetTexture(face), nei_tex = neighbour.GetTexture(BlockFaceOpposite(face));
-		if (tex.Empty() || tex == nei_tex)
-			return false;
-		if (!tex.IsTransparent() && !nei_tex.IsTransparent())
-			return false;
-		if (tex.IsLiquid() && !nei_tex.Empty())
-			return false;
-		return !tex.IsTransparent() || nei_tex.IsTransparent() || nei_tex.IsLiquid();
-	}
-
-	bool operator==(Block r) const { return m_data == r.m_data; }
-	bool operator!=(Block r) const { return m_data != r.m_data; }
+enum ID {
+#include "../register/blocks"
 };
 
-int main() { printf("%d\n", Block(Blocks::kStone).GetTransparency()); }
+int main(int argc, char **argv) {
+	--argc;
+	++argv;
+
+	if (argc != 1)
+		return EXIT_FAILURE;
+
+	std::ofstream output{argv[0]};
+	output << "#pragma once" << std::endl;
+
+	constexpr auto &names = magic_enum::enum_names<ID>();
+	for (const auto &i : names) {
+		std::string filename = make_block_hpp_filename(i);
+		output << "#include \"" << filename << "\"" << std::endl;
+	}
+	std::ifstream hpp_in{kBlockHppInFilename};
+	output << std::string{(std::istreambuf_iterator<char>(hpp_in)), std::istreambuf_iterator<char>()};
+}

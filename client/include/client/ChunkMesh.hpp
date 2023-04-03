@@ -2,7 +2,7 @@
 #define HYPERCRAFT_COMMON_CHUNK_MESH_HPP
 
 #include <AABB.hpp>
-#include <common/Block.hpp>
+#include <block/Block.hpp>
 #include <common/Light.hpp>
 
 #include "client/mesh/MeshHandle.hpp"

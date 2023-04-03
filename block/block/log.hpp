@@ -1,3 +1,4 @@
+#pragma once
 #include "public/Trait.hpp"
 
 template <> struct BlockTrait<Blocks::kLog> : public MultiBlockTrait<Blocks::kLog> {
@@ -24,9 +25,9 @@ template <> struct BlockTrait<Blocks::kLog> : public MultiBlockTrait<Blocks::kLo
 
 	inline static constexpr uint8_t kTransforms = 3;
 	template <BlockMeta Transform> inline static constexpr BlockProperty TransformProperty(BlockProperty property) {
-		if constexpr (Transform == 0)
-			return property.RotateCW(0);
 		if constexpr (Transform == 1)
+			return property.RotateCW(0);
+		if constexpr (Transform == 2)
 			return property.RotateCW(2);
 		else
 			return property;
