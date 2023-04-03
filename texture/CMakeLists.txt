@@ -26,14 +26,14 @@ if (PNG_FOUND)
     add_custom_command(
             OUTPUT ${GENERATED_DIR}/block_texture_png.inl
             OUTPUT ${GENERATED_DIR}/block_texture_transparency.inl
-            COMMAND ${CMAKE_CURRENT_BINARY_DIR}/HyperCraft_block_tex_gen ${GENERATED_DIR}/block_texture_png.inl ${GENERATED_DIR}/block_texture_transparency.inl
+            COMMAND HyperCraft_block_tex_gen ${GENERATED_DIR}/block_texture_png.inl ${GENERATED_DIR}/block_texture_transparency.inl
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/image/block/
             DEPENDS HyperCraft_block_tex_gen ${BLOCK_TEXTURES}
     )
 
     add_custom_command(
             OUTPUT ${GENERATED_DIR}/misc_texture_png.inl
-            COMMAND ${CMAKE_CURRENT_BINARY_DIR}/HyperCraft_misc_tex_gen ${GENERATED_DIR}/misc_texture_png.inl
+            COMMAND HyperCraft_misc_tex_gen ${GENERATED_DIR}/misc_texture_png.inl
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/image/misc/
             DEPENDS HyperCraft_misc_tex_gen ${MISC_TEXTURES}
     )

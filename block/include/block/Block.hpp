@@ -23,9 +23,9 @@ private:
 		uint16_t m_data;
 		struct {
 #ifdef IS_SMALL_ENDIAN
-			uint8_t m_id, m_meta; // regular order for little endian
-#else
 			uint8_t m_meta, m_id;
+#else
+			uint8_t m_id, m_meta;
 #endif
 		};
 	};
@@ -36,7 +36,7 @@ private:
 
 	inline static constexpr u8AABB kDefaultAABB{{0, 0, 0}, {16, 16, 16}};
 
-	inline const BlockProperty *get_property() const { return kBlockDataProperties + (m_id | (m_meta << 8u)); }
+	inline const BlockProperty *get_property() const { return kBlockDataProperties + m_data; }
 
 public:
 	inline Block() : m_id{}, m_meta{} {}
