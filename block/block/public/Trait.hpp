@@ -4,24 +4,7 @@
 #include <bit>
 #include <cinttypes>
 #include <texture/BlockTexture.hpp>
-
-using BlockID = uint8_t;
-using BlockMeta = uint8_t;
-
-namespace Blocks {
-enum : BlockID {
-#include "../../register/blocks"
-};
-} // namespace Blocks
-
-namespace BlockMetas {
-namespace Tree {
-enum : BlockMeta { kOak = 0, kAcacia, kJungle, kSpruce, kBirch };
-}
-namespace Grass {
-enum : BlockMeta { kPlain = 0, kSavanna, kTropical, kBoreal };
-}
-} // namespace BlockMetas
+#include <block/Block.hpp>
 
 #define BLOCK_TEXTURE_NONE \
 	{ \
@@ -33,6 +16,9 @@ enum : BlockMeta { kPlain = 0, kSavanna, kTropical, kBoreal };
 	{ s, s, t, b, s, s }
 
 template <BlockID> struct BlockTrait {
+	inline static constexpr uint8_t kVariants = 0;
+	inline static constexpr uint8_t kTransforms = 0;
+
 	inline static constexpr uint8_t kVariantBits = 0;
 	inline static constexpr uint8_t kTransformBits = 0;
 
@@ -42,6 +28,7 @@ template <BlockID> struct BlockTrait {
 };
 
 template <BlockID ID> struct SingleBlockTrait {
+	inline static constexpr uint8_t kVariants = 1;
 	inline static constexpr uint8_t kVariantBits = 0;
 	inline static constexpr uint8_t kTransformBits = std::countr_zero(std::bit_ceil(BlockTrait<ID>::kTransforms));
 

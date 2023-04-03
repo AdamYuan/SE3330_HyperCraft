@@ -5,6 +5,9 @@
 #include "BlockFace.hpp"
 #include "BlockMesh.hpp"
 
+using BlockID = uint8_t;
+using BlockMeta = uint8_t;
+
 using BlockTransparency = uint8_t;
 struct BlockTransparencies {
 	enum : uint8_t { kOpaque = 0, kSemiTransparent, kTransparent };

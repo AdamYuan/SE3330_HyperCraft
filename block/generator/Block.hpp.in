@@ -12,20 +12,24 @@ private:
 	};
 
 	template <uint16_t Data> using BlockDataTrait = BlockTrait<Data & 0xffu>;
+
 	template <uint16_t Data>
-	inline static constexpr uint8_t kBlockDataVariant = (Data >> 8u) & ((1u << BlockDataTrait<Data>::kVariantBits) - 1);
+	inline static constexpr BlockMeta kBlockDataVariant = std::min<BlockMeta>(
+	    (Data >> 8u) & ((1u << BlockDataTrait<Data>::kVariantBits) - 1), BlockDataTrait<Data>::kVariants - 1u);
+
 	template <uint16_t Data>
-	inline static constexpr uint8_t kBlockDataTransform =
-	    (Data >> (8u + BlockDataTrait<Data>::kVariantBits)) & ((1u << BlockDataTrait<Data>::kTransformBits) - 1);
-	template <uint16_t Data>
-	inline static constexpr BlockProperty kBlockDataProperty =
-	    BlockDataTrait<Data>::template GetProperty<kBlockDataVariant<Data>, kBlockDataTransform<Data>>();
+	inline static constexpr BlockMeta kBlockDataTransform = std::min<BlockMeta>(
+	    (Data >> (8u + BlockDataTrait<Data>::kVariantBits)) & ((1u << BlockDataTrait<Data>::kTransformBits) - 1u),
+	    BlockDataTrait<Data>::kTransforms - 1);
+
 	template <typename DataSequence> struct BlockDataTable;
 	template <std::size_t... DataArray> struct BlockDataTable<std::index_sequence<DataArray...>> {
-		inline static constexpr BlockProperty kProperties[] = {(kBlockDataProperty<DataArray>)...};
+		inline static constexpr BlockProperty kProperties[] = {
+		    BlockProperty(BlockDataTrait<DataArray>::template GetProperty<kBlockDataVariant<DataArray>,
+		                                                                  kBlockDataTransform<DataArray>>())...};
 	};
 	inline static constexpr const BlockProperty *kBlockDataProperties =
-	    BlockDataTable<std::make_index_sequence<256>>::kProperties;
+	    BlockDataTable<std::make_index_sequence<65536>>::kProperties;
 
 	template <typename IDSequence> struct BlockIDTable;
 	template <std::size_t... IDArray> struct BlockIDTable<std::index_sequence<IDArray...>> {
@@ -39,10 +43,11 @@ private:
 
 	inline static constexpr u8AABB kDefaultAABB{{0, 0, 0}, {16, 16, 16}};
 
-	inline constexpr const BlockProperty *get_property() const { return kBlockDataProperties + m_id; }
+	inline constexpr const BlockProperty *get_property() const {
+		return kBlockDataProperties + (m_id | (m_meta << 8u));
+	}
 
 public:
-	inline constexpr Block() : m_data{} {}
 	inline constexpr Block(BlockID id) : m_id{id}, m_meta{} {}
 	inline constexpr Block(BlockID id, BlockMeta variant, BlockMeta transform)
 	    : m_id{id}, m_meta(variant | (transform << kBlockIDVariantBits[id])) {}
@@ -85,6 +90,6 @@ public:
 		return !tex.IsTransparent() || nei_tex.IsTransparent() || nei_tex.IsLiquid();
 	}
 
-	bool operator==(Block r) const { return m_data == r.m_data; }
-	bool operator!=(Block r) const { return m_data != r.m_data; }
+	inline bool operator==(Block r) const { return m_data == r.m_data; }
+	inline bool operator!=(Block r) const { return m_data != r.m_data; }
 };

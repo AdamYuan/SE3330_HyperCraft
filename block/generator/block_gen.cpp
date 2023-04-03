@@ -2,7 +2,7 @@
 #include <iostream>
 #include <magic_enum.hpp>
 
-inline static constexpr const char *kBlockHppInFilename = "Block.hpp.in";
+inline static constexpr const char *kBlockCppInFilename = "Block.cpp.in";
 inline std::string make_block_hpp_filename(std::string_view x) {
 	std::string ret;
 	bool first_upper = true;
@@ -17,7 +17,7 @@ inline std::string make_block_hpp_filename(std::string_view x) {
 			ret.push_back(*i);
 	}
 	ret += ".hpp";
-	return "../../block/" + ret;
+	return "../block/" + ret;
 }
 
 enum ID {
@@ -32,13 +32,12 @@ int main(int argc, char **argv) {
 		return EXIT_FAILURE;
 
 	std::ofstream output{argv[0]};
-	output << "#pragma once" << std::endl;
 
 	constexpr auto &names = magic_enum::enum_names<ID>();
 	for (const auto &i : names) {
 		std::string filename = make_block_hpp_filename(i);
 		output << "#include \"" << filename << "\"" << std::endl;
 	}
-	std::ifstream hpp_in{kBlockHppInFilename};
+	std::ifstream hpp_in{kBlockCppInFilename};
 	output << std::string{(std::istreambuf_iterator<char>(hpp_in)), std::istreambuf_iterator<char>()};
 }

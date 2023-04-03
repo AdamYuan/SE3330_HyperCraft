@@ -142,7 +142,7 @@ private:
 	private:
 		std::unordered_map<glm::i32vec3, Block> m_blocks;
 		int32_t m_y_min{INT32_MAX}, m_y_max{INT32_MIN};
-		inline constexpr static bool block_cover(Block old, Block cur) {
+		inline static bool block_cover(Block old, Block cur) {
 			return old.GetIndirectLightPass() == cur.GetIndirectLightPass()
 			           ? (old.GetID() == cur.GetID() ? cur.GetMeta() > old.GetMeta() : cur.GetID() > old.GetID())
 			           : cur.GetIndirectLightPass() < old.GetIndirectLightPass();

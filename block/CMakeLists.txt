@@ -22,18 +22,15 @@ add_executable(HyperCraft_block_gen
 target_link_libraries(HyperCraft_block_gen PRIVATE hc::texture::block hc::dep)
 
 add_custom_command(
-        OUTPUT ${GENERATED_DIR}/block/Block.hpp
-        COMMAND ${CMAKE_CURRENT_BINARY_DIR}/HyperCraft_block_gen ${GENERATED_DIR}/block/Block.hpp
+        OUTPUT ${GENERATED_DIR}/Block.cpp
+        COMMAND ${CMAKE_CURRENT_BINARY_DIR}/HyperCraft_block_gen ${GENERATED_DIR}/Block.cpp
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/generator
-        DEPENDS HyperCraft_block_gen generator/Block.hpp.in ${BLOCK_DEFS}
+        DEPENDS HyperCraft_block_gen generator/Block.cpp.in ${BLOCK_DEFS}
 )
 
-add_library(HyperCraft_block INTERFACE
-        include/block/BlockFace.hpp
-        include/block/BlockMesh.hpp
-        include/block/BlockProperty.hpp
-        ${GENERATED_DIR}/block/Block.hpp
+add_library(HyperCraft_block STATIC
+        ${GENERATED_DIR}/Block.cpp
         )
 add_library(hc::block ALIAS HyperCraft_block)
-target_include_directories(HyperCraft_block INTERFACE include ${GENERATED_DIR})
-target_link_libraries(HyperCraft_block INTERFACE hc::texture::block)
+target_include_directories(HyperCraft_block PUBLIC include)
+target_link_libraries(HyperCraft_block PUBLIC hc::texture::block hc::dep)
