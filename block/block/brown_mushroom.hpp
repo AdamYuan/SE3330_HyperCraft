@@ -1,4 +1,5 @@
 #pragma once
+#include "public/CrossMesh.hpp"
 #include "public/Trait.hpp"
 
 template <> struct BlockTrait<kBrownMushroom> : public SingleBlockTrait<kBrownMushroom> {
@@ -7,6 +8,6 @@ template <> struct BlockTrait<kBrownMushroom> : public SingleBlockTrait<kBrownMu
 	    BLOCK_TEXTURE_NONE,
 	    BlockTransparencies::kTransparent,
 	    BlockCollisionBits::kNone,
-	    &BlockMeshes::kCross<BlockTextures::kBrownMushroom, 6, 0, 9, true>,
+	    &kCrossMesh<BlockTextures::kBrownMushroom, 6, 0, 9, true>,
 	};
 };

@@ -1,4 +1,5 @@
 #pragma once
+#include "public/InnerSurfaceMesh.hpp"
 #include "public/Trait.hpp"
 
 template <> struct BlockTrait<kVine> : public SingleBlockTrait<kVine> {
@@ -11,7 +12,7 @@ template <> struct BlockTrait<kVine> : public SingleBlockTrait<kVine> {
 
 	inline constexpr static uint8_t kTransforms = 6;
 	template <BlockMeta Transform> inline static constexpr BlockProperty TransformProperty(BlockProperty property) {
-		property.p_custom_mesh = &BlockMeshes::kInnerSurface<BlockTextures::kVine, Transform, 1>;
+		property.p_custom_mesh = &kInnerSurfaceMesh<BlockTextures::kVine, Transform, 1>;
 		return property;
 	}
 };

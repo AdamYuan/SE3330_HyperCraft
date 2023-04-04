@@ -1,4 +1,5 @@
 #pragma once
+#include "public/CrossMesh.hpp"
 #include "public/Trait.hpp"
 
 template <> struct BlockTrait<kApple> : public SingleBlockTrait<kApple> {
@@ -7,6 +8,6 @@ template <> struct BlockTrait<kApple> : public SingleBlockTrait<kApple> {
 	    BLOCK_TEXTURE_NONE,
 	    BlockTransparencies::kTransparent,
 	    BlockCollisionBits::kNone,
-	    &BlockMeshes::kCross<BlockTextures::kApple, 5, 1, 15, BlockFaces::kBottom>,
+	    &kCrossMesh<BlockTextures::kApple, 5, 1, 15, BlockFaces::kBottom>,
 	};
 };

@@ -1,4 +1,5 @@
 #pragma once
+#include "public/CrossMesh.hpp"
 #include "public/Trait.hpp"
 
 template <> struct BlockTrait<kGrass> : public MultiBlockTrait<kGrass> {
@@ -8,28 +9,28 @@ template <> struct BlockTrait<kGrass> : public MultiBlockTrait<kGrass> {
 	        BLOCK_TEXTURE_NONE,
 	        BlockTransparencies::kTransparent,
 	        BlockCollisionBits::kNone,
-	        &BlockMeshes::kCross<BlockTextures::kGrassPlain, 8, 0, 16>,
+	        &kCrossMesh<BlockTextures::kGrassPlain, 8, 0, 16>,
 	    },
 	    {
 	        "Grass",
 	        BLOCK_TEXTURE_NONE,
 	        BlockTransparencies::kTransparent,
 	        BlockCollisionBits::kNone,
-	        &BlockMeshes::kCross<BlockTextures::kGrassSavanna, 8, 0, 16>,
+	        &kCrossMesh<BlockTextures::kGrassSavanna, 8, 0, 16>,
 	    },
 	    {
 	        "Grass",
 	        BLOCK_TEXTURE_NONE,
 	        BlockTransparencies::kTransparent,
 	        BlockCollisionBits::kNone,
-	        &BlockMeshes::kCross<BlockTextures::kGrassTropical, 8, 0, 16>,
+	        &kCrossMesh<BlockTextures::kGrassTropical, 8, 0, 16>,
 	    },
 	    {
 	        "Grass",
 	        BLOCK_TEXTURE_NONE,
 	        BlockTransparencies::kTransparent,
 	        BlockCollisionBits::kNone,
-	        &BlockMeshes::kCross<BlockTextures::kGrassBoreal, 8, 0, 16>,
+	        &kCrossMesh<BlockTextures::kGrassBoreal, 8, 0, 16>,
 	    },
 	};
 };
