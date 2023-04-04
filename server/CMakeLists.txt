@@ -11,7 +11,6 @@ endif ()
 add_executable(HyperCraft_server
         src/main.cpp
         src/ENetServer.cpp
-        include/server/ENetServer.hpp
         )
 
 target_link_libraries(HyperCraft_server
