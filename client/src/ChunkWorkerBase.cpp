@@ -5,5 +5,5 @@
 void ChunkWorkerBase::push_worker(std::unique_ptr<ChunkWorkerBase> &&worker) const {
 	std::shared_ptr<World> world = m_chunk_ptr->LockWorld();
 	if (world)
-		world->GetWorkQueuePtr()->PushWorker(std::move(worker));
+		world->GetWorkPoolPtr()->PushWorker(std::move(worker));
 }

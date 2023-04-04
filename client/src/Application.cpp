@@ -96,7 +96,7 @@ void Application::draw_frame(double delta) {
 	command_buffer->End();
 
 	if (!post_updates.empty())
-		m_work_queue->PushWorker(
+		m_work_pool->PushWorker(
 		    std::make_unique<PostUpdateWorker>(m_world_renderer->GetChunkMeshPool(), std::move(post_updates)));
 
 	m_frame_manager->Render();
@@ -117,9 +117,9 @@ Application::Application() {
 
 	m_transfer_queue = m_main_queue;
 
-	m_work_queue = WorkQueue::Create(std::max<std::size_t>(std::thread::hardware_concurrency() * 3 / 4, 1));
+	m_work_pool = WorkPool::Create(std::max<std::size_t>(std::thread::hardware_concurrency() * 3 / 4, 1));
 
-	m_world = World::Create(m_work_queue);
+	m_world = World::Create(m_work_pool);
 	m_global_texture = GlobalTexture::Create(m_main_command_pool);
 	m_camera = Camera::Create();
 	m_camera->m_speed = 32.0f;
@@ -137,6 +137,8 @@ Application::Application() {
 void Application::Run() {
 	std::chrono::time_point<std::chrono::steady_clock> prev_time = std::chrono::steady_clock::now();
 
+	int concurrency = m_work_pool->GetConcurrency();
+
 	while (!glfwWindowShouldClose(m_window)) {
 		glfwPollEvents();
 
@@ -153,8 +155,12 @@ void Application::Run() {
 		ImGui::Text("fps: %f", ImGui::GetIO().Framerate);
 		ImGui::Text("frame time: %.1f ms", delta.count() * 1000.0f);
 		ImGui::Text("cam: %f %f %f", m_camera->m_position.x, m_camera->m_position.y, m_camera->m_position.z);
-		ImGui::Text("workers (approx): %zu", m_work_queue->GetApproxWorkerCount());
+		ImGui::Text("workers (approx): %zu", m_work_pool->GetApproxWorkerCount());
 		ImGui::Text("delta: %f", delta.count());
+
+		if (ImGui::DragInt("concurrency", &concurrency, 1, 1, (int)std::thread::hardware_concurrency()))
+			m_work_pool->Relaunch(std::clamp<std::size_t>(concurrency, 1, std::thread::hardware_concurrency()));
+
 		ImGui::End();
 
 		ImGui::Render();
@@ -162,7 +168,7 @@ void Application::Run() {
 		draw_frame(delta.count());
 	}
 	m_frame_manager->WaitIdle();
-	m_work_queue->Join();
+	m_work_pool->Join();
 }
 
 Application::~Application() {

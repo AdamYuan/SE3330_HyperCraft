@@ -44,8 +44,8 @@ void World::Update(const glm::vec3 &position) {
 				new_workers.push_back(ChunkGenerator::Create(PushChunk(pos)));
 		}
 
-		m_work_queue_ptr->PushWorkers(std::move(new_workers));
-		m_work_queue_ptr->PushWorkers(std::move(new_nei_workers));
+		m_work_pool_ptr->PushWorkers(std::move(new_workers));
+		m_work_pool_ptr->PushWorkers(std::move(new_nei_workers));
 	}
 }
 

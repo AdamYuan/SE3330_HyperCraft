@@ -8,10 +8,10 @@
 
 #include "WorkerBase.hpp"
 
-class WorkQueue : public std::enable_shared_from_this<WorkQueue> {
+class WorkPool : public std::enable_shared_from_this<WorkPool> {
 public:
-	inline static std::shared_ptr<WorkQueue> Create(std::size_t concurrency) {
-		return std::make_shared<WorkQueue>(concurrency);
+	inline static std::shared_ptr<WorkPool> Create(std::size_t concurrency) {
+		return std::make_shared<WorkPool>(concurrency);
 	}
 
 private:
@@ -23,7 +23,11 @@ private:
 	void worker_thread_func();
 
 public:
-	inline explicit WorkQueue(std::size_t concurrency) { launch_worker_threads(concurrency); }
+	inline explicit WorkPool(std::size_t concurrency) { launch_worker_threads(concurrency); }
+	inline void Relaunch(std::size_t concurrency) {
+		Join();
+		launch_worker_threads(concurrency);
+	}
 	void Join();
 
 	inline void PushWorker(std::unique_ptr<WorkerBase> &&worker) { m_workers.enqueue(std::move(worker)); }
@@ -31,5 +35,7 @@ public:
 		m_workers.enqueue_bulk(std::make_move_iterator(workers.begin()), workers.size());
 	}
 
-	inline size_t GetApproxWorkerCount() const { return m_workers.size_approx(); }
+	inline std::size_t GetConcurrency() const { return m_worker_threads.size(); }
+
+	inline std::size_t GetApproxWorkerCount() const { return m_workers.size_approx(); }
 };

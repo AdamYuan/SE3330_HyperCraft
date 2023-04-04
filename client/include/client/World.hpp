@@ -13,15 +13,15 @@
 
 #include <client/Chunk.hpp>
 
-#include <common/WorkQueue.hpp>
+#include <common/WorkPool.hpp>
 
 class WorldRenderer;
 class ClientBase;
 
 class World : public std::enable_shared_from_this<World> {
 public:
-	inline static std::shared_ptr<World> Create(const std::shared_ptr<WorkQueue> &work_queue_ptr) {
-		return std::make_shared<World>(work_queue_ptr);
+	inline static std::shared_ptr<World> Create(const std::shared_ptr<WorkPool> &work_pool_ptr) {
+		return std::make_shared<World>(work_pool_ptr);
 	}
 
 private:
@@ -37,10 +37,10 @@ private:
 	std::unordered_map<ChunkPos3, std::shared_ptr<Chunk>> m_chunks;
 
 	// Work Queue
-	std::shared_ptr<WorkQueue> m_work_queue_ptr;
+	std::shared_ptr<WorkPool> m_work_pool_ptr;
 
 public:
-	inline explicit World(const std::shared_ptr<WorkQueue> &work_queue_ptr) : m_work_queue_ptr{work_queue_ptr} {}
+	inline explicit World(const std::shared_ptr<WorkPool> &work_pool_ptr) : m_work_pool_ptr{work_pool_ptr} {}
 	~World();
 
 	inline const std::weak_ptr<WorldRenderer> &GetWorldRendererWeakPtr() const { return m_world_renderer_weak_ptr; }
@@ -49,7 +49,7 @@ public:
 	inline const std::weak_ptr<ClientBase> &GetClientWeakPtr() const { return m_client_weak_ptr; }
 	inline std::shared_ptr<ClientBase> LockClient() const { return m_client_weak_ptr.lock(); }
 
-	inline const auto &GetWorkQueuePtr() const { return m_work_queue_ptr; }
+	inline const auto &GetWorkPoolPtr() const { return m_work_pool_ptr; }
 
 	std::shared_ptr<Chunk> FindChunk(const ChunkPos3 &position) const;
 	std::shared_ptr<Chunk> PushChunk(const ChunkPos3 &position);
