@@ -9,13 +9,13 @@ using BlockID = uint8_t;
 using BlockMeta = uint8_t;
 
 using BlockTransparency = uint8_t;
-struct BlockTransparencies {
-	enum : uint8_t { kOpaque = 0, kSemiTransparent, kTransparent };
-};
+namespace BlockTransparencies {
+enum : uint8_t { kOpaque = 0, kSemiTransparent, kTransparent };
+}
 using BlockCollisionMask = uint8_t;
-struct BlockCollisionBits {
-	enum : uint8_t { kNone = 1 << 0, kSolid = 1 << 1, kLiquid = 1 << 2 };
-};
+namespace BlockCollisionBits {
+enum : uint8_t { kNone = 1 << 0, kSolid = 1 << 1, kLiquid = 1 << 2 };
+}
 struct BlockProperty {
 	const char *name{"Unnamed"};
 	BlockTexture textures[6]{};

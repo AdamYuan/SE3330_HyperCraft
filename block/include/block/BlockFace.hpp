@@ -4,9 +4,9 @@
 #include <glm/glm.hpp>
 
 using BlockFace = uint8_t;
-struct BlockFaces {
-	enum FACE : BlockFace { kRight = 0, kLeft, kTop, kBottom, kFront, kBack };
-};
+namespace BlockFaces {
+enum FACE : BlockFace { kRight = 0, kLeft, kTop, kBottom, kFront, kBack };
+}
 
 inline constexpr BlockFace BlockFaceOpposite(BlockFace f) { return f ^ 1u; }
 template <typename T>

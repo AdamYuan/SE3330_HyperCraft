@@ -40,7 +40,7 @@ void DefaultTerrain::Generate(const std::shared_ptr<Chunk> &chunk_ptr, int32_t l
 				switch (biome) {
 				case Biomes::kPlain:
 					if (cur_height == height) {
-						chunk_ptr->SetBlock(x, y, z, {Blocks::kGrassBlock, BlockMetas::Grass::kPlain, 0});
+						chunk_ptr->SetBlock(x, y, z, {Blocks::kGrassBlock, BlockVariants::Grass::kPlain, 0});
 					} else if (cur_height < height) {
 						int32_t dirt_height = height - int32_t(meta % 4u) - 1;
 						chunk_ptr->SetBlock(x, y, z, cur_height >= dirt_height ? Blocks::kDirt : Blocks::kStone);
@@ -48,7 +48,7 @@ void DefaultTerrain::Generate(const std::shared_ptr<Chunk> &chunk_ptr, int32_t l
 					break;
 				case Biomes::kSavanna:
 					if (cur_height == height) {
-						chunk_ptr->SetBlock(x, y, z, {Blocks::kGrassBlock, BlockMetas::Grass::kSavanna, 0});
+						chunk_ptr->SetBlock(x, y, z, {Blocks::kGrassBlock, BlockVariants::Grass::kSavanna, 0});
 					} else if (cur_height < height) {
 						int32_t dirt_height = height - int32_t(meta % 6u) - 3;
 						chunk_ptr->SetBlock(x, y, z, cur_height >= dirt_height ? Blocks::kDirt : Blocks::kStone);
@@ -91,7 +91,7 @@ void DefaultTerrain::Generate(const std::shared_ptr<Chunk> &chunk_ptr, int32_t l
 				} break;
 				case Biomes::kForest: {
 					if (cur_height == height) {
-						chunk_ptr->SetBlock(x, y, z, Block{Blocks::kGrassBlock, BlockMetas::Grass::kPlain, 0});
+						chunk_ptr->SetBlock(x, y, z, Block{Blocks::kGrassBlock, BlockVariants::Grass::kPlain, 0});
 					} else if (cur_height < height) {
 						int32_t dirt_height = height - int32_t(meta % 6u) - 3;
 						chunk_ptr->SetBlock(x, y, z, cur_height >= dirt_height ? Blocks::kDirt : Blocks::kStone);
@@ -99,7 +99,7 @@ void DefaultTerrain::Generate(const std::shared_ptr<Chunk> &chunk_ptr, int32_t l
 				} break;
 				case Biomes::kTropicalForest: {
 					if (cur_height == height) {
-						chunk_ptr->SetBlock(x, y, z, Block{Blocks::kGrassBlock, BlockMetas::Grass::kTropical, 0});
+						chunk_ptr->SetBlock(x, y, z, Block{Blocks::kGrassBlock, BlockVariants::Grass::kTropical, 0});
 					} else if (cur_height < height) {
 						int32_t dirt_height = height - int32_t(meta % 6u) - 3;
 						chunk_ptr->SetBlock(x, y, z, cur_height >= dirt_height ? Blocks::kDirt : Blocks::kStone);
@@ -107,7 +107,7 @@ void DefaultTerrain::Generate(const std::shared_ptr<Chunk> &chunk_ptr, int32_t l
 				} break;
 				case Biomes::kBorealForest: {
 					if (cur_height == height) {
-						chunk_ptr->SetBlock(x, y, z, Block{Blocks::kGrassBlock, BlockMetas::Grass::kBoreal, 0});
+						chunk_ptr->SetBlock(x, y, z, Block{Blocks::kGrassBlock, BlockVariants::Grass::kBoreal, 0});
 					} else if (cur_height < height) {
 						int32_t dirt_height = height - int32_t(meta % 6u) - 3;
 						chunk_ptr->SetBlock(x, y, z, cur_height >= dirt_height ? Blocks::kDirt : Blocks::kStone);
@@ -394,7 +394,7 @@ void DefaultTerrain::generate_xz_info(const ChunkPos2 &pos, XZInfo *info) {
 				else
 					info->decorations.GenOakTree(rand_gen, x, y, z);
 			} else if (rand % 273 == 0)
-				info->decorations.SetBlock(x, y + 1, z, {Blocks::kGrass, BlockMetas::Grass::kPlain, 0});
+				info->decorations.SetBlock(x, y + 1, z, {Blocks::kGrass, BlockVariants::Grass::kPlain, 0});
 			else if (rand % 647 == 0)
 				info->decorations.SetBlock(x, y + 1, z,
 				                           (rand_gen() & 1u) ? Blocks::kRedMushroom : Blocks::kBrownMushroom);
@@ -403,7 +403,7 @@ void DefaultTerrain::generate_xz_info(const ChunkPos2 &pos, XZInfo *info) {
 			if (rand % 120 == 0)
 				info->decorations.GenSpruceTree(rand_gen, x, y, z);
 			else if (rand % 87 == 0)
-				info->decorations.SetBlock(x, y + 1, z, {Blocks::kGrass, BlockMetas::Grass::kBoreal, 0});
+				info->decorations.SetBlock(x, y + 1, z, {Blocks::kGrass, BlockVariants::Grass::kBoreal, 0});
 			else if (rand % 437 == 0)
 				info->decorations.SetBlock(x, y + 1, z, Blocks::kBrownMushroom);
 		} break;
@@ -411,7 +411,7 @@ void DefaultTerrain::generate_xz_info(const ChunkPos2 &pos, XZInfo *info) {
 			if (rand % 57 == 0)
 				info->decorations.GenJungleTree(rand_gen, x, y, z);
 			else if (rand % 127 == 0)
-				info->decorations.SetBlock(x, y + 1, z, {Blocks::kGrass, BlockMetas::Grass::kTropical, 0});
+				info->decorations.SetBlock(x, y + 1, z, {Blocks::kGrass, BlockVariants::Grass::kTropical, 0});
 			else if (rand % 117 == 0)
 				info->decorations.SetBlock(x, y + 1, z,
 				                           (rand_gen() & 1u) ? Blocks::kRedMushroom : Blocks::kBrownMushroom);
@@ -423,7 +423,7 @@ void DefaultTerrain::generate_xz_info(const ChunkPos2 &pos, XZInfo *info) {
 				else
 					info->decorations.GenOakTree(rand_gen, x, y, z);
 			} else if (rand % 227 == 0) {
-				info->decorations.SetBlock(x, y + 1, z, {Blocks::kGrass, BlockMetas::Grass::kPlain, 0});
+				info->decorations.SetBlock(x, y + 1, z, {Blocks::kGrass, BlockVariants::Grass::kPlain, 0});
 			}
 		} break;
 		case Biomes::kDesert: {
@@ -436,7 +436,7 @@ void DefaultTerrain::generate_xz_info(const ChunkPos2 &pos, XZInfo *info) {
 			if (rand % 1200 == 0)
 				info->decorations.GenAcaciaTree(rand_gen, x, y, z);
 			else if (rand % 257 == 0)
-				info->decorations.SetBlock(x, y + 1, z, {Blocks::kGrass, BlockMetas::Grass::kSavanna, 0});
+				info->decorations.SetBlock(x, y + 1, z, {Blocks::kGrass, BlockVariants::Grass::kSavanna, 0});
 			else if (rand % 537 == 0)
 				info->decorations.SetBlock(x, y + 1, z, Blocks::kDeadBush);
 		} break;

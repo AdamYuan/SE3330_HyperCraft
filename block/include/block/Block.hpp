@@ -8,14 +8,14 @@ enum : BlockID {
 };
 } // namespace Blocks
 
-namespace BlockMetas {
+namespace BlockVariants {
 namespace Tree {
 enum : BlockMeta { kOak = 0, kAcacia, kJungle, kSpruce, kBirch };
 }
 namespace Grass {
 enum : BlockMeta { kPlain = 0, kSavanna, kTropical, kBoreal };
 }
-} // namespace BlockMetas
+} // namespace BlockVariants
 
 class Block {
 private:
@@ -39,7 +39,7 @@ private:
 	inline const BlockProperty *get_property() const { return kBlockDataProperties + m_data; }
 
 public:
-	inline Block() : m_id{}, m_meta{} {}
+	inline Block() : m_data{} {}
 	inline Block(BlockID id) : m_id{id}, m_meta{} {}
 	inline Block(BlockID id, BlockMeta variant, BlockMeta transform)
 	    : m_id{id}, m_meta(variant | (transform << kBlockIDVariantBits[id])) {}
@@ -81,3 +81,4 @@ public:
 	inline bool operator==(Block r) const { return m_data == r.m_data; }
 	inline bool operator!=(Block r) const { return m_data != r.m_data; }
 };
+static_assert(sizeof(Block) == 2);

@@ -6,12 +6,12 @@
 using BlockTexID = uint16_t;
 using BlockTexTrans = uint8_t;
 
-struct BlockTextures {
-	enum : BlockTexID {
+namespace BlockTextures {
+enum : BlockTexID {
 #include "../../register/block_textures"
-	};
-	enum : BlockTexTrans { kTransSwapUV = 1u, kTransNegU = 2u, kTransNegV = 4u };
 };
+enum : BlockTexTrans { kTransSwapUV = 1u, kTransNegU = 2u, kTransNegV = 4u };
+} // namespace BlockTextures
 
 class BlockTexture {
 private:

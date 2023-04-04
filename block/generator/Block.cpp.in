@@ -1,6 +1,6 @@
+#include <algorithm>
 #include <block/Block.hpp>
 #include <utility>
-#include <algorithm>
 
 template <uint16_t Data> using BlockDataTrait = BlockTrait<Data & 0xffu>;
 

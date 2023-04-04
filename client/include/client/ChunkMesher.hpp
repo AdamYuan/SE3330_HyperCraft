@@ -1,9 +1,9 @@
 #ifndef HYPERCRAFT_CLIENT_CHUNK_MESHER_HPP
 #define HYPERCRAFT_CLIENT_CHUNK_MESHER_HPP
 
+#include <AABB.hpp>
 #include <client/ChunkMesh.hpp>
 #include <client/ChunkWorkerBase.hpp>
-#include <AABB.hpp>
 #include <queue>
 
 class ChunkMesher : public ChunkWorkerS26Base {
