@@ -12,15 +12,8 @@ if (NOT TARGET hc::dep)
 endif ()
 
 add_library(HyperCraft_common STATIC
-        include/common/Endian.hpp
-        include/common/Light.hpp
-        include/common/Message.hpp
-        include/common/ByteStream.hpp
-        include/common/WorldDatabase.hpp
-        include/common/Position.hpp
-        include/common/Size.hpp
-
         src/WorldDatabase.cpp
+        src/WorkQueue.cpp
         )
 add_library(hc::common ALIAS HyperCraft_common)
 

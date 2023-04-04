@@ -1,5 +1,4 @@
-#ifndef HYPERCRAFT_CLIENT_WORKER_BASE_HPP
-#define HYPERCRAFT_CLIENT_WORKER_BASE_HPP
+#pragma once
 
 class WorkerBase {
 public:
@@ -7,4 +6,3 @@ public:
 	virtual ~WorkerBase() = default;
 };
 
-#endif

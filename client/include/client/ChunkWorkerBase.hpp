@@ -2,7 +2,8 @@
 #define HYPERCRAFT_CLIENT_CHUNK_WORKER_HPP
 
 #include <client/Chunk.hpp>
-#include <client/WorkerBase.hpp>
+
+#include <common/WorkerBase.hpp>
 
 class ChunkWorkerBase : public WorkerBase {
 private:

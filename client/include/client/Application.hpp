@@ -12,6 +12,8 @@
 
 #include <client/pass/WorldRenderGraph.hpp>
 
+#include <common/WorkQueue.hpp>
+
 class Application {
 private:
 	GLFWwindow *m_window{};
@@ -36,6 +38,9 @@ private:
 
 	// game client
 	std::shared_ptr<ClientBase> m_client;
+
+	// worker
+	std::shared_ptr<WorkQueue> m_work_queue;
 
 	void create_glfw_window();
 	void create_vulkan_base();

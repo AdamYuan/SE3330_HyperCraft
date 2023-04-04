@@ -96,7 +96,7 @@ void Application::draw_frame(double delta) {
 	command_buffer->End();
 
 	if (!post_updates.empty())
-		m_world->PushWorker(
+		m_work_queue->PushWorker(
 		    std::make_unique<PostUpdateWorker>(m_world_renderer->GetChunkMeshPool(), std::move(post_updates)));
 
 	m_frame_manager->Render();
@@ -117,7 +117,9 @@ Application::Application() {
 
 	m_transfer_queue = m_main_queue;
 
-	m_world = World::Create();
+	m_work_queue = WorkQueue::Create(std::max<std::size_t>(std::thread::hardware_concurrency() * 3 / 4, 1));
+
+	m_world = World::Create(m_work_queue);
 	m_global_texture = GlobalTexture::Create(m_main_command_pool);
 	m_camera = Camera::Create();
 	m_camera->m_speed = 32.0f;
@@ -151,7 +153,7 @@ void Application::Run() {
 		ImGui::Text("fps: %f", ImGui::GetIO().Framerate);
 		ImGui::Text("frame time: %.1f ms", delta.count() * 1000.0f);
 		ImGui::Text("cam: %f %f %f", m_camera->m_position.x, m_camera->m_position.y, m_camera->m_position.z);
-		ImGui::Text("workers (approx): %zu", m_world->GetApproxWorkerCount());
+		ImGui::Text("workers (approx): %zu", m_work_queue->GetApproxWorkerCount());
 		ImGui::Text("delta: %f", delta.count());
 		ImGui::End();
 
@@ -160,7 +162,7 @@ void Application::Run() {
 		draw_frame(delta.count());
 	}
 	m_frame_manager->WaitIdle();
-	m_world->Join();
+	m_work_queue->Join();
 }
 
 Application::~Application() {

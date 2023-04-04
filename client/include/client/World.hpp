@@ -12,14 +12,17 @@
 #include <vector>
 
 #include <client/Chunk.hpp>
-#include <client/WorkerBase.hpp>
+
+#include <common/WorkQueue.hpp>
 
 class WorldRenderer;
 class ClientBase;
 
 class World : public std::enable_shared_from_this<World> {
 public:
-	inline static std::shared_ptr<World> Create() { return std::make_shared<World>(); }
+	inline static std::shared_ptr<World> Create(const std::shared_ptr<WorkQueue> &work_queue_ptr) {
+		return std::make_shared<World>(work_queue_ptr);
+	}
 
 private:
 	// Parent weak_ptrs
@@ -33,36 +36,26 @@ private:
 	// Chunks
 	std::unordered_map<ChunkPos3, std::shared_ptr<Chunk>> m_chunks;
 
-	// Chunk workers
-	std::atomic_bool m_worker_threads_running{true};
-	moodycamel::BlockingConcurrentQueue<std::unique_ptr<WorkerBase>> m_workers;
-	std::vector<std::thread> m_worker_threads;
-
-	void launch_worker_threads();
-	void worker_thread_func();
+	// Work Queue
+	std::shared_ptr<WorkQueue> m_work_queue_ptr;
 
 public:
+	inline explicit World(const std::shared_ptr<WorkQueue> &work_queue_ptr) : m_work_queue_ptr{work_queue_ptr} {}
+	~World();
+
 	inline const std::weak_ptr<WorldRenderer> &GetWorldRendererWeakPtr() const { return m_world_renderer_weak_ptr; }
 	inline std::shared_ptr<WorldRenderer> LockWorldRenderer() const { return m_world_renderer_weak_ptr.lock(); }
 
 	inline const std::weak_ptr<ClientBase> &GetClientWeakPtr() const { return m_client_weak_ptr; }
 	inline std::shared_ptr<ClientBase> LockClient() const { return m_client_weak_ptr.lock(); }
 
-	inline void PushWorker(std::unique_ptr<WorkerBase> &&worker) { m_workers.enqueue(std::move(worker)); }
-	inline void PushWorkers(std::vector<std::unique_ptr<WorkerBase>> &&workers) {
-		m_workers.enqueue_bulk(std::make_move_iterator(workers.begin()), workers.size());
-	}
+	inline const auto &GetWorkQueuePtr() const { return m_work_queue_ptr; }
 
 	std::shared_ptr<Chunk> FindChunk(const ChunkPos3 &position) const;
 	std::shared_ptr<Chunk> PushChunk(const ChunkPos3 &position);
 	void EraseChunk(const ChunkPos3 &position) { m_chunks.erase(position); }
 
 	void Update(const glm::vec3 &position);
-
-	size_t GetApproxWorkerCount() const { return m_workers.size_approx(); }
-
-	World() { launch_worker_threads(); }
-	void Join(); // must be called in main thread
 };
 
 #endif
