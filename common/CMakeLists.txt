@@ -3,10 +3,6 @@ project(HyperCraft)
 
 set(CMAKE_CXX_STANDARD 20)
 
-if (NOT TARGET hc::texture::block)
-    add_subdirectory(../texture ../texture)
-endif ()
-
 if (NOT TARGET hc::block)
     add_subdirectory(../block ../block)
 endif ()
@@ -22,7 +18,6 @@ add_library(HyperCraft_common STATIC
         include/common/ByteStream.hpp
         include/common/WorldDatabase.hpp
         include/common/Position.hpp
-        include/common/Biome.hpp
         include/common/Size.hpp
 
         src/WorldDatabase.cpp
@@ -44,6 +39,5 @@ find_package(Threads REQUIRED)
 
 target_link_libraries(HyperCraft_common
         PUBLIC hc::common::dep hc::block hc::dep Threads::Threads
-        PRIVATE hc::texture::block
         )
 target_include_directories(HyperCraft_common PUBLIC include)

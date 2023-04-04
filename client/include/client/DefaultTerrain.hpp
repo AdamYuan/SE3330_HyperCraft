@@ -3,7 +3,6 @@
 
 #include <block/Block.hpp>
 #include <client/TerrainBase.hpp>
-#include <common/Biome.hpp>
 #include <common/Position.hpp>
 #include <common/Size.hpp>
 
@@ -16,6 +15,20 @@
 
 class DefaultTerrain : public TerrainBase {
 private:
+	using Biome = uint8_t;
+	struct Biomes {
+		enum : Biome {
+			kOcean = 0,
+			kPlain,
+			kSavanna, kTundra,
+			kGlacier,
+			kDesert,
+			kForest,
+			kTropicalForest,
+			kBorealForest
+		};
+	};
+
 	// Biome
 	static constexpr uint32_t kBiomeMapSize = 4, kSampleScale = 1, kOceanSampleScale = 16, kHeightRange = 256;
 	static constexpr Biome kBiomeMap[kBiomeMapSize][kBiomeMapSize] = {
