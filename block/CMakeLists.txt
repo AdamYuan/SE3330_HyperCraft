@@ -21,7 +21,7 @@ target_link_libraries(HyperCraft_block_gen PRIVATE hc::texture::block hc::dep)
 
 add_custom_command(
         OUTPUT ${GENERATED_DIR}/Block.cpp
-        COMMAND HyperCraft_block_gen ${GENERATED_DIR}/Block.cpp
+        COMMAND ./HyperCraft_block_gen ${GENERATED_DIR}/Block.cpp
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/generator
         DEPENDS HyperCraft_block_gen generator/Block.cpp.in ${BLOCK_DEFS} register/blocks
 )
