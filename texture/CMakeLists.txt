@@ -14,7 +14,8 @@ set(GENERATED_DIR ${CMAKE_CURRENT_SOURCE_DIR}/internal/generated)
 
 add_subdirectory(dep)
 
-find_package(PNG)
+find_package(PNG 1.6 EXACT)
+
 if (PNG_FOUND)
     add_executable(HyperCraft_block_tex_gen generator/block_tex_gen.cpp register/block_textures)
     target_link_libraries(HyperCraft_block_tex_gen PRIVATE hc::texture::dep hc::dep PNG::PNG)
