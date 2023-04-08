@@ -20,7 +20,8 @@ private:
 		enum : Biome {
 			kOcean = 0,
 			kPlain,
-			kSavanna, kTundra,
+			kSavanna,
+			kTundra,
 			kGlacier,
 			kDesert,
 			kForest,
