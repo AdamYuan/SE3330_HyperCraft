@@ -12,7 +12,7 @@ endif ()
 
 file(GLOB BLOCK_DEFS block/*.hpp block/public/*)
 
-set(GENERATED_DIR ${CMAKE_CURRENT_SOURCE_DIR}/internal)
+set(GENERATED_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(HyperCraft_block_gen
         generator/block_gen.cpp
