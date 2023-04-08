@@ -14,26 +14,8 @@ set(GENERATED_DIR ${CMAKE_CURRENT_SOURCE_DIR}/internal/generated)
 
 add_subdirectory(dep)
 
-# check for libpng
-if (MINGW)
-    include(FindPkgConfig)
-    if (NOT PKG_CONFIG_FOUND)
-        message(FATAL_ERROR "pkg-config not found")
-    endif ()
-    pkg_check_modules(PNG libpng16 REQUIRED)
-else ()
-    find_package(PNG 1.6 EXACT)
-endif ()
-
+find_package(PNG)
 if (PNG_FOUND)
-    if (MINGW)
-        add_library(PNG INTERFACE)
-        target_include_directories(PNG INTERFACE ${PNG_INCLUDE_DIRS})
-        target_link_directories(PNG INTERFACE ${PNG_LIBRARY_DIRS})
-        target_link_libraries(PNG INTERFACE ${PNG_LIBRARIES})
-        add_library(PNG::PNG ALIAS PNG)
-    endif ()
-
     add_executable(HyperCraft_block_tex_gen generator/block_tex_gen.cpp register/block_textures)
     target_link_libraries(HyperCraft_block_tex_gen PRIVATE hc::texture::dep hc::dep PNG::PNG)
     target_include_directories(HyperCraft_block_tex_gen PRIVATE internal)
