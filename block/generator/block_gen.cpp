@@ -32,6 +32,7 @@ int main(int argc, char **argv) {
 		return EXIT_FAILURE;
 
 	std::ofstream output{argv[0]};
+	std::cout << argv[0] << " Is Open = " << output.is_open() << std::endl;
 
 	constexpr auto &names = magic_enum::enum_names<ID>();
 	for (const auto &i : names) {
