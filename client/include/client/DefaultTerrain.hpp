@@ -31,8 +31,8 @@ private:
 	};
 
 	// Biome
-	static constexpr uint32_t kBiomeMapSize = 4, kSampleScale = 1, kOceanSampleScale = 16, kHeightRange = 256;
-	static constexpr Biome kBiomeMap[kBiomeMapSize][kBiomeMapSize] = {
+	inline static constexpr uint32_t kBiomeMapSize = 4, kSampleScale = 1, kOceanSampleScale = 16, kHeightRange = 256;
+	inline static constexpr Biome kBiomeMap[kBiomeMapSize][kBiomeMapSize] = {
 	    // [precipitation][temperature]
 	    {Biomes::kGlacier, Biomes::kTundra, Biomes::kDesert, Biomes::kDesert},
 	    {Biomes::kGlacier, Biomes::kSavanna, Biomes::kSavanna, Biomes::kDesert},
@@ -49,7 +49,8 @@ private:
 	}
 	inline static constexpr float biome_prop_remap(float prop) { return std::clamp(prop, -0.4f, 0.4f) * 1.25f + 0.5f; }
 	inline static constexpr float cubic(float x, float a, float b, float c) {
-		return x * x * x * a + x * x * b + x * c;
+		float x2 = x * x;
+		return x * (x2 * a + c) + x2 * b;
 	}
 	inline static constexpr float biome_height_transform(Biome biome, float height) {
 		switch (biome) {
