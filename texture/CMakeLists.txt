@@ -16,7 +16,20 @@ add_subdirectory(dep)
 
 find_package(PNG 1.6 EXACT)
 
+# check for libpng
+include(FindPkgConfig)
+if (NOT PKG_CONFIG_FOUND)
+    message(FATAL_ERROR "pkg-config not found")
+endif ()
+pkg_check_modules(PNG libpng16 REQUIRED)
+
 if (PNG_FOUND)
+    add_library(PNG INTERFACE)
+    target_include_directories(PNG INTERFACE ${PNG_INCLUDE_DIRS})
+    target_link_directories(PNG INTERFACE ${PNG_LIBRARY_DIRS})
+    target_link_libraries(PNG INTERFACE ${PNG_LIBRARIES})
+    add_library(PNG::PNG ALIAS PNG)
+
     add_executable(HyperCraft_block_tex_gen generator/block_tex_gen.cpp register/block_textures)
     target_link_libraries(HyperCraft_block_tex_gen PRIVATE hc::texture::dep hc::dep PNG::PNG)
     target_include_directories(HyperCraft_block_tex_gen PRIVATE internal)
