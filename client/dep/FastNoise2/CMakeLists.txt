@@ -1,13 +1,28 @@
 # CMakeList.txt : CMake project for FastNoise2
 cmake_minimum_required(VERSION 3.7.1)
 
-project(FastNoise2 VERSION 0.9.4)
+project(FastNoise2 VERSION 0.9.7)
 set(CMAKE_CXX_STANDARD 17)
 
-# Build DLL
-set(BUILD_SHARED_LIBS OFF) 
-option(FASTNOISE2_NOISETOOL "Build NoiseTool application" OFF)
-option(FASTNOISE2_TESTS "Build tests" OFF)
+message("FastNoise2 Arch: ${CMAKE_SYSTEM_PROCESSOR}") 
+
+if(CMAKE_SYSTEM_PROCESSOR MATCHES armv7)
+
+    set(FASTSIMD_COMPILE_ARMV7 true)
+    set(FASTSIMD_COMPILE_ARM true)
+    set(FASTSIMD_COMPILE_HAVE_NEON true)
+
+elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL aarch64)
+
+    set(FASTSIMD_COMPILE_AARCH64 true)
+    set(FASTSIMD_COMPILE_ARM true)
+    set(FASTSIMD_COMPILE_HAVE_NEON true)
+
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES arm)
+
+    set(FASTSIMD_COMPILE_ARM true)
+
+endif()
 
 if(MSVC)
     #setup pdb target location
@@ -20,21 +35,4 @@ if(MSVC)
     add_compile_options("/FS")
 endif()
 
-# Introduce variables:
-# * CMAKE_INSTALL_LIBDIR
-# * CMAKE_INSTALL_BINDIR
-include(GNUInstallDirs) 
-set(install_targets "")
-
 add_subdirectory(src)
-
-if(FASTNOISE2_NOISETOOL)
-    include(cmake/CPM.cmake)
-    add_subdirectory(NoiseTool)
-endif()
-
-if(FASTNOISE2_TESTS)
-    include(cmake/CPM.cmake)  
-    add_subdirectory(tests)
-endif()
-
