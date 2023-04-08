@@ -30,5 +30,8 @@ add_library(HyperCraft_block STATIC
         ${GENERATED_DIR}/Block.cpp
         )
 add_library(hc::block ALIAS HyperCraft_block)
-target_include_directories(HyperCraft_block PUBLIC include)
+target_include_directories(HyperCraft_block
+        PUBLIC include
+        PRIVATE block
+        )
 target_link_libraries(HyperCraft_block PUBLIC hc::texture::block hc::dep)

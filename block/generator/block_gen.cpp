@@ -17,7 +17,7 @@ inline std::string make_block_hpp_filename(std::string_view x) {
 			ret.push_back(*i);
 	}
 	ret += ".hpp";
-	return "../block/" + ret;
+	return ret;
 }
 
 enum ID {
@@ -36,8 +36,9 @@ int main(int argc, char **argv) {
 	constexpr auto &names = magic_enum::enum_names<ID>();
 	for (const auto &i : names) {
 		std::string filename = make_block_hpp_filename(i);
-		std::cout << i << "->" << filename;
-		output << "#include \"" << filename << "\"" << std::endl;
+		output << "#include <" << filename << ">" << std::endl;
+
+		std::cout << i << "->" << filename << std::endl;
 	}
 	std::ifstream hpp_in{kBlockCppInFilename};
 	output << std::string{(std::istreambuf_iterator<char>(hpp_in)), std::istreambuf_iterator<char>()};

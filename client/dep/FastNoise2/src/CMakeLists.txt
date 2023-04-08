@@ -1,3 +1,4 @@
+cmake_policy(SET CMP0069 NEW)
 set(CMAKE_CXX_STANDARD 17)
 
 set(install_targets ${install_targets} FastNoise PARENT_SCOPE)
