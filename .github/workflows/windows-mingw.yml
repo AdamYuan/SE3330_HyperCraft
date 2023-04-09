@@ -20,9 +20,10 @@ jobs:
             os: windows-latest,
             artifact: "windows_mingw_32.7z",
             build_type: "Release",
-            gcc_package: "mingw-w64-i686-gcc",
-            cc: "/mingw32/bin/i686-w64-mingw32-gcc",
-            cxx: "/mingw32/bin/i686-w64-mingw32-g++",
+            sys: mingw32,
+            env: i686,
+            cc: "i686-w64-mingw32-gcc",
+            cxx: "i686-w64-mingw32-g++",
             archiver: "7z a",
             generators: "Ninja"
           }
@@ -31,9 +32,10 @@ jobs:
             os: windows-latest,
             artifact: "windows_mingw_64.7z",
             build_type: "Release",
-            gcc_package: "mingw-w64-x86_64-gcc",
-            cc: "/mingw64/bin/x86_64-w64-mingw32-gcc",
-            cxx: "/mingw64/bin/x86_64-w64-mingw32-g++",
+            sys: mingw64,
+            env: x86_64,
+            cc: "x86_64-w64-mingw32-gcc",
+            cxx: "x86_64-w64-mingw32-g++",
             archiver: "7z a",
             generators: "Ninja"
           }
@@ -44,7 +46,8 @@ jobs:
       - uses: msys2/setup-msys2@v2
         with:
           update: false
-          install: ${{ matrix.config.gcc_package }} cmake ninja
+          msystem: ${{ matrix.config.sys }}
+          install: mingw-w64-${{ matrix.config.env }}-gcc cmake ninja
 
       - name: Configure
         shell: msys2 {0}
