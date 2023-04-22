@@ -494,25 +494,17 @@ void ChunkMesher::light4_interpolate(const ChunkMesher::Light4 &low_light, const
 }
 
 void ChunkMesher::Run() {
-	if (!lock()) {
-		return;
-	}
-
-	uint64_t version = m_chunk_ptr->GetMeshSync().FetchVersion();
-
-	if (!m_chunk_ptr->IsGenerated())
+	if (!lock())
 		return;
 
 	// if the neighbour chunks are not totally generated, return and move it back
 	for (const auto &i : m_neighbour_chunk_ptr)
 		if (!i->IsGenerated()) {
-			// spdlog::info("remesh");
 			try_push_worker(ChunkMesher::TryCreateWithInitialLight(m_chunk_ptr));
 			return;
 		}
 
 	if (m_init_light) {
-		uint64_t light_version = m_chunk_ptr->GetLightSync().FetchVersion();
 		// TODO: optimize this
 		for (int8_t y = -15; y < (int8_t)kChunkSize + 15; ++y)
 			for (int8_t z = -15; z < (int8_t)kChunkSize + 15; ++z)
@@ -525,7 +517,7 @@ void ChunkMesher::Run() {
 					//	torchlight_queue.Push({{x, y, z}, light.GetTorchlight()});
 				}
 		initial_sunlight_bfs();
-		m_chunk_ptr->PushLight(light_version, m_light_buffer);
+		m_chunk_ptr->PushLight(m_light_version, m_light_buffer);
 	}
 
 	std::vector<MeshGenInfo> meshes = generate_mesh();
@@ -552,5 +544,5 @@ void ChunkMesher::Run() {
 	}
 
 	// Push mesh to chunk
-	m_chunk_ptr->PushMesh(version, mesh_handles);
+	m_chunk_ptr->PushMesh(m_version, mesh_handles);
 }

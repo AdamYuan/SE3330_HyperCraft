@@ -86,11 +86,7 @@ static void initial_sunlight_bfs(Light *light_buffer, LightQueue *queue) {
 }
 
 void ChunkLighter::Run() {
-	if (!lock() || !m_chunk_ptr->IsGenerated())
-		return;
-
-	uint64_t version = m_chunk_ptr->GetLightSync().FetchVersion();
-	if (!version)
+	if (!lock())
 		return;
 
 	thread_local static Light light_buffer[(kChunkSize + 28) * (kChunkSize + 28) * (kChunkSize + 28)];
@@ -119,7 +115,7 @@ void ChunkLighter::Run() {
 				}
 		initial_sunlight_bfs(light_buffer, &sunlight_queue);
 	}
-	m_chunk_ptr->PushLight(version, light_buffer);
+	m_chunk_ptr->PushLight(m_version, light_buffer);
 	// TODO: Push neighbour lights to be updated
 	{}
 	/* for (uint32_t i = 0; i < Chunk::kSize * Chunk::kSize * Chunk::kSize; ++i)

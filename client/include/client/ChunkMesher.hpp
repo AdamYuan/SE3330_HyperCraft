@@ -8,17 +8,6 @@
 
 class ChunkMesher final : public ChunkWorkerS26Base {
 public:
-	inline bool lock() final {
-		if (!ChunkWorkerS26Base::lock()) {
-			if (m_chunk_ptr) {
-				m_chunk_ptr->GetMeshSync().Cancel();
-				if (m_init_light)
-					m_chunk_ptr->GetLightSync().Cancel();
-			}
-			return false;
-		}
-		return true;
-	}
 	static inline std::unique_ptr<ChunkMesher> TryCreate(const std::shared_ptr<Chunk> &chunk_ptr) {
 		if (chunk_ptr->GetMeshSync().IsPending())
 			return nullptr;
@@ -40,7 +29,28 @@ public:
 	void Run() override;
 
 private:
+	inline bool lock() final {
+		if (!ChunkWorkerS26Base::lock()) {
+			if (m_chunk_ptr) {
+				m_chunk_ptr->GetMeshSync().Cancel();
+				if (m_init_light)
+					m_chunk_ptr->GetLightSync().Cancel();
+			}
+			return false;
+		}
+		if (!m_chunk_ptr->IsGenerated()) {
+			m_chunk_ptr->GetMeshSync().Cancel();
+			if (m_init_light)
+				m_chunk_ptr->GetLightSync().Cancel();
+			return false;
+		}
+		m_version = m_chunk_ptr->GetMeshSync().FetchVersion();
+		if (m_init_light)
+			m_light_version = m_chunk_ptr->GetLightSync().FetchVersion();
+		return true;
+	}
 	bool m_init_light{};
+	uint64_t m_version{}, m_light_version{};
 	struct LightEntry {
 		glm::i8vec3 position;
 		LightLvl light_lvl;

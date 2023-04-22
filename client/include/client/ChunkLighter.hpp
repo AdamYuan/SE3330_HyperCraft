@@ -4,10 +4,25 @@
 #include <client/ChunkWorkerBase.hpp>
 #include <common/Light.hpp>
 
-class ChunkLighter : public ChunkWorkerS26Base {
+class ChunkLighter final : public ChunkWorkerS26Base {
 private:
+	uint64_t m_version{};
 	bool m_initial_pass{false};
 	std::vector<glm::ivec3> m_mods;
+
+	inline bool lock() final {
+		if (!ChunkWorkerS26Base::lock()) {
+			if (m_chunk_ptr)
+				m_chunk_ptr->GetLightSync().Cancel();
+			return false;
+		}
+		if (!m_chunk_ptr->IsGenerated()) {
+			m_chunk_ptr->GetLightSync().Cancel();
+			return false;
+		}
+		m_version = m_chunk_ptr->GetLightSync().FetchVersion();
+		return true;
+	}
 
 public:
 	static inline std::unique_ptr<ChunkLighter> TryCreateInitial(const std::shared_ptr<Chunk> &chunk_ptr) {
