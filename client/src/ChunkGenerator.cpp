@@ -45,7 +45,7 @@ void ChunkGenerator::Run() {
 
 	for (uint32_t i = 0; i < Chunk::kSize * Chunk::kSize * Chunk::kSize; ++i)
 		if (m_chunk_ptr->GetBlock(i) != Blocks::kAir) {
-			push_worker(ChunkMesher::CreateWithInitialLight(m_chunk_ptr));
+			try_push_worker(ChunkMesher::TryCreateWithInitialLight(m_chunk_ptr));
 			return;
 		}
 	m_chunk_ptr->SetMeshedFlag();

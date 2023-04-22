@@ -32,8 +32,11 @@ void World::Update(const glm::vec3 &position) {
 			if (glm::distance((glm::vec3)current_chunk_pos, (glm::vec3)it->first) > kR + 2) {
 				it = m_chunks.erase(it);
 			} else {
-				if (!it->second->IsMeshed())
-					new_nei_workers.push_back(ChunkMesher::CreateWithInitialLight(it->second));
+				if (!it->second->IsMeshed()) {
+					auto worker = ChunkMesher::TryCreateWithInitialLight(it->second);
+					if (worker)
+						new_nei_workers.push_back(std::move(worker));
+				}
 				++it;
 			}
 		}

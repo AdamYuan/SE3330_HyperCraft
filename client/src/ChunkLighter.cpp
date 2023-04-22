@@ -89,7 +89,7 @@ void ChunkLighter::Run() {
 	if (!lock() || !m_chunk_ptr->IsGenerated())
 		return;
 
-	uint64_t version = m_chunk_ptr->FetchLightVersion();
+	uint64_t version = m_chunk_ptr->GetLightSync().FetchVersion();
 	if (!version)
 		return;
 
@@ -103,7 +103,7 @@ void ChunkLighter::Run() {
 		// wait all neighbours to be generated
 		for (const auto &i : m_neighbour_chunk_ptr)
 			if (!i->IsGenerated()) {
-				push_worker(ChunkLighter::Create(m_chunk_ptr, m_initial_pass, std::move(m_mods)));
+				try_push_worker(ChunkLighter::TryCreate(m_chunk_ptr, m_initial_pass, std::move(m_mods)));
 				return;
 			}
 		// fetch light
@@ -123,8 +123,8 @@ void ChunkLighter::Run() {
 	// TODO: Push neighbour lights to be updated
 	{}
 	/* for (uint32_t i = 0; i < Chunk::kSize * Chunk::kSize * Chunk::kSize; ++i)
-		if (m_chunk_ptr->GetBlock(i) != Blocks::kAir) {
-			push_worker(ChunkMesher::Create(m_chunk_ptr));
-			return;
-		} */
+	    if (m_chunk_ptr->GetBlock(i) != Blocks::kAir) {
+	        push_worker(ChunkMesher::Create(m_chunk_ptr));
+	        return;
+	    } */
 }

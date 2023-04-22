@@ -20,14 +20,12 @@ class Chunk : public std::enable_shared_from_this<Chunk> {
 public:
 	static constexpr uint32_t kSize = kChunkSize;
 
-	template <typename T>
-	static inline constexpr typename std::enable_if<std::is_integral<T>::value, void>::type Index2XYZ(uint32_t idx,
-	                                                                                                  T *xyz) {
+	template <typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+	static inline constexpr void Index2XYZ(uint32_t idx, T *xyz) {
 		return ChunkIndex2XYZ(idx, xyz);
 	}
-	template <typename T>
-	static inline constexpr typename std::enable_if<std::is_integral<T>::value, uint32_t>::type XYZ2Index(T x, T y,
-	                                                                                                      T z) {
+	template <typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+	static inline constexpr uint32_t XYZ2Index(T x, T y, T z) {
 		return ChunkXYZ2Index(x, y, z);
 	}
 	template <typename T>
@@ -124,33 +122,23 @@ public:
 	// World (parent)
 	inline std::shared_ptr<World> LockWorld() const { return m_world_weak_ptr.lock(); }
 
-	// Flags
-	bool IsGenerated() const { return m_generated_flag.load(std::memory_order_acquire); }
-	void SetGeneratedFlag() { m_generated_flag.store(true, std::memory_order_release); }
-	bool IsMeshed() const { return m_meshed_flag.load(std::memory_order_acquire); }
-	void SetMeshedFlag() { m_meshed_flag.store(true, std::memory_order_release); }
+	// Initial Flags
+	bool IsGenerated() const { return m_initial_generated_flag.load(std::memory_order_acquire); }
+	void SetGeneratedFlag() { m_initial_generated_flag.store(true, std::memory_order_release); }
+	bool IsMeshed() const { return m_initial_meshed_flag.load(std::memory_order_acquire); }
+	void SetMeshedFlag() { m_initial_meshed_flag.store(true, std::memory_order_release); }
 
-	// Versions
-	inline void PendMeshVersion() { m_mesh_version.Pend(); }
-	inline void PendLightVersion() { m_light_version.Pend(); }
+	// Sync
+	inline auto &GetMeshSync() { return m_mesh_sync; }
+	inline auto &GetLightSync() { return m_light_sync; }
 
-	inline uint64_t FetchMeshVersion() { return m_mesh_version.Fetch(); }
-	inline uint64_t FetchLightVersion() { return m_light_version.Fetch(); }
-
-	inline bool IsLatestMesh() const { return m_mesh_version.IsLatest(); }
-	inline bool IsLatestLight() const { return m_light_version.IsLatest(); }
-
-	inline void SwapMesh(uint64_t version, std::vector<std::unique_ptr<ChunkMeshHandle>> &mesh_handles) {
-		std::scoped_lock lock{m_mesh_mutex};
-		if (!m_mesh_version.Done(version))
-			return;
-		std::swap(m_mesh_handles, mesh_handles);
+	inline void PushMesh(uint64_t version, std::vector<std::unique_ptr<ChunkMeshHandle>> &mesh_handles) {
+		m_mesh_sync.Done(version, [this, &mesh_handles]() { m_mesh_handles = std::move(mesh_handles); });
 	}
 	inline void PushLight(uint64_t version, const Light *light_buffer) {
-		std::scoped_lock lock{m_light_mutex};
-		if (!m_light_version.Done(version))
-			return;
-		std::copy(light_buffer, light_buffer + kChunkSize * kChunkSize * kChunkSize, m_lights);
+		m_light_sync.Done(version, [this, light_buffer]() {
+			std::copy(light_buffer, light_buffer + kChunkSize * kChunkSize * kChunkSize, m_lights);
+		});
 	}
 
 	// Creation
@@ -161,11 +149,7 @@ public:
 		return ret;
 	}
 
-	// Mesh Removal
-	inline std::vector<std::unique_ptr<ChunkMeshHandle>> &&MoveMeshes() {
-		std::scoped_lock lock{m_mesh_mutex};
-		return std::move(m_mesh_handles);
-	}
+	// Finalize
 	inline void SetMeshFinalize() const {
 		for (const auto &i : m_mesh_handles)
 			i->SetFinalize();
@@ -180,54 +164,35 @@ private:
 	std::weak_ptr<Chunk> m_neighbour_weak_ptrs[26];
 	std::weak_ptr<World> m_world_weak_ptr;
 
-	std::mutex m_mesh_mutex, m_light_mutex;
 	std::vector<std::unique_ptr<ChunkMeshHandle>> m_mesh_handles;
 
-	template <bool DoneInMutex = false> struct Version {
+	struct Sync {
 	private:
-		std::atomic_uint64_t m_pending{0}, m_fetched{0}, m_done{0};
+		std::atomic_bool m_is_pending{};
+		std::mutex m_version_mutex;
+		uint64_t m_fetched_version{}, m_done_version{};
 
 	public:
-		inline void Pend() { ++m_pending; }
-		inline uint64_t Fetch() {
-			uint64_t target = m_pending.load(std::memory_order_acquire);
-
-			uint64_t prev = m_fetched.load(std::memory_order_acquire);
-			do {
-				if (target <= prev)
-					return 0;
-			} while (
-			    !m_fetched.compare_exchange_weak(prev, target, std::memory_order_release, std::memory_order_relaxed));
-			return target;
+		inline bool IsPending() { return m_is_pending.load(std::memory_order_acquire); }
+		inline void Pend() { m_is_pending.store(true, std::memory_order_release); }
+		inline void Cancel() { m_is_pending.store(false, std::memory_order_release); }
+		inline uint64_t FetchVersion() {
+			m_is_pending.store(false, std::memory_order_release);
+			std::scoped_lock lock{m_version_mutex};
+			return ++m_fetched_version;
 		}
-		inline bool Done(uint64_t v) {
-			uint64_t target = m_fetched.load(std::memory_order_acquire);
-			assert(target >= v); // TODO: remove assert
-			if (target > v)
-				return false;
-
-			if constexpr (DoneInMutex) {
-				uint64_t prev = m_done.load(std::memory_order_acquire);
-				if (v > prev) {
-					m_done.store(v, std::memory_order_release);
-					return true;
-				}
-			} else {
-				uint64_t prev = m_done.load(std::memory_order_acquire);
-				do {
-					if (prev >= v)
-						return false;
-				} while (!m_done.compare_exchange_weak(prev, v, std::memory_order_release, std::memory_order_relaxed));
+		template <typename DoneFunc> inline bool Done(uint64_t version, DoneFunc &&done_func) {
+			std::scoped_lock lock{m_version_mutex};
+			if (version == m_fetched_version && version > m_done_version) {
+				done_func();
+				m_done_version = version;
 				return true;
 			}
 			return false;
 		}
-		inline bool IsLatest() const {
-			return m_done.load(std::memory_order_acquire) == m_pending.load(std::memory_order_acquire);
-		}
 	};
-	std::atomic_bool m_generated_flag{}, m_meshed_flag{};
-	Version<true> m_mesh_version{}, m_light_version{};
+	std::atomic_bool m_initial_generated_flag{false}, m_initial_meshed_flag{false};
+	Sync m_mesh_sync{}, m_light_sync{};
 };
 
 #endif

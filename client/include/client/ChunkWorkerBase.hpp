@@ -12,7 +12,7 @@ private:
 protected:
 	std::shared_ptr<Chunk> m_chunk_ptr;
 	virtual inline bool lock() { return (m_chunk_ptr = m_chunk_weak_ptr.lock()) != nullptr; }
-	void push_worker(std::unique_ptr<ChunkWorkerBase> &&worker) const;
+	void try_push_worker(std::unique_ptr<ChunkWorkerBase> &&worker) const;
 
 public:
 	inline explicit ChunkWorkerBase(const std::weak_ptr<Chunk> &chunk_weak_ptr) : m_chunk_weak_ptr(chunk_weak_ptr) {}
