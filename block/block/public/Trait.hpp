@@ -5,6 +5,8 @@
 #include <cinttypes>
 #include <texture/BlockTexture.hpp>
 
+using namespace block;
+
 #define BLOCK_TEXTURE_NONE \
 	{ \
 		{}, {}, {}, {}, {}, {} \

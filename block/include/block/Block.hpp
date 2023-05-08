@@ -2,20 +2,22 @@
 
 #include "BlockProperty.hpp"
 
-namespace Blocks {
-enum : BlockID {
-#include "../../register/blocks"
-};
-} // namespace Blocks
+namespace block {
 
-namespace BlockVariants {
-namespace Tree {
-enum : BlockMeta { kOak = 0, kAcacia, kJungle, kSpruce, kBirch };
-}
-namespace Grass {
-enum : BlockMeta { kPlain = 0, kSavanna, kTropical, kBoreal };
-}
-} // namespace BlockVariants
+struct Blocks {
+	enum : BlockID {
+#include "../../register/blocks"
+	};
+};
+
+struct BlockVariants {
+	struct Tree {
+		enum : BlockMeta { kOak = 0, kAcacia, kJungle, kSpruce, kBirch };
+	};
+	struct Grass {
+		enum : BlockMeta { kPlain = 0, kSavanna, kTropical, kBoreal };
+	};
+};
 
 class Block {
 private:
@@ -82,3 +84,5 @@ public:
 	inline bool operator!=(Block r) const { return m_data != r.m_data; }
 };
 static_assert(sizeof(Block) == 2);
+
+} // namespace block

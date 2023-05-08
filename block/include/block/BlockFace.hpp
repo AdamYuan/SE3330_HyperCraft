@@ -3,10 +3,12 @@
 #include <cinttypes>
 #include <glm/glm.hpp>
 
+namespace block {
+
 using BlockFace = uint8_t;
-namespace BlockFaces {
-enum FACE : BlockFace { kRight = 0, kLeft, kTop, kBottom, kFront, kBack };
-}
+struct BlockFaces {
+	enum FACE : BlockFace { kRight = 0, kLeft, kTop, kBottom, kFront, kBack };
+};
 
 inline constexpr BlockFace BlockFaceOpposite(BlockFace f) { return f ^ 1u; }
 template <typename T>
@@ -20,3 +22,5 @@ BlockFaceProceed(glm::vec<3, T> xyz, BlockFace f) {
 	xyz[f >> 1] += 1 - ((f & 1) << 1);
 	return xyz;
 }
+
+} // namespace block

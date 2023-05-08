@@ -2,6 +2,8 @@
 #include <block/Block.hpp>
 #include <utility>
 
+namespace block {
+
 template <uint16_t Data> using BlockDataTrait = BlockTrait<Data & 0xffu>;
 
 template <uint16_t Data>
@@ -28,3 +30,5 @@ template <std::size_t... IDArray> struct BlockIDTable<std::index_sequence<IDArra
 const BlockProperty *Block::kBlockDataProperties = BlockDataTable<std::make_index_sequence<65536>>::kProperties;
 const uint8_t *Block::kBlockIDVariantBits = BlockIDTable<std::make_index_sequence<256>>::kVariantBits;
 const uint8_t *Block::kBlockIDTransformBits = BlockIDTable<std::make_index_sequence<256>>::kTransformBits;
+
+} // namespace block

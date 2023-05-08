@@ -8,6 +8,8 @@
 #include <limits>
 #include <type_traits>
 
+namespace block {
+
 struct BlockMeshVertex {
 	union {
 		struct {
@@ -36,3 +38,5 @@ struct BlockMesh {
 	uint32_t aabb_count{};
 };
 #undef BLOCK_MESH_MAX_FACE_COUNT
+
+}

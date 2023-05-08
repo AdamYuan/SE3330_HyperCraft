@@ -17,6 +17,9 @@
 class World;
 
 class Chunk : public std::enable_shared_from_this<Chunk> {
+private:
+	using Block = block::Block;
+
 public:
 	static constexpr uint32_t kSize = kChunkSize;
 
@@ -60,20 +63,11 @@ public:
 
 	// Block Getter and Setter
 	inline const Block *GetBlockData() const { return m_blocks; }
-	template <typename T>
-	inline typename std::enable_if<std::is_integral<T>::value, Block>::type GetBlock(T x, T y, T z) const {
-		return m_blocks[XYZ2Index(x, y, z)];
-	}
-	template <typename T>
-	inline typename std::enable_if<std::is_integral<T>::value, Block &>::type GetBlockRef(T x, T y, T z) {
-		return m_blocks[XYZ2Index(x, y, z)];
-	}
+	template <typename T> inline Block GetBlock(T x, T y, T z) const { return m_blocks[XYZ2Index(x, y, z)]; }
+	template <typename T> inline Block &GetBlockRef(T x, T y, T z) { return m_blocks[XYZ2Index(x, y, z)]; }
 	inline Block GetBlock(uint32_t idx) const { return m_blocks[idx]; }
 	inline Block &GetBlockRef(uint32_t idx) { return m_blocks[idx]; }
-	template <typename T>
-	inline typename std::enable_if<std::is_integral<T>::value, void>::type SetBlock(T x, T y, T z, Block b) {
-		m_blocks[XYZ2Index(x, y, z)] = b;
-	}
+	template <typename T> inline void SetBlock(T x, T y, T z, Block b) { m_blocks[XYZ2Index(x, y, z)] = b; }
 	inline void SetBlock(uint32_t idx, Block b) { m_blocks[idx] = b; }
 
 	// Light Getter and Setter
@@ -105,8 +99,8 @@ public:
 	GetBlockFromNeighbour(T x, T y, T z) const {
 		return m_blocks[XYZ2Index((x + kSize) % kSize, (y + kSize) % kSize, (z + kSize) % kSize)];
 	}
-	template <typename T>
-	inline typename std::enable_if<std::is_unsigned<T>::value, Block>::type GetBlockFromNeighbour(T x, T y, T z) const {
+	template <typename T, typename = std::enable_if_t<std::is_unsigned_v<T>>>
+	inline Block GetBlockFromNeighbour(T x, T y, T z) const {
 		return m_blocks[XYZ2Index(x % kSize, y % kSize, z % kSize)];
 	}
 	template <typename T>

@@ -70,9 +70,9 @@ public:
 static void initial_sunlight_bfs(Light *light_buffer, LightQueue *queue) {
 	while (!queue->Empty()) {
 		LightEntry e = queue->Pop();
-		for (BlockFace f = 0; f < 6; ++f) {
+		for (block::BlockFace f = 0; f < 6; ++f) {
 			LightEntry nei = e;
-			BlockFaceProceed(glm::value_ptr(nei.position), f);
+			block::BlockFaceProceed(glm::value_ptr(nei.position), f);
 			--nei.light_lvl;
 
 			uint32_t idx = chunk_xyz_extended14_to_index(nei.position.x, nei.position.y, nei.position.z);

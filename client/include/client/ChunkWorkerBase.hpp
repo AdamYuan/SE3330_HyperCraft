@@ -20,6 +20,9 @@ public:
 };
 
 class ChunkWorkerS26Base : public ChunkWorkerBase {
+private:
+	using Block = block::Block;
+
 protected:
 	std::shared_ptr<Chunk> m_neighbour_chunk_ptr[26];
 	inline bool lock() override {

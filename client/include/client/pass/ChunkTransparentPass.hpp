@@ -72,7 +72,7 @@ public:
 		    frag_shader_module->GetPipelineShaderStageCreateInfo(VK_SHADER_STAGE_FRAGMENT_BIT)};
 
 		myvk::GraphicsPipelineState pipeline_state = {};
-		pipeline_state.m_vertex_input_state.Enable({{0, sizeof(ChunkMeshVertex), VK_VERTEX_INPUT_RATE_VERTEX}},
+		pipeline_state.m_vertex_input_state.Enable({{0, sizeof(BlockVertex), VK_VERTEX_INPUT_RATE_VERTEX}},
 		                                           {{0, 0, VK_FORMAT_R32G32_UINT, 0}});
 		pipeline_state.m_input_assembly_state.Enable(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
 		pipeline_state.m_rasterization_state.Initialize(VK_POLYGON_MODE_FILL, VK_FRONT_FACE_COUNTER_CLOCKWISE,

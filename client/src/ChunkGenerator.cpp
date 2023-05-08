@@ -44,7 +44,7 @@ void ChunkGenerator::Run() {
 	             m_chunk_ptr->GetPosition().z); */
 
 	for (uint32_t i = 0; i < Chunk::kSize * Chunk::kSize * Chunk::kSize; ++i)
-		if (m_chunk_ptr->GetBlock(i) != Blocks::kAir) {
+		if (m_chunk_ptr->GetBlock(i) != block::Blocks::kAir) {
 			try_push_worker(ChunkMesher::TryCreateWithInitialLight(m_chunk_ptr));
 			return;
 		}

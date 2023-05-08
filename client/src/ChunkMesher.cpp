@@ -72,9 +72,9 @@ void ChunkMesher::initial_sunlight_bfs() {
 		if (e.light_lvl <= 1u)
 			continue;
 		--e.light_lvl;
-		for (BlockFace f = 0; f < 6; ++f) {
+		for (block::BlockFace f = 0; f < 6; ++f) {
 			LightEntry nei = e;
-			BlockFaceProceed(glm::value_ptr(nei.position), f);
+			block::BlockFaceProceed(glm::value_ptr(nei.position), f);
 
 			if (!chunk_xyz_extended15_in_bound(nei.position.x, nei.position.y, nei.position.z))
 				continue;
@@ -100,19 +100,19 @@ std::vector<ChunkMesher::MeshGenInfo> ChunkMesher::generate_mesh() const {
 
 	// deal with custom block mesh
 	for (uint32_t idx = 0; idx < kChunkSize * kChunkSize * kChunkSize; ++idx) {
-		Block b = m_chunk_ptr->GetBlock(idx);
+		block::Block b = m_chunk_ptr->GetBlock(idx);
 		if (!b.HaveCustomMesh())
 			continue;
-		const BlockMesh *mesh = b.GetCustomMesh();
+		const block::BlockMesh *mesh = b.GetCustomMesh();
 		glm::vec<3, int_fast8_t> pos{};
 		ChunkIndex2XYZ(idx, glm::value_ptr(pos));
-		glm::u32vec3 base = (glm::u32vec3)pos << ChunkMeshVertex::kUnitBitOffset;
+		glm::u32vec3 base = (glm::u32vec3)pos << BlockVertex::kUnitBitOffset;
 
-		BlockFace cur_light_face = std::numeric_limits<BlockFace>::max();
+		auto cur_light_face = std::numeric_limits<block::BlockFace>::max();
 		uint8_t cur_light_axis{}, u_light_axis{}, v_light_axis{};
 		Light4 low_light4{}, high_light4{};
 		for (uint32_t i = 0; i < mesh->face_count; ++i) {
-			const BlockMeshFace *mesh_face = mesh->faces + i;
+			const block::BlockMeshFace *mesh_face = mesh->faces + i;
 
 			if (mesh_face->light_face != cur_light_face) {
 				cur_light_face = mesh_face->light_face;
@@ -122,8 +122,8 @@ std::vector<ChunkMesher::MeshGenInfo> ChunkMesher::generate_mesh() const {
 				if (cur_light_face & 1u)
 					std::swap(u_light_axis, v_light_axis);
 
-				auto op_nei_pos = BlockFaceProceed(pos, BlockFaceOpposite(cur_light_face)),
-				     nei_pos = BlockFaceProceed(pos, cur_light_face);
+				auto op_nei_pos = block::BlockFaceProceed(pos, block::BlockFaceOpposite(cur_light_face)),
+				     nei_pos = block::BlockFaceProceed(pos, cur_light_face);
 				light4_init(&low_light4, cur_light_face, op_nei_pos.x, op_nei_pos.y, op_nei_pos.z);
 				if (get_block(nei_pos.x, nei_pos.y, nei_pos.z).GetIndirectLightPass())
 					light4_init(&high_light4, cur_light_face, pos.x, pos.y, pos.z);
@@ -144,9 +144,9 @@ std::vector<ChunkMesher::MeshGenInfo> ChunkMesher::generate_mesh() const {
 			for (const auto &vert : mesh_face->vertices) {
 				info.aabb.Merge({base.x + vert.x, base.y + vert.y, base.z + vert.z});
 				uint8_t du = vert.pos[u_light_axis], dv = vert.pos[v_light_axis],
-				        dw = std::min(vert.pos[cur_light_axis], (uint8_t)ChunkMeshVertex::kUnitOffset);
+				        dw = std::min(vert.pos[cur_light_axis], (uint8_t)BlockVertex::kUnitOffset);
 				if (cur_light_face & 1u)
-					dw = ChunkMeshVertex::kUnitOffset - (int32_t)dw;
+					dw = BlockVertex::kUnitOffset - (int32_t)dw;
 				uint8_t ao = vert.ao, sunlight, torchlight;
 				light4_interpolate(low_light4, high_light4, du, dv, dw, &ao, &sunlight, &torchlight);
 				info.vertices.emplace_back(base.x + vert.x, base.y + vert.y, base.z + vert.z, mesh_face->axis,
@@ -183,10 +183,10 @@ std::vector<ChunkMesher::MeshGenInfo> ChunkMesher::generate_mesh() const {
 			uint32_t counter = 0;
 			for (x[v] = 0; x[v] < Chunk::kSize; ++x[v]) {
 				for (x[u] = 0; x[u] < Chunk::kSize; ++x[u], ++counter) {
-					const Block a = get_block(x[0] + q[0], x[1] + q[1], x[2] + q[2]);
-					const Block b = get_block(x[0], x[1], x[2]);
+					const block::Block a = get_block(x[0] + q[0], x[1] + q[1], x[2] + q[2]);
+					const block::Block b = get_block(x[0], x[1], x[2]);
 
-					BlockFace f;
+					block::BlockFace f;
 					if (x[axis] != 0 && a.ShowFace((f = axis << 1), b)) {
 						texture_mask[0][counter] = a.GetTexture(f);
 						face_mask |= 1u;
@@ -259,35 +259,35 @@ std::vector<ChunkMesher::MeshGenInfo> ChunkMesher::generate_mesh() const {
 								info = MeshGenInfo{};
 								info.transparent = trans;
 							}
-							info.aabb.Merge({{uint32_t(x[0]) << ChunkMeshVertex::kUnitBitOffset,
-							                  uint32_t(x[1]) << ChunkMeshVertex::kUnitBitOffset,
-							                  uint32_t(x[2]) << ChunkMeshVertex::kUnitBitOffset},
-							                 {uint32_t(x[0] + du[0] + dv[0]) << ChunkMeshVertex::kUnitBitOffset,
-							                  uint32_t(x[1] + du[1] + dv[1]) << ChunkMeshVertex::kUnitBitOffset,
-							                  uint32_t(x[2] + du[2] + dv[2]) << ChunkMeshVertex::kUnitBitOffset}});
+							info.aabb.Merge({{uint32_t(x[0]) << BlockVertex::kUnitBitOffset,
+							                  uint32_t(x[1]) << BlockVertex::kUnitBitOffset,
+							                  uint32_t(x[2]) << BlockVertex::kUnitBitOffset},
+							                 {uint32_t(x[0] + du[0] + dv[0]) << BlockVertex::kUnitBitOffset,
+							                  uint32_t(x[1] + du[1] + dv[1]) << BlockVertex::kUnitBitOffset,
+							                  uint32_t(x[2] + du[2] + dv[2]) << BlockVertex::kUnitBitOffset}});
 
-							BlockFace quad_face = (axis << 1) | quad_face_inv;
-							info.vertices.emplace_back(uint32_t(x[0]) << ChunkMeshVertex::kUnitBitOffset,
-							                           uint32_t(x[1]) << ChunkMeshVertex::kUnitBitOffset,
-							                           uint32_t(x[2]) << ChunkMeshVertex::kUnitBitOffset, axis,
-							                           quad_face, quad_light.ao[0], quad_light.sunlight[0],
+							block::BlockFace quad_face = (axis << 1) | quad_face_inv;
+							info.vertices.emplace_back(uint32_t(x[0]) << BlockVertex::kUnitBitOffset,
+							                           uint32_t(x[1]) << BlockVertex::kUnitBitOffset,
+							                           uint32_t(x[2]) << BlockVertex::kUnitBitOffset, axis, quad_face,
+							                           quad_light.ao[0], quad_light.sunlight[0],
 							                           quad_light.torchlight[0], quad_texture.GetID(),
 							                           quad_texture.GetTransformation());
-							info.vertices.emplace_back(uint32_t(x[0] + du[0]) << ChunkMeshVertex::kUnitBitOffset,
-							                           uint32_t(x[1] + du[1]) << ChunkMeshVertex::kUnitBitOffset,
-							                           uint32_t(x[2] + du[2]) << ChunkMeshVertex::kUnitBitOffset, axis,
+							info.vertices.emplace_back(uint32_t(x[0] + du[0]) << BlockVertex::kUnitBitOffset,
+							                           uint32_t(x[1] + du[1]) << BlockVertex::kUnitBitOffset,
+							                           uint32_t(x[2] + du[2]) << BlockVertex::kUnitBitOffset, axis,
 							                           quad_face, quad_light.ao[1], quad_light.sunlight[1],
 							                           quad_light.torchlight[1], quad_texture.GetID(),
 							                           quad_texture.GetTransformation());
-							info.vertices.emplace_back(
-							    uint32_t(x[0] + du[0] + dv[0]) << ChunkMeshVertex::kUnitBitOffset,
-							    uint32_t(x[1] + du[1] + dv[1]) << ChunkMeshVertex::kUnitBitOffset,
-							    uint32_t(x[2] + du[2] + dv[2]) << ChunkMeshVertex::kUnitBitOffset, axis, quad_face,
-							    quad_light.ao[2], quad_light.sunlight[2], quad_light.torchlight[2],
-							    quad_texture.GetID(), quad_texture.GetTransformation());
-							info.vertices.emplace_back(uint32_t(x[0] + dv[0]) << ChunkMeshVertex::kUnitBitOffset,
-							                           uint32_t(x[1] + dv[1]) << ChunkMeshVertex::kUnitBitOffset,
-							                           uint32_t(x[2] + dv[2]) << ChunkMeshVertex::kUnitBitOffset, axis,
+							info.vertices.emplace_back(uint32_t(x[0] + du[0] + dv[0]) << BlockVertex::kUnitBitOffset,
+							                           uint32_t(x[1] + du[1] + dv[1]) << BlockVertex::kUnitBitOffset,
+							                           uint32_t(x[2] + du[2] + dv[2]) << BlockVertex::kUnitBitOffset,
+							                           axis, quad_face, quad_light.ao[2], quad_light.sunlight[2],
+							                           quad_light.torchlight[2], quad_texture.GetID(),
+							                           quad_texture.GetTransformation());
+							info.vertices.emplace_back(uint32_t(x[0] + dv[0]) << BlockVertex::kUnitBitOffset,
+							                           uint32_t(x[1] + dv[1]) << BlockVertex::kUnitBitOffset,
+							                           uint32_t(x[2] + dv[2]) << BlockVertex::kUnitBitOffset, axis,
 							                           quad_face, quad_light.ao[3], quad_light.sunlight[3],
 							                           quad_light.torchlight[3], quad_texture.GetID(),
 							                           quad_texture.GetTransformation());
@@ -344,7 +344,8 @@ std::vector<ChunkMesher::MeshGenInfo> ChunkMesher::generate_mesh() const {
 	return ret;
 }
 
-void ChunkMesher::light4_init(Light4 *light4, BlockFace face, int_fast8_t x, int_fast8_t y, int_fast8_t z) const {
+void ChunkMesher::light4_init(Light4 *light4, block::BlockFace face, int_fast8_t x, int_fast8_t y,
+                              int_fast8_t z) const {
 	//  structure of the neighbour arrays
 	// y
 	// |
@@ -410,14 +411,14 @@ void ChunkMesher::light4_init(Light4 *light4, BlockFace face, int_fast8_t x, int
 
 	for (uint32_t v = 0; v < 4; ++v) {
 		for (uint32_t b = 0; b < 3; ++b) {
-			Block blk =
+			auto blk =
 			    get_block(x + kLookup3v[face][v][b][0], y + kLookup3v[face][v][b][1], z + kLookup3v[face][v][b][2]);
 			indirect_pass[b] = blk.GetIndirectLightPass();
-			direct_pass[b] = blk.GetVerticalLightPass() || blk.GetCollisionMask() != BlockCollisionBits::kSolid;
+			direct_pass[b] = blk.GetVerticalLightPass() || blk.GetCollisionMask() != block::BlockCollisionBits::kSolid;
 		}
 		{
-			Block blk = get_block(x + kLookup1v[face][0], y + kLookup1v[face][1], z + kLookup1v[face][2]);
-			direct_pass[3] = blk.GetVerticalLightPass() || blk.GetCollisionMask() != BlockCollisionBits::kSolid;
+			auto blk = get_block(x + kLookup1v[face][0], y + kLookup1v[face][1], z + kLookup1v[face][2]);
+			direct_pass[3] = blk.GetVerticalLightPass() || blk.GetCollisionMask() != block::BlockCollisionBits::kSolid;
 		}
 
 		uint32_t ao =
@@ -464,14 +465,14 @@ void ChunkMesher::light4_interpolate(const ChunkMesher::Light4 &low_light, const
                                      uint8_t *torchlight) {
 // don't care about the macro cost since this will be optimized
 #define LERP(a, b, t) \
-	((uint32_t)(a)*uint32_t((int32_t)ChunkMeshVertex::kUnitOffset - (int32_t)(t)) + (uint32_t)(b) * (uint32_t)(t))
+	((uint32_t)(a)*uint32_t((int32_t)BlockVertex::kUnitOffset - (int32_t)(t)) + (uint32_t)(b) * (uint32_t)(t))
 #define CEIL(a, b) ((a) / (b) + ((a) % (b) ? 1 : 0))
 
 	if (*ao == 4) {
 		uint32_t ao_sum = LERP(
 		    LERP(LERP(low_light.ao[0], low_light.ao[1], du), LERP(low_light.ao[3], low_light.ao[2], du), dv),
 		    LERP(LERP(high_light.ao[0], high_light.ao[1], du), LERP(high_light.ao[3], high_light.ao[2], du), dv), dw);
-		*ao = CEIL(ao_sum, ChunkMeshVertex::kUnitOffset * ChunkMeshVertex::kUnitOffset * ChunkMeshVertex::kUnitOffset);
+		*ao = CEIL(ao_sum, BlockVertex::kUnitOffset * BlockVertex::kUnitOffset * BlockVertex::kUnitOffset);
 	}
 
 	uint32_t sunlight_sum = LERP(LERP(LERP(low_light.sunlight[0], low_light.sunlight[1], du),
@@ -479,15 +480,13 @@ void ChunkMesher::light4_interpolate(const ChunkMesher::Light4 &low_light, const
 	                             LERP(LERP(high_light.sunlight[0], high_light.sunlight[1], du),
 	                                  LERP(high_light.sunlight[3], high_light.sunlight[2], du), dv),
 	                             dw);
-	*sunlight =
-	    CEIL(sunlight_sum, ChunkMeshVertex::kUnitOffset * ChunkMeshVertex::kUnitOffset * ChunkMeshVertex::kUnitOffset);
+	*sunlight = CEIL(sunlight_sum, BlockVertex::kUnitOffset * BlockVertex::kUnitOffset * BlockVertex::kUnitOffset);
 	uint32_t torchlight_sum = LERP(LERP(LERP(low_light.torchlight[0], low_light.torchlight[1], du),
 	                                    LERP(low_light.torchlight[3], low_light.torchlight[2], du), dv),
 	                               LERP(LERP(high_light.torchlight[0], high_light.torchlight[1], du),
 	                                    LERP(high_light.torchlight[3], high_light.torchlight[2], du), dv),
 	                               dw);
-	*torchlight = CEIL(torchlight_sum,
-	                   ChunkMeshVertex::kUnitOffset * ChunkMeshVertex::kUnitOffset * ChunkMeshVertex::kUnitOffset);
+	*torchlight = CEIL(torchlight_sum, BlockVertex::kUnitOffset * BlockVertex::kUnitOffset * BlockVertex::kUnitOffset);
 
 #undef CEIL
 #undef LERP
@@ -539,8 +538,8 @@ void ChunkMesher::Run() {
 		auto &info = meshes[i];
 		mesh_handles[i] = ChunkMeshHandle::Create(
 		    world_renderer_ptr->GetChunkMeshPool(), info.vertices, info.indices,
-		    {(fAABB)info.aabb / glm::vec3(1u << ChunkMeshVertex::kUnitBitOffset) + (glm::vec3)base_position,
-		     base_position, (uint32_t)info.transparent});
+		    {(fAABB)info.aabb / glm::vec3(1u << BlockVertex::kUnitBitOffset) + (glm::vec3)base_position, base_position,
+		     (uint32_t)info.transparent});
 	}
 
 	// Push mesh to chunk

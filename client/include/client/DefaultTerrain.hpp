@@ -15,6 +15,12 @@
 
 class DefaultTerrain : public TerrainBase {
 private:
+	using Block = block::Block;
+	using Blocks = block::Blocks;
+	using BlockFace = block::BlockFace;
+	using BlockFaces = block::BlockFaces;
+	using BlockVariants = block::BlockVariants;
+
 	using Biome = uint8_t;
 	struct Biomes {
 		enum : Biome {
@@ -286,7 +292,7 @@ private:
 				BlockFace vine_face = rng() % 6;
 				if ((vine_face >> 1) == 1) // ignore y axis
 					continue;
-				glm::i32vec3 vine_pos = BlockFaceProceed(pos, vine_face);
+				glm::i32vec3 vine_pos = block::BlockFaceProceed(pos, vine_face);
 				SetBlock(vine_pos.x, vine_pos.y, vine_pos.z, {Blocks::kVine, 0, vine_face});
 			}
 

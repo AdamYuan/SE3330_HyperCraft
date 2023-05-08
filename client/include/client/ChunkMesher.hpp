@@ -89,14 +89,14 @@ private:
 	};
 
 	struct MeshGenInfo {
-		std::vector<ChunkMeshVertex> vertices;
+		std::vector<BlockVertex> vertices;
 		std::vector<uint16_t> indices;
 		AABB<uint32_t> aabb{};
 		bool transparent;
 	};
 
 	void initial_sunlight_bfs();
-	void light4_init(Light4 *light4, BlockFace face, int_fast8_t x, int_fast8_t y, int_fast8_t z) const;
+	void light4_init(Light4 *light4, block::BlockFace face, int_fast8_t x, int_fast8_t y, int_fast8_t z) const;
 	static void light4_interpolate(const Light4 &low_light, const Light4 &high_light, uint8_t du, uint8_t dv,
 	                               uint8_t dw, uint8_t *ao, uint8_t *sunlight, uint8_t *torchlight);
 	std::vector<MeshGenInfo> generate_mesh() const;
