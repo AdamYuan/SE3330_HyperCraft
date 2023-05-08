@@ -1,5 +1,7 @@
 #include <common/WorkPool.hpp>
 
+namespace common {
+
 void WorkPool::Join() {
 	m_worker_threads_running.store(false, std::memory_order_release);
 	for (auto &i : m_worker_threads)
@@ -24,3 +26,5 @@ void WorkPool::worker_thread_func() {
 		}
 	}
 }
+
+} // namespace common

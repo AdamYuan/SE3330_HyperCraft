@@ -40,7 +40,7 @@ private:
 	std::shared_ptr<ClientBase> m_client;
 
 	// worker
-	std::shared_ptr<WorkPool> m_work_pool;
+	std::shared_ptr<common::WorkPool> m_work_pool;
 
 	void create_glfw_window();
 	void create_vulkan_base();

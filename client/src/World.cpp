@@ -25,7 +25,7 @@ void World::Update(const glm::vec3 &position) {
 		last_chunk_pos = current_chunk_pos;
 		spdlog::info("current_chunk_pos = {}", glm::to_string(current_chunk_pos));
 
-		std::vector<std::unique_ptr<WorkerBase>> new_workers, new_nei_workers;
+		std::vector<std::unique_ptr<common::WorkerBase>> new_workers, new_nei_workers;
 
 		for (auto it = m_chunks.begin(); it != m_chunks.end();) {
 

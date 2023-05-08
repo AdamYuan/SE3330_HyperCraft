@@ -20,7 +20,7 @@ class ClientBase;
 
 class World : public std::enable_shared_from_this<World> {
 public:
-	inline static std::shared_ptr<World> Create(const std::shared_ptr<WorkPool> &work_pool_ptr) {
+	inline static std::shared_ptr<World> Create(const std::shared_ptr<common::WorkPool> &work_pool_ptr) {
 		return std::make_shared<World>(work_pool_ptr);
 	}
 
@@ -37,10 +37,10 @@ private:
 	std::unordered_map<ChunkPos3, std::shared_ptr<Chunk>> m_chunks;
 
 	// Work Queue
-	std::shared_ptr<WorkPool> m_work_pool_ptr;
+	std::shared_ptr<common::WorkPool> m_work_pool_ptr;
 
 public:
-	inline explicit World(const std::shared_ptr<WorkPool> &work_pool_ptr) : m_work_pool_ptr{work_pool_ptr} {}
+	inline explicit World(const std::shared_ptr<common::WorkPool> &work_pool_ptr) : m_work_pool_ptr{work_pool_ptr} {}
 	~World();
 
 	inline const std::weak_ptr<WorldRenderer> &GetWorldRendererWeakPtr() const { return m_world_renderer_weak_ptr; }

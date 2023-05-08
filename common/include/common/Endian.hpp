@@ -5,19 +5,23 @@
 #define IS_SMALL_ENDIAN
 #endif
 
-constexpr bool is_big_endian() {
+namespace common {
+
+constexpr bool IsBigEndian() {
 #ifdef IS_BIG_ENDIAN
 	return true;
 #else
 	return false;
 #endif
 }
-constexpr bool is_small_endian() {
+constexpr bool IsSmallEndian() {
 #ifdef IS_SMALL_ENDIAN
 	return true;
 #else
 	return false;
 #endif
 }
+
+} // namespace common
 
 #endif
