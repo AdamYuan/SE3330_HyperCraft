@@ -18,7 +18,8 @@ std::shared_ptr<GlobalTexture> GlobalTexture::Create(const std::shared_ptr<myvk:
 void GlobalTexture::create_lightmap_texture(const std::shared_ptr<myvk::CommandPool> &command_pool) {
 	int x, y, c;
 
-	stbi_uc *img = stbi_load_from_memory(kLightmapTexturePng, sizeof(kLightmapTexturePng), &x, &y, &c, 4);
+	stbi_uc *img =
+	    stbi_load_from_memory(texture::kLightmapTexturePng, sizeof(texture::kLightmapTexturePng), &x, &y, &c, 4);
 	std::shared_ptr<myvk::Buffer> staging =
 	    myvk::Buffer::CreateStaging(command_pool->GetDevicePtr(), img, img + x * y * 4);
 
@@ -61,7 +62,7 @@ void GlobalTexture::create_lightmap_texture(const std::shared_ptr<myvk::CommandP
 void GlobalTexture::create_block_texture(const std::shared_ptr<myvk::CommandPool> &command_pool) {
 	int x, y, c;
 
-	stbi_uc *img = stbi_load_from_memory(kBlockTexturePng, sizeof(kBlockTexturePng), &x, &y, &c, 4);
+	stbi_uc *img = stbi_load_from_memory(texture::kBlockTexturePng, sizeof(texture::kBlockTexturePng), &x, &y, &c, 4);
 	std::shared_ptr<myvk::Buffer> staging =
 	    myvk::Buffer::CreateStaging(command_pool->GetDevicePtr(), img, img + x * y * 4);
 

@@ -6,6 +6,7 @@
 #include <texture/BlockTexture.hpp>
 
 using namespace block;
+using namespace texture;
 
 #define BLOCK_TEXTURE_NONE \
 	{ \

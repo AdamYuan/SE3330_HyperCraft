@@ -25,7 +25,7 @@ struct BlockMeshVertex {
 struct BlockMeshFace {
 	uint8_t axis;
 	BlockFace light_face{}, render_face{};
-	BlockTexture texture{};
+	texture::BlockTexture texture{};
 	BlockMeshVertex vertices[4]{};
 };
 #define BLOCK_MESH_MAX_FACE_COUNT 32
@@ -39,4 +39,4 @@ struct BlockMesh {
 };
 #undef BLOCK_MESH_MAX_FACE_COUNT
 
-}
+} // namespace block

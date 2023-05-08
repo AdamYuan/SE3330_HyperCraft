@@ -170,7 +170,7 @@ std::vector<ChunkMesher::MeshGenInfo> ChunkMesher::generate_mesh() const {
 
 		uint_fast8_t x[3]{0};
 		int_fast8_t q[3]{0};
-		thread_local static BlockTexture texture_mask[2][Chunk::kSize * Chunk::kSize]{};
+		thread_local static texture::BlockTexture texture_mask[2][Chunk::kSize * Chunk::kSize]{};
 		// thread_local static std::bitset<Chunk::kSize * Chunk::kSize> face_inv_mask{};
 		thread_local static Light4 light_mask[2][Chunk::kSize * Chunk::kSize]{};
 
@@ -211,7 +211,7 @@ std::vector<ChunkMesher::MeshGenInfo> ChunkMesher::generate_mesh() const {
 				auto local_light_mask = light_mask[quad_face_inv];
 				for (uint_fast8_t j = 0; j < Chunk::kSize; ++j) {
 					for (uint_fast8_t i = 0; i < Chunk::kSize;) {
-						const BlockTexture quad_texture = local_texture_mask[counter];
+						const texture::BlockTexture quad_texture = local_texture_mask[counter];
 						if (!quad_texture.Empty()) {
 							const Light4 quad_light = local_light_mask[counter];
 							// Compute width

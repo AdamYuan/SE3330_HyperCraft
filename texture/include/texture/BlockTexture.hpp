@@ -3,6 +3,8 @@
 
 #include <cinttypes>
 
+namespace texture {
+
 using BlockTexID = uint16_t;
 using BlockTexTrans = uint8_t;
 
@@ -68,5 +70,7 @@ public:
 };
 
 #include <generated/block_texture_png.inl>
+
+}
 
 #endif

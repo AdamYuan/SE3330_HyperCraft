@@ -61,7 +61,7 @@ public:
 	inline const u8AABB *GetAABBs() const { return HaveCustomMesh() ? GetCustomMesh()->aabbs : &kDefaultAABB; }
 	inline uint32_t GetAABBCount() const { return HaveCustomMesh() ? GetCustomMesh()->aabb_count : 1; }
 	inline const char *GetName() const { return get_property()->name; }
-	inline BlockTexture GetTexture(BlockFace face) const { return get_property()->textures[face]; }
+	inline texture::BlockTexture GetTexture(BlockFace face) const { return get_property()->textures[face]; }
 	// Vertical Sunlight
 	inline BlockTransparency GetTransparency() const { return get_property()->transparency; }
 	inline bool GetVerticalLightPass() const { return GetTransparency() == BlockTransparencies::kTransparent; }
@@ -70,7 +70,7 @@ public:
 	inline BlockCollisionMask GetCollisionMask() const { return get_property()->collision_mask; }
 
 	inline bool ShowFace(BlockFace face, Block neighbour) const {
-		BlockTexture tex = GetTexture(face), nei_tex = neighbour.GetTexture(BlockFaceOpposite(face));
+		auto tex = GetTexture(face), nei_tex = neighbour.GetTexture(BlockFaceOpposite(face));
 		if (tex.Empty() || tex == nei_tex)
 			return false;
 		if (!tex.IsTransparent() && !nei_tex.IsTransparent())

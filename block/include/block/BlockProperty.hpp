@@ -20,7 +20,7 @@ enum : uint8_t { kNone = 1 << 0, kSolid = 1 << 1, kLiquid = 1 << 2 };
 }
 struct BlockProperty {
 	const char *name{"Unnamed"};
-	BlockTexture textures[6]{};
+	texture::BlockTexture textures[6]{};
 	BlockTransparency transparency{BlockTransparencies::kOpaque};
 	BlockCollisionMask collision_mask{BlockCollisionBits::kSolid};
 	const BlockMesh *p_custom_mesh{nullptr};
