@@ -10,6 +10,7 @@ int main() {
 	enet_initialize();
 	spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%t] [%l] %v");
 	std::shared_ptr<common::WorldDatabase> level_db = common::WorldDatabase::Create(kLevelDBFilename);
+
 	if (!level_db) {
 		spdlog::error("Failed to open sqlite3 database {}", kLevelDBFilename);
 		return EXIT_FAILURE;
