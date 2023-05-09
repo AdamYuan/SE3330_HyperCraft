@@ -2,10 +2,8 @@
 #define HYPERCRAFT_SERVER_ENET_SERVER_HPP
 
 #include <common/WorldDatabase.hpp>
-#include <enet/enet.h>
 #include <thread>
-
-namespace server {
+#include <enet/enet.h>
 
 class ENetServer {
 private:
@@ -26,7 +24,5 @@ public:
 
 	inline const std::shared_ptr<common::WorldDatabase> &GetLevelDBPtr() const { return m_level_db_ptr; }
 };
-
-} // namespace server
 
 #endif

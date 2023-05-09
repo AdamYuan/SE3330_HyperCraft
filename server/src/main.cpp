@@ -14,7 +14,7 @@ int main() {
 		spdlog::error("Failed to open sqlite3 database {}", kLevelDBFilename);
 		return EXIT_FAILURE;
 	}
-	std::shared_ptr<server::ENetServer> server = server::ENetServer::Create(level_db, kPort);
+	std::shared_ptr<ENetServer> server = ENetServer::Create(level_db, kPort);
 	if (!server) {
 		spdlog::error("Failed to open open server in port {}", kPort);
 		return EXIT_FAILURE;
