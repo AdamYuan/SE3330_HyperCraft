@@ -6,12 +6,10 @@
 
 template <typename T, typename = std::enable_if_t<std::is_integral_v<T> && std::is_signed_v<T>>>
 static constexpr uint32_t chunk_xyz_extended14_to_index(T x, T y, T z) {
-	constexpr auto kChunkSize = common::kChunkSize;
-
 	bool x_inside = 0 <= x && x < kChunkSize, y_inside = 0 <= y && y < kChunkSize, z_inside = 0 <= z && z < kChunkSize;
 	uint32_t bits = x_inside | (y_inside << 1u) | (z_inside << 2u);
 	if (bits == 7u)
-		return common::ChunkXYZ2Index(x, y, z);
+		return ChunkXYZ2Index(x, y, z);
 	constexpr uint32_t kOffsets[8] = {
 	    kChunkSize * kChunkSize * kChunkSize,
 	    kChunkSize * kChunkSize * kChunkSize + 28 * 28 * 28,
@@ -41,8 +39,6 @@ static constexpr uint32_t chunk_xyz_extended14_to_index(T x, T y, T z) {
 
 template <typename T, typename = std::enable_if_t<std::is_integral_v<T> && std::is_signed_v<T>>>
 static constexpr bool light_interfere(T x, T y, T z, LightLvl lvl) {
-	constexpr auto kChunkSize = common::kChunkSize;
-
 	if (lvl <= 1)
 		return false;
 	uint32_t dist = 0;
@@ -61,7 +57,6 @@ struct LightEntry {
 };
 class LightQueue {
 private:
-	inline static constexpr auto kChunkSize = common::kChunkSize;
 	LightEntry m_entries[(kChunkSize + 28) * (kChunkSize + 28) * (kChunkSize + 28)]{};
 	LightEntry *m_back = m_entries, *m_top = m_entries;
 
@@ -93,8 +88,6 @@ static void initial_sunlight_bfs(Light *light_buffer, LightQueue *queue) {
 void ChunkLighter::Run() {
 	if (!lock())
 		return;
-
-	constexpr auto kChunkSize = common::kChunkSize;
 
 	thread_local static Light light_buffer[(kChunkSize + 28) * (kChunkSize + 28) * (kChunkSize + 28)];
 	thread_local static LightQueue sunlight_queue, torchlight_queue;

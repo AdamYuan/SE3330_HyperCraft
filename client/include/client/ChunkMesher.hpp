@@ -56,8 +56,7 @@ private:
 		LightLvl light_lvl;
 	};
 	static_assert(sizeof(LightEntry) == 4);
-	inline static thread_local Light
-	    m_light_buffer[(common::kChunkSize + 30) * (common::kChunkSize + 30) * (common::kChunkSize + 30)]{};
+	inline static thread_local Light m_light_buffer[(kChunkSize + 30) * (kChunkSize + 30) * (kChunkSize + 30)]{};
 	static thread_local std::queue<LightEntry> m_light_queue;
 
 	struct AO4 { // compressed ambient occlusion data for 4 vertices (a face)

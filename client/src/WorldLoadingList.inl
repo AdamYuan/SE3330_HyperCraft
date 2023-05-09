@@ -1,7 +1,7 @@
 #include <common/Position.hpp>
 #include <client/Config.hpp>
 
-constexpr common::ChunkPos3 kWorldLoadingList[] = {
+constexpr ChunkPos3 kWorldLoadingList[] = {
 	{0, 0, 0}, {0, 0, 1}, {0, 0, -1}, {0, 1, 0}, {0, 1, 1}, 
 	{0, 1, -1}, {0, -1, 0}, {0, -1, 1}, {0, -1, -1}, {1, 0, 0}, 
 	{1, 0, 1}, {1, 0, -1}, {1, 1, 0}, {1, 1, 1}, {1, 1, -1}, 
@@ -8291,5 +8291,5 @@ constexpr common::ChunkPos3 kWorldLoadingList[] = {
 	{20, 7, 0}, {20, 7, -2}, {20, 7, 1}, {20, 7, 2}, {21, 0, 0}, 
 	{21, 0, 1}, {21, 0, -1}, {21, 1, 0}, {21, 1, 1}, {21, 1, -1}, 
 	{21, -1, 0}, {21, -1, 1}, {21, -1, -1}, };
-constexpr const common::ChunkPos3 *kWorldLoadingRadiusEnd[kWorldMaxLoadRadius + 1] = {
+constexpr const ChunkPos3 *kWorldLoadingRadiusEnd[kWorldMaxLoadRadius + 1] = {
 	kWorldLoadingList + 27, kWorldLoadingList + 81, kWorldLoadingList + 179, kWorldLoadingList + 389, kWorldLoadingList + 667, kWorldLoadingList + 1141, kWorldLoadingList + 1767, kWorldLoadingList + 2501, kWorldLoadingList + 3503, kWorldLoadingList + 4825, kWorldLoadingList + 6331, kWorldLoadingList + 8121, kWorldLoadingList + 10107, kWorldLoadingList + 12677, kWorldLoadingList + 15547, kWorldLoadingList + 18781, kWorldLoadingList + 22263, kWorldLoadingList + 26313, kWorldLoadingList + 30911, kWorldLoadingList + 35921, kWorldLoadingList + 41443, };
