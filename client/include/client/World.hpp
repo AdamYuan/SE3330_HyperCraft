@@ -34,7 +34,7 @@ private:
 	friend class ENetClient;
 
 	// Chunks
-	std::unordered_map<ChunkPos3, std::shared_ptr<Chunk>> m_chunks;
+	std::unordered_map<common::ChunkPos3, std::shared_ptr<Chunk>> m_chunks;
 
 	// Work Queue
 	std::shared_ptr<common::WorkPool> m_work_pool_ptr;
@@ -51,9 +51,9 @@ public:
 
 	inline const auto &GetWorkPoolPtr() const { return m_work_pool_ptr; }
 
-	std::shared_ptr<Chunk> FindChunk(const ChunkPos3 &position) const;
-	std::shared_ptr<Chunk> PushChunk(const ChunkPos3 &position);
-	void EraseChunk(const ChunkPos3 &position) { m_chunks.erase(position); }
+	std::shared_ptr<Chunk> FindChunk(const common::ChunkPos3 &position) const;
+	std::shared_ptr<Chunk> PushChunk(const common::ChunkPos3 &position);
+	void EraseChunk(const common::ChunkPos3 &position) { m_chunks.erase(position); }
 
 	void Update(const glm::vec3 &position);
 };

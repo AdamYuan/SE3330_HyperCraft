@@ -21,15 +21,15 @@ private:
 	using Block = block::Block;
 
 public:
-	static constexpr uint32_t kSize = kChunkSize;
+	static constexpr uint32_t kSize = common::kChunkSize;
 
 	template <typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
 	static inline constexpr void Index2XYZ(uint32_t idx, T *xyz) {
-		return ChunkIndex2XYZ(idx, xyz);
+		return common::ChunkIndex2XYZ(idx, xyz);
 	}
 	template <typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
 	static inline constexpr uint32_t XYZ2Index(T x, T y, T z) {
-		return ChunkXYZ2Index(x, y, z);
+		return common::ChunkXYZ2Index(x, y, z);
 	}
 	template <typename T>
 	static inline constexpr typename std::enable_if<std::is_signed<T>::value && std::is_integral<T>::value, bool>::type
@@ -46,20 +46,20 @@ public:
 	template <typename T>
 	static inline constexpr typename std::enable_if<std::is_integral<T>::value, uint32_t>::type
 	CmpXYZ2NeighbourIndex(T cmp_x, T cmp_y, T cmp_z) {
-		return ::CmpXYZ2NeighbourIndex(cmp_x, cmp_y, cmp_z);
+		return common::CmpXYZ2NeighbourIndex(cmp_x, cmp_y, cmp_z);
 	}
 	template <typename T>
 	static inline constexpr typename std::enable_if<std::is_integral<T>::value, uint32_t>::type
 	GetBlockNeighbourIndex(T x, T y, T z) {
-		return GetBlockChunkNeighbourIndex(x, y, z);
+		return common::GetBlockChunkNeighbourIndex(x, y, z);
 	}
 	template <typename T>
 	static inline constexpr typename std::enable_if<std::is_signed<T>::value && std::is_integral<T>::value, void>::type
 	NeighbourIndex2CmpXYZ(uint32_t idx, T *cmp_xyz) {
-		return ::NeighbourIndex2CmpXYZ(idx, cmp_xyz);
+		return common::NeighbourIndex2CmpXYZ(idx, cmp_xyz);
 	}
 
-	inline const ChunkPos3 &GetPosition() const { return m_position; }
+	inline const common::ChunkPos3 &GetPosition() const { return m_position; }
 
 	// Block Getter and Setter
 	inline const Block *GetBlockData() const { return m_blocks; }
@@ -131,12 +131,13 @@ public:
 	}
 	inline void PushLight(uint64_t version, const Light *light_buffer) {
 		m_light_sync.Done(version, [this, light_buffer]() {
-			std::copy(light_buffer, light_buffer + kChunkSize * kChunkSize * kChunkSize, m_lights);
+			std::copy(light_buffer, light_buffer + common::kChunkSize * common::kChunkSize * common::kChunkSize,
+			          m_lights);
 		});
 	}
 
 	// Creation
-	static inline std::shared_ptr<Chunk> Create(const std::weak_ptr<World> &world, const ChunkPos3 &position) {
+	static inline std::shared_ptr<Chunk> Create(const std::weak_ptr<World> &world, const common::ChunkPos3 &position) {
 		auto ret = std::make_shared<Chunk>();
 		ret->m_position = position;
 		ret->m_world_weak_ptr = world;
@@ -153,7 +154,7 @@ private:
 	Block m_blocks[kSize * kSize * kSize];
 	Light m_lights[kSize * kSize * kSize];
 
-	ChunkPos3 m_position{};
+	common::ChunkPos3 m_position{};
 
 	std::weak_ptr<Chunk> m_neighbour_weak_ptrs[26];
 	std::weak_ptr<World> m_world_weak_ptr;
