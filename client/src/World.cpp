@@ -7,7 +7,7 @@
 #include <client/ChunkMesher.hpp>
 #include <client/Config.hpp>
 
-namespace client {
+namespace hc::client {
 
 World::~World() {
 	for (const auto &i : m_chunks)
@@ -82,4 +82,4 @@ std::shared_ptr<Chunk> World::FindChunk(const ChunkPos3 &position) const {
 	return it == m_chunks.end() ? nullptr : it->second;
 }
 
-} // namespace client
+} // namespace hc::client

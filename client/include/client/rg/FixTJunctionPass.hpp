@@ -3,7 +3,7 @@
 
 #include <myvk_rg/RenderGraph.hpp>
 
-namespace client::rg {
+namespace hc::client::rg {
 
 class FixTJunctionPass final : public myvk_rg::GraphicsPassBase {
 private:
@@ -74,6 +74,6 @@ public:
 	inline auto GetFixedDepthOutput() { return MakeImageOutput({"fixed_depth"}); }
 };
 
-} // namespace client::rg
+} // namespace hc::client::rg
 
 #endif

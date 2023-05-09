@@ -4,7 +4,7 @@
 #include <client/ClientBase.hpp>
 #include <common/WorldDatabase.hpp>
 
-namespace client {
+namespace hc::client {
 
 class LocalClient : public ClientBase, public std::enable_shared_from_this<LocalClient> {
 private:
@@ -17,6 +17,6 @@ public:
 	static std::shared_ptr<LocalClient> Create(const std::shared_ptr<World> &world_ptr, const char *database_filename);
 };
 
-} // namespace client
+} // namespace hc::client
 
 #endif

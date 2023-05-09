@@ -4,7 +4,7 @@
 #include <client/ChunkWorkerBase.hpp>
 #include <common/Light.hpp>
 
-namespace client {
+namespace hc::client {
 
 class ChunkLighter final : public ChunkWorkerS26Base {
 private:
@@ -51,6 +51,6 @@ public:
 	void Run() override;
 };
 
-} // namespace client
+} // namespace hc::client
 
 #endif

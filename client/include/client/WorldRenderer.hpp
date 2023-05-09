@@ -16,7 +16,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace client {
+namespace hc::client {
 
 class WorldRenderer : public std::enable_shared_from_this<WorldRenderer> {
 private:
@@ -39,6 +39,6 @@ public:
 	inline const auto &GetChunkMeshPool() const { return m_chunk_mesh_pool; }
 };
 
-} // namespace client
+} // namespace hc::client
 
 #endif

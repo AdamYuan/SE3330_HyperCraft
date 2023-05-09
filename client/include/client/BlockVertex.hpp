@@ -2,7 +2,7 @@
 
 #include <block/Block.hpp>
 
-namespace client {
+namespace hc::client {
 
 struct BlockVertex { // Compressed mesh vertex for chunk
 	static constexpr uint32_t kUnitBitOffset = 4u;
@@ -16,4 +16,4 @@ struct BlockVertex { // Compressed mesh vertex for chunk
 	                                     (sunlight << 18u) | (torchlight << 24u)) {}
 };
 
-} // namespace client
+} // namespace hc::client

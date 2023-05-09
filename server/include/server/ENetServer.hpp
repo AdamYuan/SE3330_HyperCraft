@@ -5,7 +5,7 @@
 #include <enet/enet.h>
 #include <thread>
 
-namespace server {
+namespace hc::server {
 
 class ENetServer {
 private:
@@ -27,6 +27,6 @@ public:
 	inline const std::shared_ptr<WorldDatabase> &GetLevelDBPtr() const { return m_level_db_ptr; }
 };
 
-} // namespace server
+} // namespace hc::server
 
 #endif

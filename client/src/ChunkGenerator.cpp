@@ -7,7 +7,7 @@
 
 #include <spdlog/spdlog.h>
 
-namespace client {
+namespace hc::client {
 
 void ChunkGenerator::Run() {
 	if (!lock())
@@ -53,4 +53,4 @@ void ChunkGenerator::Run() {
 	m_chunk_ptr->SetMeshedFlag();
 }
 
-} // namespace client
+} // namespace hc::client

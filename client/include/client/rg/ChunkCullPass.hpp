@@ -5,7 +5,7 @@
 
 #include <myvk_rg/RenderGraph.hpp>
 
-namespace client::rg {
+namespace hc::client::rg {
 
 class ChunkCullPass final : public myvk_rg::ComputePassBase {
 private:

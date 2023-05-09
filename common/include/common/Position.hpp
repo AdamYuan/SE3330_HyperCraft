@@ -11,6 +11,8 @@
 
 #include "Size.hpp"
 
+namespace hc {
+
 using ChunkPos1 = int16_t;
 using ChunkPos2 = glm::vec<2, ChunkPos1>;
 using ChunkPos3 = glm::vec<3, ChunkPos1>;
@@ -61,5 +63,7 @@ NeighbourIndex2CmpXYZ(uint32_t idx, T *cmp_xyz) {
 	cmp_xyz[1] = kRevLookUp[idx % 3u];
 	cmp_xyz[0] = kRevLookUp[idx / 3u];
 }
+
+} // namespace hc
 
 #endif

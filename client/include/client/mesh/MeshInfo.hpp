@@ -3,7 +3,7 @@
 
 #include <cinttypes>
 
-namespace client::mesh {
+namespace hc::client::mesh {
 
 // Mesh information
 template <typename Info> struct MeshInfo {

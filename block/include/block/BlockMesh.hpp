@@ -8,7 +8,7 @@
 #include <limits>
 #include <type_traits>
 
-namespace block {
+namespace hc::block {
 
 struct BlockMeshVertex {
 	union {
@@ -39,4 +39,4 @@ struct BlockMesh {
 };
 #undef BLOCK_MESH_MAX_FACE_COUNT
 
-} // namespace block
+} // namespace hc::block

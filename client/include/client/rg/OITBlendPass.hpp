@@ -3,7 +3,7 @@
 
 #include <myvk_rg/RenderGraph.hpp>
 
-namespace client::rg {
+namespace hc::client::rg {
 
 class OITBlendPass final : public myvk_rg::GraphicsPassBase {
 private:
@@ -72,6 +72,6 @@ public:
 	inline auto GetColorOutput() { return MakeImageOutput({"color"}); }
 };
 
-} // namespace client::rg
+} // namespace hc::client::rg
 
 #endif

@@ -3,7 +3,7 @@
 
 #include <myvk_rg/RenderGraph.hpp>
 
-namespace client::rg {
+namespace hc::client::rg {
 
 class DepthHierarchyPass final : public myvk_rg::PassGroupBase {
 private:
@@ -115,6 +115,6 @@ public:
 	inline auto GetDepthHierarchyOutput() { return GetResource<myvk_rg::CombinedImage>({"depth_hierarchy"}); }
 };
 
-} // namespace client::rg
+} // namespace hc::client::rg
 
 #endif

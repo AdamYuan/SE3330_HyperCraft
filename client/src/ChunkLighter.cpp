@@ -4,7 +4,7 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-namespace client {
+namespace hc::client {
 
 template <typename T, typename = std::enable_if_t<std::is_integral_v<T> && std::is_signed_v<T>>>
 static constexpr uint32_t chunk_xyz_extended14_to_index(T x, T y, T z) {
@@ -127,4 +127,4 @@ void ChunkLighter::Run() {
 	    } */
 }
 
-} // namespace client
+} // namespace hc::client

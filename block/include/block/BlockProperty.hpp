@@ -5,7 +5,7 @@
 #include "BlockFace.hpp"
 #include "BlockMesh.hpp"
 
-namespace block {
+namespace hc::block {
 
 using BlockID = uint8_t;
 using BlockMeta = uint8_t;
@@ -69,4 +69,4 @@ struct BlockProperty {
 	}
 };
 
-} // namespace block
+} // namespace hc::block

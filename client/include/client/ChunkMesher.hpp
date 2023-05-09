@@ -6,7 +6,7 @@
 #include <client/ChunkWorkerBase.hpp>
 #include <queue>
 
-namespace client {
+namespace hc::client {
 
 class ChunkMesher final : public ChunkWorkerS26Base {
 public:
@@ -104,6 +104,6 @@ private:
 	std::vector<MeshGenInfo> generate_mesh() const;
 };
 
-} // namespace client
+} // namespace hc::client
 
 #endif

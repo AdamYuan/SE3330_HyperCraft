@@ -7,7 +7,7 @@
 #include "MeshCluster.hpp"
 #include "MeshPool.hpp"
 
-namespace client::mesh {
+namespace hc::client::mesh {
 
 template <typename Vertex, typename Index, typename Info> class MeshHandle {
 private:
@@ -108,6 +108,6 @@ public:
 	}
 };
 
-} // namespace client
+} // namespace hc::client
 
 #endif

@@ -13,7 +13,7 @@
 
 struct GLFWwindow;
 
-namespace client {
+namespace hc::client {
 
 class Camera {
 public:
@@ -40,6 +40,6 @@ public:
 	void Update(UniformData *p_data);
 };
 
-} // namespace client
+} // namespace hc::client
 
 #endif

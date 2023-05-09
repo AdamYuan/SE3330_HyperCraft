@@ -2,7 +2,7 @@
 
 #include "BlockProperty.hpp"
 
-namespace block {
+namespace hc::block {
 
 struct Blocks {
 	enum : BlockID {
@@ -85,4 +85,4 @@ public:
 };
 static_assert(sizeof(Block) == 2);
 
-} // namespace block
+} // namespace hc::block

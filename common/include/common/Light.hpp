@@ -3,6 +3,8 @@
 
 #include <cinttypes>
 
+namespace hc {
+
 using LightLvl = uint8_t;
 
 class Light {
@@ -24,5 +26,7 @@ public:
 	bool operator==(Light r) const { return m_data == r.m_data; }
 	bool operator!=(Light r) const { return m_data != r.m_data; }
 };
+
+} // namespace hc
 
 #endif

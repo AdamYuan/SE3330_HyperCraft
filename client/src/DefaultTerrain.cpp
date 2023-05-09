@@ -5,7 +5,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <random>
 
-namespace client {
+namespace hc::client {
 
 void DefaultTerrain::Generate(const std::shared_ptr<Chunk> &chunk_ptr, int32_t light_map[kChunkSize * kChunkSize]) {
 #if 1
@@ -510,4 +510,4 @@ void DefaultTerrain::DecorationInfo::PopToChunk(const std::shared_ptr<Chunk> &ch
 	}
 }
 
-} // namespace client
+} // namespace hc::client

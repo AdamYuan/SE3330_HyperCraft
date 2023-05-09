@@ -12,7 +12,7 @@
 
 #include <myvk/CommandBuffer.hpp>
 
-namespace client::mesh {
+namespace hc::client::mesh {
 
 template <typename Vertex, typename Index, typename Info> class MeshPool : public myvk::DeviceObjectBase {
 public:
@@ -258,6 +258,6 @@ public:
 	}
 };
 
-} // namespace client::mesh
+} // namespace hc::client::mesh
 
 #endif

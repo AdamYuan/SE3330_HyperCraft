@@ -15,7 +15,7 @@
 #include <myvk_rg/resource/StaticImage.hpp>
 #include <myvk_rg/resource/SwapchainImage.hpp>
 
-namespace client::rg {
+namespace hc::client::rg {
 
 class WorldRenderGraph final : public myvk_rg::RenderGraph<WorldRenderGraph> {
 private:
@@ -149,6 +149,6 @@ public:
 	}
 };
 
-} // namespace client::rg
+} // namespace hc::client::rg
 
 #endif

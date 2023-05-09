@@ -5,7 +5,7 @@
 
 #include <common/WorkerBase.hpp>
 
-namespace client {
+namespace hc::client {
 
 class ChunkWorkerBase : public WorkerBase {
 private:
@@ -61,6 +61,6 @@ class ChunkWorkerS6Base : public ChunkWorkerBase {
 	~ChunkWorkerS6Base() override = default;
 };
 
-} // namespace client
+} // namespace hc::client
 
 #endif

@@ -16,7 +16,7 @@
 
 #include <random>
 
-namespace client {
+namespace hc::client {
 
 void Application::create_glfw_window() {
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
@@ -193,4 +193,4 @@ void Application::glfw_framebuffer_resize_callback(GLFWwindow *window, int width
 	app->m_frame_manager->Resize();
 }
 
-} // namespace client
+} // namespace hc::client

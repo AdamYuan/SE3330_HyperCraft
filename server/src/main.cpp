@@ -9,12 +9,12 @@ constexpr uint16_t kPort = 60000;
 int main() {
 	enet_initialize();
 	spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%t] [%l] %v");
-	std::shared_ptr<WorldDatabase> level_db = WorldDatabase::Create(kLevelDBFilename);
+	std::shared_ptr<hc::WorldDatabase> level_db = hc::WorldDatabase::Create(kLevelDBFilename);
 	if (!level_db) {
 		spdlog::error("Failed to open sqlite3 database {}", kLevelDBFilename);
 		return EXIT_FAILURE;
 	}
-	std::shared_ptr<server::ENetServer> server = server::ENetServer::Create(level_db, kPort);
+	std::shared_ptr<hc::server::ENetServer> server = hc::server::ENetServer::Create(level_db, kPort);
 	if (!server) {
 		spdlog::error("Failed to open open server in port {}", kPort);
 		return EXIT_FAILURE;

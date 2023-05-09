@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-namespace server {
+namespace hc::server {
 
 std::shared_ptr<ENetServer> ENetServer::Create(const std::shared_ptr<WorldDatabase> &level_db, uint16_t port) {
 	ENetAddress address;
@@ -71,4 +71,4 @@ void ENetServer::event_thread_func() {
 	spdlog::info("Quit event thread");
 }
 
-} // namespace server
+} // namespace hc::server

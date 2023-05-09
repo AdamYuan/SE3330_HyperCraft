@@ -5,7 +5,7 @@
 
 #include <myvk_rg/RenderGraph.hpp>
 
-namespace client::rg {
+namespace hc::client::rg {
 
 class ChunkOpaquePass final : public myvk_rg::GraphicsPassBase {
 private:
@@ -102,6 +102,6 @@ public:
 	}
 };
 
-} // namespace client::rg
+} // namespace hc::client::rg
 
 #endif

@@ -7,7 +7,7 @@
 #include <myvk/ImageView.hpp>
 #include <myvk/Sampler.hpp>
 
-namespace client {
+namespace hc::client {
 
 class GlobalTexture {
 private:
@@ -27,6 +27,6 @@ public:
 	inline const auto &GetLightMapView() const { return m_lightmap_view; }
 };
 
-} // namespace client
+} // namespace hc::client
 
 #endif

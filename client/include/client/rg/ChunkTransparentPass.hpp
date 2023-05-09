@@ -5,7 +5,7 @@
 
 #include <myvk_rg/RenderGraph.hpp>
 
-namespace client::rg {
+namespace hc::client::rg {
 
 class ChunkTransparentPass final : public myvk_rg::GraphicsPassBase {
 private:
@@ -128,6 +128,6 @@ public:
 	inline auto GetRevealOutput() { return MakeImageOutput({"reveal"}); }
 };
 
-} // namespace client::rg
+} // namespace hc::client::rg
 
 #endif

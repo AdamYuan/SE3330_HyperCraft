@@ -2,7 +2,7 @@
 
 #include <block/BlockMesh.hpp>
 
-namespace block {
+namespace hc::block {
 
 template <BlockTexID TexID, int Radius, int Low, int High, BlockFace LightFace = BlockFaces::kTop>
 inline static constexpr BlockMesh kCrossMesh = {{

@@ -10,7 +10,7 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-namespace client {
+namespace hc::client {
 
 thread_local std::queue<ChunkMesher::LightEntry> ChunkMesher::m_light_queue;
 
@@ -548,4 +548,4 @@ void ChunkMesher::Run() {
 	m_chunk_ptr->PushMesh(m_version, mesh_handles);
 }
 
-} // namespace client
+} // namespace hc::client

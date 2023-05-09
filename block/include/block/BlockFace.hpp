@@ -3,7 +3,7 @@
 #include <cinttypes>
 #include <glm/glm.hpp>
 
-namespace block {
+namespace hc::block {
 
 using BlockFace = uint8_t;
 struct BlockFaces {
@@ -23,4 +23,4 @@ BlockFaceProceed(glm::vec<3, T> xyz, BlockFace f) {
 	return xyz;
 }
 
-} // namespace block
+} // namespace hc::block

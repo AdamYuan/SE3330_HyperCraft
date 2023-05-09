@@ -10,7 +10,7 @@
 
 #include <spdlog/spdlog.h>
 
-namespace client {
+namespace hc::client {
 
 class Chunk;
 class TerrainBase {
@@ -71,6 +71,6 @@ public:
 	}
 };
 
-} // namespace client
+} // namespace hc::client
 
 #endif

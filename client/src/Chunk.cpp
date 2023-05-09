@@ -1,3 +1,3 @@
 #include <client/Chunk.hpp>
 
-namespace client {}
+namespace hc::client {}

@@ -7,7 +7,7 @@
 
 #include <future>
 
-namespace client {
+namespace hc::client {
 
 class ENetClient : public ClientBase, public std::enable_shared_from_this<ENetClient> {
 private:
@@ -31,6 +31,6 @@ public:
 	}
 };
 
-} // namespace client
+} // namespace hc::client
 
 #endif

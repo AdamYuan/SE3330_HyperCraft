@@ -14,7 +14,7 @@
 
 #include <common/WorkPool.hpp>
 
-namespace client {
+namespace hc::client {
 
 class Application {
 private:
@@ -61,6 +61,6 @@ public:
 	~Application();
 };
 
-} // namespace client
+} // namespace hc::client
 
 #endif

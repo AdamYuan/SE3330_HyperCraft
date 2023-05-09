@@ -9,7 +9,7 @@
 #include "mesh/MeshHandle.hpp"
 #include "mesh/MeshPool.hpp"
 
-namespace client {
+namespace hc::client {
 
 struct ChunkMeshInfo {
 	fAABB aabb;
@@ -38,6 +38,6 @@ public:
 	}
 };
 
-} // namespace client
+} // namespace hc::client
 
 #endif

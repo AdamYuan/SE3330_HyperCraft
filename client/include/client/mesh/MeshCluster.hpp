@@ -14,7 +14,7 @@
 
 #include <spdlog/include/spdlog/spdlog.h>
 
-namespace client::mesh {
+namespace hc::client::mesh {
 
 // Used for zero-overhead rendering (with GPU culling)
 template <typename Vertex, typename Index, typename Info> class MeshCluster {
@@ -175,6 +175,6 @@ public:
 	                       : (sizeof(Index) == 2 ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT8_EXT);
 };
 
-} // namespace client::mesh
+} // namespace hc::client::mesh
 
 #endif

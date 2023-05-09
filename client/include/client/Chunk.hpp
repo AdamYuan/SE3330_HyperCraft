@@ -14,7 +14,7 @@
 #include <memory>
 #include <vector>
 
-namespace client {
+namespace hc::client {
 
 class World;
 
@@ -48,7 +48,7 @@ public:
 	template <typename T>
 	static inline constexpr typename std::enable_if<std::is_integral<T>::value, uint32_t>::type
 	CmpXYZ2NeighbourIndex(T cmp_x, T cmp_y, T cmp_z) {
-		return ::CmpXYZ2NeighbourIndex(cmp_x, cmp_y, cmp_z);
+		return hc::CmpXYZ2NeighbourIndex(cmp_x, cmp_y, cmp_z);
 	}
 	template <typename T>
 	static inline constexpr typename std::enable_if<std::is_integral<T>::value, uint32_t>::type
@@ -58,7 +58,7 @@ public:
 	template <typename T>
 	static inline constexpr typename std::enable_if<std::is_signed<T>::value && std::is_integral<T>::value, void>::type
 	NeighbourIndex2CmpXYZ(uint32_t idx, T *cmp_xyz) {
-		return ::NeighbourIndex2CmpXYZ(idx, cmp_xyz);
+		return hc::NeighbourIndex2CmpXYZ(idx, cmp_xyz);
 	}
 
 	inline const ChunkPos3 &GetPosition() const { return m_position; }
@@ -191,6 +191,6 @@ private:
 	Sync m_mesh_sync{}, m_light_sync{};
 };
 
-} // namespace client
+} // namespace hc::client
 
 #endif

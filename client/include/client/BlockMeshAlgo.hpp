@@ -6,7 +6,7 @@
 
 #include <vector>
 
-namespace client {
+namespace hc::client {
 
 class BlockMeshAlgo {
 private:
@@ -114,8 +114,8 @@ private:
 
 		for (uint32_t v = 0; v < 4; ++v) {
 			for (uint32_t b = 0; b < 3; ++b) {
-				Block blk = get_block_func(x + kLookup3v[face][v][b][0], y + kLookup3v[face][v][b][1],
-				                           z + kLookup3v[face][v][b][2]);
+				block::Block blk = get_block_func(x + kLookup3v[face][v][b][0], y + kLookup3v[face][v][b][1],
+				                                  z + kLookup3v[face][v][b][2]);
 				indirect_pass[b] = blk.GetIndirectLightPass();
 				direct_pass[b] = blk.GetVerticalLightPass() || blk.GetCollisionMask() != BlockCollisionBits::kSolid;
 			}
@@ -452,4 +452,4 @@ public:
 	}
 };
 
-} // namespace client
+} // namespace hc::client

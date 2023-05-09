@@ -3,7 +3,7 @@
 
 #include <client/ChunkWorkerBase.hpp>
 
-namespace client {
+namespace hc::client {
 
 class ChunkGenerator : public ChunkWorkerBase {
 public:
@@ -16,6 +16,6 @@ public:
 	void Run() override;
 };
 
-} // namespace client
+} // namespace hc::client
 
 #endif

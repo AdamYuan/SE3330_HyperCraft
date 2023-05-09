@@ -2,7 +2,7 @@
 
 #include <client/DefaultTerrain.hpp>
 
-namespace client {
+namespace hc::client {
 
 std::shared_ptr<LocalClient> LocalClient::Create(const std::shared_ptr<World> &world_ptr,
                                                  const char *database_filename) {
@@ -19,4 +19,4 @@ std::shared_ptr<LocalClient> LocalClient::Create(const std::shared_ptr<World> &w
 	return ret;
 }
 
-} // namespace client
+} // namespace hc::client

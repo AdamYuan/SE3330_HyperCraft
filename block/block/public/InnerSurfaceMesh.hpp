@@ -2,7 +2,7 @@
 
 #include <block/BlockMesh.hpp>
 
-namespace block {
+namespace hc::block {
 
 inline static constexpr BlockMesh InnerSurfaceMesh(BlockTexID tex_id, BlockFace face, uint8_t dist) {
 	uint8_t axis = face >> 1, u = (axis + 1) % 3, v = (axis + 2) % 3;
@@ -45,4 +45,4 @@ inline static constexpr BlockMesh InnerSurfaceMesh(BlockTexID tex_id, BlockFace 
 template <BlockTexID TexID, BlockFace Face, uint8_t Dist>
 inline static constexpr BlockMesh kInnerSurfaceMesh = InnerSurfaceMesh(TexID, Face, Dist);
 
-} // namespace block
+} // namespace hc::block

@@ -15,7 +15,7 @@
 
 #include <common/WorkPool.hpp>
 
-namespace client {
+namespace hc::client {
 
 class WorldRenderer;
 class ClientBase;
@@ -60,6 +60,6 @@ public:
 	void Update(const glm::vec3 &position);
 };
 
-} // namespace client
+} // namespace hc::client
 
 #endif

@@ -3,4 +3,4 @@
 #include <myvk/ShaderModule.hpp>
 #include <spdlog/spdlog.h>
 
-namespace client {}
+namespace hc::client {}

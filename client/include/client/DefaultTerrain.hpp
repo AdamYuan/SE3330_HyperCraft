@@ -13,7 +13,7 @@
 
 #include <spdlog/spdlog.h>
 
-namespace client {
+namespace hc::client {
 
 class DefaultTerrain : public TerrainBase {
 private:
@@ -544,6 +544,6 @@ public:
 	void Generate(const std::shared_ptr<Chunk> &chunk_ptr, int32_t light_map[kChunkSize * kChunkSize]) override;
 };
 
-} // namespace client
+} // namespace hc::client
 
 #endif

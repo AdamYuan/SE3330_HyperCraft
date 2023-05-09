@@ -6,7 +6,7 @@
 
 #include <spdlog/spdlog.h>
 
-namespace client {
+namespace hc::client {
 
 class ClientBase {
 protected:
@@ -20,6 +20,6 @@ public:
 	virtual bool IsConnected() = 0;
 };
 
-} // namespace client
+} // namespace hc::client
 
 #endif
