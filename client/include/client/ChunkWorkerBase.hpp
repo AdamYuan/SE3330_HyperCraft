@@ -5,7 +5,7 @@
 
 #include <common/WorkerBase.hpp>
 
-class ChunkWorkerBase : public common::WorkerBase {
+class ChunkWorkerBase : public WorkerBase {
 private:
 	std::weak_ptr<Chunk> m_chunk_weak_ptr;
 

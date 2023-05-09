@@ -8,7 +8,7 @@ std::shared_ptr<LocalClient> LocalClient::Create(const std::shared_ptr<World> &w
 	ret->m_world_ptr = world_ptr;
 	world_ptr->m_client_weak_ptr = ret->weak_from_this();
 
-	if (!(ret->m_world_database = common::WorldDatabase::Create(database_filename)))
+	if (!(ret->m_world_database = WorldDatabase::Create(database_filename)))
 		return nullptr;
 	if (!(ret->m_terrain = DefaultTerrain::Create(12314524)))
 		return nullptr;

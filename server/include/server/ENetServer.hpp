@@ -18,13 +18,13 @@ private:
 	void event_thread_func();
 
 public:
-	static std::shared_ptr<ENetServer> Create(const std::shared_ptr<common::WorldDatabase> &level_db, uint16_t port);
+	static std::shared_ptr<ENetServer> Create(const std::shared_ptr<WorldDatabase> &level_db, uint16_t port);
 	~ENetServer();
 
 	void RunShell();
 	void Join();
 
-	inline const std::shared_ptr<common::WorldDatabase> &GetLevelDBPtr() const { return m_level_db_ptr; }
+	inline const std::shared_ptr<WorldDatabase> &GetLevelDBPtr() const { return m_level_db_ptr; }
 };
 
 } // namespace server

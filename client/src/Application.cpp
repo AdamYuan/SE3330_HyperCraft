@@ -61,7 +61,7 @@ void Application::resize(const VkExtent2D &extent) {
 	m_camera->m_aspect_ratio = (float)extent.width / (float)extent.height;
 }
 
-class PostUpdateWorker final : public common::WorkerBase {
+class PostUpdateWorker final : public WorkerBase {
 private:
 	std::shared_ptr<ChunkMeshPool> m_chunk_mesh_pool;
 	std::vector<std::unique_ptr<ChunkMeshPool::LocalUpdate>> m_post_updates;
@@ -117,7 +117,7 @@ Application::Application() {
 
 	m_transfer_queue = m_main_queue;
 
-	m_work_pool = common::WorkPool::Create(std::max<std::size_t>(std::thread::hardware_concurrency() * 3 / 4, 1));
+	m_work_pool = WorkPool::Create(std::max<std::size_t>(std::thread::hardware_concurrency() * 3 / 4, 1));
 
 	m_world = World::Create(m_work_pool);
 	m_global_texture = GlobalTexture::Create(m_main_command_pool);

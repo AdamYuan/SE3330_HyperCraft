@@ -5,8 +5,6 @@
 #define IS_SMALL_ENDIAN
 #endif
 
-namespace common {
-
 constexpr bool IsBigEndian() {
 #ifdef IS_BIG_ENDIAN
 	return true;
@@ -21,7 +19,5 @@ constexpr bool IsSmallEndian() {
 	return false;
 #endif
 }
-
-} // namespace common
 
 #endif

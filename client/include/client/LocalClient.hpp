@@ -6,7 +6,7 @@
 
 class LocalClient : public ClientBase, public std::enable_shared_from_this<LocalClient> {
 private:
-	std::unique_ptr<common::WorldDatabase> m_world_database;
+	std::unique_ptr<WorldDatabase> m_world_database;
 
 public:
 	~LocalClient() override = default;

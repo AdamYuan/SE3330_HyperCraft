@@ -8,8 +8,6 @@
 
 #include <common/Endian.hpp>
 
-namespace common {
-
 class InputByteStream {
 private:
 	std::vector<uint8_t> m_data{};
@@ -56,7 +54,5 @@ public:
 		return ret;
 	}
 };
-
-} // namespace common
 
 #endif

@@ -8,8 +8,6 @@
 
 #include "WorkerBase.hpp"
 
-namespace common {
-
 class WorkPool : public std::enable_shared_from_this<WorkPool> {
 public:
 	inline static std::shared_ptr<WorkPool> Create(std::size_t concurrency) {
@@ -41,5 +39,3 @@ public:
 
 	inline std::size_t GetApproxWorkerCount() const { return m_workers.size_approx(); }
 };
-
-}

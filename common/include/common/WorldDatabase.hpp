@@ -4,8 +4,6 @@
 #include <memory>
 #include <sqlite3.h>
 
-namespace common {
-
 class WorldDatabase {
 private:
 	sqlite3 *m_db{nullptr};
@@ -20,7 +18,5 @@ public:
 
 	~WorldDatabase();
 };
-
-}
 
 #endif
