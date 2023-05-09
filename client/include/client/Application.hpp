@@ -10,9 +10,11 @@
 #include <client/GlobalTexture.hpp>
 #include <client/WorldRenderer.hpp>
 
-#include <client/pass/WorldRenderGraph.hpp>
+#include <client/rg/WorldRenderGraph.hpp>
 
 #include <common/WorkPool.hpp>
+
+namespace client {
 
 class Application {
 private:
@@ -28,7 +30,7 @@ private:
 
 	// frame objects
 	std::shared_ptr<myvk::FrameManager> m_frame_manager;
-	myvk::Ptr<WorldRenderGraph> m_world_render_graphs[kFrameCount];
+	myvk::Ptr<rg::WorldRenderGraph> m_world_render_graphs[kFrameCount];
 
 	// game objects and resources
 	std::shared_ptr<GlobalTexture> m_global_texture;
@@ -58,5 +60,7 @@ public:
 	void Run();
 	~Application();
 };
+
+} // namespace client
 
 #endif

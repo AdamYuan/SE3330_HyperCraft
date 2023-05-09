@@ -14,6 +14,8 @@
 #include <memory>
 #include <vector>
 
+namespace client {
+
 class World;
 
 class Chunk : public std::enable_shared_from_this<Chunk> {
@@ -188,5 +190,7 @@ private:
 	std::atomic_bool m_initial_generated_flag{false}, m_initial_meshed_flag{false};
 	Sync m_mesh_sync{}, m_light_sync{};
 };
+
+} // namespace client
 
 #endif

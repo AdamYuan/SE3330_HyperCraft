@@ -5,6 +5,9 @@
 
 #include <client/ChunkGenerator.hpp>
 #include <client/ChunkMesher.hpp>
+#include <client/Config.hpp>
+
+namespace client {
 
 World::~World() {
 	for (const auto &i : m_chunks)
@@ -12,7 +15,6 @@ World::~World() {
 }
 
 #include "WorldLoadingList.inl"
-
 void World::Update(const glm::vec3 &position) {
 	constexpr int16_t kR = 11;
 
@@ -79,3 +81,5 @@ std::shared_ptr<Chunk> World::FindChunk(const ChunkPos3 &position) const {
 	auto it = m_chunks.find(position);
 	return it == m_chunks.end() ? nullptr : it->second;
 }
+
+} // namespace client

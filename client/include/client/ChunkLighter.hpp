@@ -4,6 +4,8 @@
 #include <client/ChunkWorkerBase.hpp>
 #include <common/Light.hpp>
 
+namespace client {
+
 class ChunkLighter final : public ChunkWorkerS26Base {
 private:
 	uint64_t m_version{};
@@ -48,5 +50,7 @@ public:
 	~ChunkLighter() override = default;
 	void Run() override;
 };
+
+} // namespace client
 
 #endif

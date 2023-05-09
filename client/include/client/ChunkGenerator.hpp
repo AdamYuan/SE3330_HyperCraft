@@ -3,6 +3,8 @@
 
 #include <client/ChunkWorkerBase.hpp>
 
+namespace client {
+
 class ChunkGenerator : public ChunkWorkerBase {
 public:
 	static inline std::unique_ptr<ChunkGenerator> Create(const std::weak_ptr<Chunk> &chunk_weak_ptr) {
@@ -13,5 +15,7 @@ public:
 	~ChunkGenerator() override = default;
 	void Run() override;
 };
+
+} // namespace client
 
 #endif

@@ -2,6 +2,8 @@
 
 #include <client/World.hpp>
 
+namespace client {
+
 void ChunkWorkerBase::try_push_worker(std::unique_ptr<ChunkWorkerBase> &&worker) const {
 	if (!worker)
 		return;
@@ -9,3 +11,5 @@ void ChunkWorkerBase::try_push_worker(std::unique_ptr<ChunkWorkerBase> &&worker)
 	if (world)
 		world->GetWorkPoolPtr()->PushWorker(std::move(worker));
 }
+
+} // namespace client

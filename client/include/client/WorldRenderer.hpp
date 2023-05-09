@@ -16,6 +16,8 @@
 #include <unordered_map>
 #include <vector>
 
+namespace client {
+
 class WorldRenderer : public std::enable_shared_from_this<WorldRenderer> {
 private:
 	std::shared_ptr<ChunkMeshPool> m_chunk_mesh_pool;
@@ -36,5 +38,7 @@ public:
 
 	inline const auto &GetChunkMeshPool() const { return m_chunk_mesh_pool; }
 };
+
+} // namespace client
 
 #endif

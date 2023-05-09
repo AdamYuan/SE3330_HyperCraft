@@ -13,6 +13,8 @@
 
 struct GLFWwindow;
 
+namespace client {
+
 class Camera {
 public:
 	glm::vec3 m_position{0.0f, 0.0f, 0.0f};
@@ -37,5 +39,7 @@ public:
 	void Control(GLFWwindow *window, double delta);
 	void Update(UniformData *p_data);
 };
+
+} // namespace client
 
 #endif

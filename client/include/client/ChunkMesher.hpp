@@ -6,6 +6,8 @@
 #include <client/ChunkWorkerBase.hpp>
 #include <queue>
 
+namespace client {
+
 class ChunkMesher final : public ChunkWorkerS26Base {
 public:
 	static inline std::unique_ptr<ChunkMesher> TryCreate(const std::shared_ptr<Chunk> &chunk_ptr) {
@@ -101,5 +103,7 @@ private:
 	                               uint8_t dw, uint8_t *ao, uint8_t *sunlight, uint8_t *torchlight);
 	std::vector<MeshGenInfo> generate_mesh() const;
 };
+
+} // namespace client
 
 #endif

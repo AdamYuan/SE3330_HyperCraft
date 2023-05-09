@@ -7,6 +7,8 @@
 #include <myvk/ImageView.hpp>
 #include <myvk/Sampler.hpp>
 
+namespace client {
+
 class GlobalTexture {
 private:
 	std::shared_ptr<myvk::Image> m_block_texture;
@@ -24,5 +26,7 @@ public:
 	inline const auto &GetBlockTextureView() const { return m_block_view; }
 	inline const auto &GetLightMapView() const { return m_lightmap_view; }
 };
+
+} // namespace client
 
 #endif

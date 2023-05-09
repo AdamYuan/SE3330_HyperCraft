@@ -5,6 +5,8 @@
 
 #include <myvk_rg/RenderGraph.hpp>
 
+namespace client::rg {
+
 class ChunkCullPass final : public myvk_rg::ComputePassBase {
 private:
 	static inline constexpr uint32_t group_x_64(uint32_t x) { return (x >> 6u) + (((x & 0x3fu) > 0u) ? 1u : 0u); }
@@ -38,15 +40,15 @@ public:
 		trans_draw_count_buffer->SetSize(chunk_mesh_pool_ptr->GetMaxClusters() * sizeof(uint32_t));
 
 		AddDescriptorInput<0, myvk_rg::Usage::kStorageBufferW, VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT>(
-		    {"opaque_draw_cmd"}, opaque_draw_cmd_buffer);
+			{"opaque_draw_cmd"}, opaque_draw_cmd_buffer);
 		AddDescriptorInput<1, myvk_rg::Usage::kStorageBufferRW, VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT>(
-		    {"opaque_draw_count"}, opaque_draw_count_buffer);
+			{"opaque_draw_count"}, opaque_draw_count_buffer);
 		AddDescriptorInput<2, myvk_rg::Usage::kStorageBufferW, VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT>(
-		    {"trans_draw_cmd"}, trans_draw_cmd_buffer);
+			{"trans_draw_cmd"}, trans_draw_cmd_buffer);
 		AddDescriptorInput<3, myvk_rg::Usage::kStorageBufferRW, VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT>(
-		    {"trans_draw_count"}, trans_draw_count_buffer);
+			{"trans_draw_count"}, trans_draw_count_buffer);
 		AddDescriptorInput<4, myvk_rg::Usage::kStorageBufferR, VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT>(
-		    {"mesh_info"}, mesh_info_buffer);
+			{"mesh_info"}, mesh_info_buffer);
 		AddDescriptorInput<5, myvk_rg::Usage::kUniformBuffer, VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT>({"camera"},
 		                                                                                              camera_buffer);
 
@@ -63,8 +65,8 @@ public:
 		reduction_create_info.reductionMode = VK_SAMPLER_REDUCTION_MODE_MAX;
 		create_info.pNext = &reduction_create_info;
 		AddDescriptorInput<6, myvk_rg::Usage::kSampledImage, VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT>(
-		    {"depth_hierarchy"}, depth_hierarchy,
-		    myvk::Sampler::Create(GetRenderGraphPtr()->GetDevicePtr(), create_info));
+			{"depth_hierarchy"}, depth_hierarchy,
+			myvk::Sampler::Create(GetRenderGraphPtr()->GetDevicePtr(), create_info));
 	}
 	inline void Update(const std::vector<std::shared_ptr<ChunkMeshCluster>> &prepared_clusters) {
 		m_p_prepared_clusters = &prepared_clusters;
@@ -75,14 +77,14 @@ public:
 	inline auto GetTransparentDrawCountOutput() { return MakeBufferOutput({"trans_draw_count"}); }
 	inline void CreatePipeline() final {
 		auto pipeline_layout =
-		    myvk::PipelineLayout::Create(GetRenderGraphPtr()->GetDevicePtr(), {GetVkDescriptorSetLayout()},
-		                                 {{VK_SHADER_STAGE_COMPUTE_BIT, 0, sizeof(uint32_t) * 3}});
+			myvk::PipelineLayout::Create(GetRenderGraphPtr()->GetDevicePtr(), {GetVkDescriptorSetLayout()},
+			                             {{VK_SHADER_STAGE_COMPUTE_BIT, 0, sizeof(uint32_t) * 3}});
 		static constexpr uint32_t kChunkCullingCompSpv[] = {
 #include <client/shader/chunk_culling.comp.u32>
 		};
 		m_pipeline = myvk::ComputePipeline::Create(
-		    pipeline_layout, myvk::ShaderModule::Create(GetRenderGraphPtr()->GetDevicePtr(), kChunkCullingCompSpv,
-		                                                sizeof(kChunkCullingCompSpv)));
+			pipeline_layout, myvk::ShaderModule::Create(GetRenderGraphPtr()->GetDevicePtr(), kChunkCullingCompSpv,
+			                                            sizeof(kChunkCullingCompSpv)));
 	}
 	inline void CmdExecute(const myvk::Ptr<myvk::CommandBuffer> &command_buffer) const final {
 		command_buffer->CmdBindPipeline(m_pipeline);
@@ -90,9 +92,9 @@ public:
 
 		// Clear counters
 		auto *opaque_draw_count_mapped =
-		    GetResource<myvk_rg::ManagedBuffer>({"opaque_draw_count"})->GetMappedData<uint32_t>();
+			GetResource<myvk_rg::ManagedBuffer>({"opaque_draw_count"})->GetMappedData<uint32_t>();
 		auto *trans_draw_count_mapped =
-		    GetResource<myvk_rg::ManagedBuffer>({"trans_draw_count"})->GetMappedData<uint32_t>();
+			GetResource<myvk_rg::ManagedBuffer>({"trans_draw_count"})->GetMappedData<uint32_t>();
 
 		std::fill(opaque_draw_count_mapped, opaque_draw_count_mapped + m_chunk_mesh_pool_ptr->GetMaxClusters(), 0u);
 		std::fill(trans_draw_count_mapped, trans_draw_count_mapped + m_chunk_mesh_pool_ptr->GetMaxClusters(), 0u);
@@ -107,5 +109,7 @@ public:
 		}
 	}
 };
+
+}
 
 #endif

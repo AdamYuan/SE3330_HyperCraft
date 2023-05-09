@@ -9,7 +9,14 @@
 
 #include <myvk/ImGuiHelper.hpp>
 
+#include <client/ChunkGenerator.hpp>
+#include <client/ENetClient.hpp>
+#include <client/LocalClient.hpp>
+#include <common/WorldDatabase.hpp>
+
 #include <random>
+
+namespace client {
 
 void Application::create_glfw_window() {
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
@@ -102,11 +109,6 @@ void Application::draw_frame(double delta) {
 	m_frame_manager->Render();
 }
 
-#include <client/ChunkGenerator.hpp>
-#include <client/ENetClient.hpp>
-#include <client/LocalClient.hpp>
-#include <common/WorldDatabase.hpp>
-
 Application::Application() {
 	glfwInit();
 
@@ -129,7 +131,7 @@ Application::Application() {
 
 	auto chunk_renderer = m_world_renderer->GetChunkMeshPool();
 	for (auto &world_rg : m_world_render_graphs) {
-		world_rg = WorldRenderGraph::Create(m_main_queue, m_frame_manager, chunk_renderer, m_global_texture);
+		world_rg = rg::WorldRenderGraph::Create(m_main_queue, m_frame_manager, chunk_renderer, m_global_texture);
 		world_rg->SetCanvasSize(m_frame_manager->GetExtent());
 	}
 }
@@ -190,3 +192,5 @@ void Application::glfw_framebuffer_resize_callback(GLFWwindow *window, int width
 	auto *app = (Application *)glfwGetWindowUserPointer(window);
 	app->m_frame_manager->Resize();
 }
+
+} // namespace client

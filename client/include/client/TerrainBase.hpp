@@ -10,6 +10,8 @@
 
 #include <spdlog/spdlog.h>
 
+namespace client {
+
 class Chunk;
 class TerrainBase {
 private:
@@ -68,5 +70,7 @@ public:
 		return generated;
 	}
 };
+
+} // namespace client
 
 #endif

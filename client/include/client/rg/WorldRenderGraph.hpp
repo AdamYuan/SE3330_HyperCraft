@@ -15,6 +15,8 @@
 #include <myvk_rg/resource/StaticImage.hpp>
 #include <myvk_rg/resource/SwapchainImage.hpp>
 
+namespace client::rg {
+
 class WorldRenderGraph final : public myvk_rg::RenderGraph<WorldRenderGraph> {
 private:
 	std::shared_ptr<ChunkMeshPool> m_chunk_mesh_pool_ptr;
@@ -146,5 +148,7 @@ public:
 		AddResult({"final"}, imgui_pass->GetImageOutput());
 	}
 };
+
+} // namespace client::rg
 
 #endif

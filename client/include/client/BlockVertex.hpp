@@ -2,6 +2,8 @@
 
 #include <block/Block.hpp>
 
+namespace client {
+
 struct BlockVertex { // Compressed mesh vertex for chunk
 	static constexpr uint32_t kUnitBitOffset = 4u;
 	static constexpr uint32_t kUnitOffset = 1u << kUnitBitOffset;
@@ -13,3 +15,5 @@ struct BlockVertex { // Compressed mesh vertex for chunk
 	      tex10_trans3_face3_ao2_sl6_tl6((tex - 1u) | (tex_trans << 10u) | (face << 13u) | (ao << 16u) |
 	                                     (sunlight << 18u) | (torchlight << 24u)) {}
 };
+
+} // namespace client

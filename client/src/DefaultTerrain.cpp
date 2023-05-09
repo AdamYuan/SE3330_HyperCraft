@@ -5,6 +5,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <random>
 
+namespace client {
+
 void DefaultTerrain::Generate(const std::shared_ptr<Chunk> &chunk_ptr, int32_t light_map[kChunkSize * kChunkSize]) {
 #if 1
 	std::shared_ptr<const XZInfo> xz_info = m_xz_cache.Acquire(
@@ -507,3 +509,5 @@ void DefaultTerrain::DecorationInfo::PopToChunk(const std::shared_ptr<Chunk> &ch
 			chunk_ptr->SetBlock(idx, i.second);
 	}
 }
+
+} // namespace client

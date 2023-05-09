@@ -7,6 +7,8 @@
 #include "MeshCluster.hpp"
 #include "MeshPool.hpp"
 
+namespace client::mesh {
+
 template <typename Vertex, typename Index, typename Info> class MeshHandle {
 private:
 	std::shared_ptr<MeshPool<Vertex, Index, Info>> m_pool_ptr;
@@ -105,5 +107,7 @@ public:
 		    std::make_unique<LocalErase>(m_cluster_ptr->GetClusterID(), m_mesh_id, m_vertex_alloc, m_index_alloc));
 	}
 };
+
+} // namespace client
 
 #endif

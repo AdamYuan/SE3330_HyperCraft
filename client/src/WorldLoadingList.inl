@@ -1,6 +1,3 @@
-#include <common/Position.hpp>
-#include <client/Config.hpp>
-
 constexpr ChunkPos3 kWorldLoadingList[] = {
 	{0, 0, 0}, {0, 0, 1}, {0, 0, -1}, {0, 1, 0}, {0, 1, 1}, 
 	{0, 1, -1}, {0, -1, 0}, {0, -1, 1}, {0, -1, -1}, {1, 0, 0}, 

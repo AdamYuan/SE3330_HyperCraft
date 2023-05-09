@@ -6,6 +6,8 @@
 
 #include <spdlog/spdlog.h>
 
+namespace client {
+
 class ClientBase {
 protected:
 	std::shared_ptr<World> m_world_ptr;
@@ -17,5 +19,7 @@ public:
 	inline const std::unique_ptr<TerrainBase> &GetTerrain() const { return m_terrain; }
 	virtual bool IsConnected() = 0;
 };
+
+} // namespace client
 
 #endif

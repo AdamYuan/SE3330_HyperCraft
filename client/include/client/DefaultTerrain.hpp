@@ -13,6 +13,8 @@
 
 #include <spdlog/spdlog.h>
 
+namespace client {
+
 class DefaultTerrain : public TerrainBase {
 private:
 	using Block = block::Block;
@@ -541,5 +543,7 @@ public:
 	inline static std::unique_ptr<TerrainBase> Create(uint32_t seed) { return std::make_unique<DefaultTerrain>(seed); }
 	void Generate(const std::shared_ptr<Chunk> &chunk_ptr, int32_t light_map[kChunkSize * kChunkSize]) override;
 };
+
+} // namespace client
 
 #endif

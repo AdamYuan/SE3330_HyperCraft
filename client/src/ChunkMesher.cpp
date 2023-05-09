@@ -10,6 +10,8 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
+namespace client {
+
 thread_local std::queue<ChunkMesher::LightEntry> ChunkMesher::m_light_queue;
 
 template <typename T, typename = std::enable_if_t<std::is_integral_v<T> && std::is_signed_v<T>>>
@@ -545,3 +547,5 @@ void ChunkMesher::Run() {
 	// Push mesh to chunk
 	m_chunk_ptr->PushMesh(m_version, mesh_handles);
 }
+
+} // namespace client

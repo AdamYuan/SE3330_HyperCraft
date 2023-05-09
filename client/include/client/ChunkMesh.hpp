@@ -9,6 +9,8 @@
 #include "mesh/MeshHandle.hpp"
 #include "mesh/MeshPool.hpp"
 
+namespace client {
+
 struct ChunkMeshInfo {
 	fAABB aabb;
 	glm::i32vec3 base_position;
@@ -16,10 +18,10 @@ struct ChunkMeshInfo {
 };
 static_assert(sizeof(ChunkMeshInfo) == 40);
 
-using ChunkMeshHandle = MeshHandle<BlockVertex, uint16_t, ChunkMeshInfo>;
-using ChunkMeshCluster = MeshCluster<BlockVertex, uint16_t, ChunkMeshInfo>;
-using ChunkMeshPoolBase = MeshPool<BlockVertex, uint16_t, ChunkMeshInfo>;
-using ChunkMeshInfoBuffer = MeshInfoBuffer<BlockVertex, uint16_t, ChunkMeshInfo>;
+using ChunkMeshHandle = mesh::MeshHandle<BlockVertex, uint16_t, ChunkMeshInfo>;
+using ChunkMeshCluster = mesh::MeshCluster<BlockVertex, uint16_t, ChunkMeshInfo>;
+using ChunkMeshPoolBase = mesh::MeshPool<BlockVertex, uint16_t, ChunkMeshInfo>;
+using ChunkMeshInfoBuffer = mesh::MeshInfoBuffer<BlockVertex, uint16_t, ChunkMeshInfo>;
 
 class ChunkMeshPool : public ChunkMeshPoolBase {
 private:
@@ -35,5 +37,7 @@ public:
 		return std::make_shared<ChunkMeshPool>(device);
 	}
 };
+
+} // namespace client
 
 #endif

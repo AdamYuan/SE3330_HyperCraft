@@ -4,6 +4,8 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
+namespace client {
+
 template <typename T, typename = std::enable_if_t<std::is_integral_v<T> && std::is_signed_v<T>>>
 static constexpr uint32_t chunk_xyz_extended14_to_index(T x, T y, T z) {
 	bool x_inside = 0 <= x && x < kChunkSize, y_inside = 0 <= y && y < kChunkSize, z_inside = 0 <= z && z < kChunkSize;
@@ -124,3 +126,5 @@ void ChunkLighter::Run() {
 	        return;
 	    } */
 }
+
+} // namespace client

@@ -8,6 +8,8 @@
 
 #include <stb_image.h>
 
+namespace client {
+
 std::shared_ptr<GlobalTexture> GlobalTexture::Create(const std::shared_ptr<myvk::CommandPool> &command_pool) {
 	std::shared_ptr<GlobalTexture> ret = std::make_shared<GlobalTexture>();
 	ret->create_block_texture(command_pool);
@@ -108,3 +110,5 @@ void GlobalTexture::create_block_texture(const std::shared_ptr<myvk::CommandPool
 	command_buffer->Submit(fence);
 	fence->Wait();
 }
+
+} // namespace client

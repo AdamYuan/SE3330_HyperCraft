@@ -14,6 +14,8 @@
 
 #include <spdlog/include/spdlog/spdlog.h>
 
+namespace client::mesh {
+
 // Used for zero-overhead rendering (with GPU culling)
 template <typename Vertex, typename Index, typename Info> class MeshCluster {
 	static_assert(sizeof(Index) == 4 || sizeof(Index) == 2 || sizeof(Index) == 1, "sizeof Index must be 1, 2 or 4");
@@ -172,5 +174,7 @@ public:
 	    sizeof(Index) == 4 ? VK_INDEX_TYPE_UINT32
 	                       : (sizeof(Index) == 2 ? VK_INDEX_TYPE_UINT16 : VK_INDEX_TYPE_UINT8_EXT);
 };
+
+} // namespace client::mesh
 
 #endif

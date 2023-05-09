@@ -12,6 +12,8 @@
 
 #include <myvk/CommandBuffer.hpp>
 
+namespace client::mesh {
+
 template <typename Vertex, typename Index, typename Info> class MeshPool : public myvk::DeviceObjectBase {
 public:
 	struct LocalUpdate {
@@ -255,5 +257,7 @@ public:
 			vmaDestroyBuffer(m_pool_ptr->GetDevicePtr()->GetAllocatorHandle(), m_buffer, m_allocation);
 	}
 };
+
+} // namespace client::mesh
 
 #endif

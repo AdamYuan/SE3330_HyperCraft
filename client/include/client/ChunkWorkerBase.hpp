@@ -5,6 +5,8 @@
 
 #include <common/WorkerBase.hpp>
 
+namespace client {
+
 class ChunkWorkerBase : public WorkerBase {
 private:
 	std::weak_ptr<Chunk> m_chunk_weak_ptr;
@@ -58,5 +60,7 @@ class ChunkWorkerS6Base : public ChunkWorkerBase {
 
 	~ChunkWorkerS6Base() override = default;
 };
+
+} // namespace client
 
 #endif

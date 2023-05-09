@@ -6,6 +6,8 @@
 
 #include <vector>
 
+namespace client {
+
 class BlockMeshAlgo {
 private:
 	struct AO4 { // compressed ambient occlusion data for 4 vertices (a face)
@@ -194,7 +196,6 @@ private:
 	}
 
 public:
-
 	template <typename GetBlockFunc, typename GetLightFunc, typename Push>
 	std::vector<ChunkMesher::MeshGenInfo> ChunkMesher::generate_mesh() const {
 		std::vector<MeshGenInfo> ret;
@@ -228,7 +229,7 @@ public:
 						std::swap(u_light_axis, v_light_axis);
 
 					auto op_nei_pos = BlockFaceProceed(pos, BlockFaceOpposite(cur_light_face)),
-						nei_pos = BlockFaceProceed(pos, cur_light_face);
+					     nei_pos = BlockFaceProceed(pos, cur_light_face);
 					light4_init(&low_light4, cur_light_face, op_nei_pos.x, op_nei_pos.y, op_nei_pos.z);
 					if (get_block(nei_pos.x, nei_pos.y, nei_pos.z).GetIndirectLightPass())
 						light4_init(&high_light4, cur_light_face, pos.x, pos.y, pos.z);
@@ -249,14 +250,14 @@ public:
 				for (const auto &vert : mesh_face->vertices) {
 					info.aabb.Merge({base.x + vert.x, base.y + vert.y, base.z + vert.z});
 					uint8_t du = vert.pos[u_light_axis], dv = vert.pos[v_light_axis],
-						dw = std::min(vert.pos[cur_light_axis], (uint8_t)BlockVertex::kUnitOffset);
+					        dw = std::min(vert.pos[cur_light_axis], (uint8_t)BlockVertex::kUnitOffset);
 					if (cur_light_face & 1u)
 						dw = BlockVertex::kUnitOffset - (int32_t)dw;
 					uint8_t ao = vert.ao, sunlight, torchlight;
 					light4_interpolate(low_light4, high_light4, du, dv, dw, &ao, &sunlight, &torchlight);
 					info.vertices.emplace_back(base.x + vert.x, base.y + vert.y, base.z + vert.z, mesh_face->axis,
-					                           mesh_face->render_face, ao, sunlight, torchlight, mesh_face->texture.GetID(),
-					                           mesh_face->texture.GetTransformation());
+					                           mesh_face->render_face, ao, sunlight, torchlight,
+					                           mesh_face->texture.GetID(), mesh_face->texture.GetTransformation());
 				}
 
 				info.indices.push_back(cur_vertex);
@@ -295,8 +296,8 @@ public:
 						if (x[axis] != 0 && a.ShowFace((f = axis << 1), b)) {
 							texture_mask[0][counter] = a.GetTexture(f);
 							face_mask |= 1u;
-							light4_init(light_mask[0] + counter, f, (int_fast8_t)(x[0] + q[0]), (int_fast8_t)(x[1] + q[1]),
-							            (int_fast8_t)(x[2] + q[2]));
+							light4_init(light_mask[0] + counter, f, (int_fast8_t)(x[0] + q[0]),
+							            (int_fast8_t)(x[1] + q[1]), (int_fast8_t)(x[2] + q[2]));
 						}
 						if (Chunk::kSize != x[axis] && b.ShowFace((f = (axis << 1) | 1), a)) {
 							texture_mask[1][counter] = b.GetTexture(f);
@@ -321,8 +322,9 @@ public:
 								const Light4 quad_light = local_light_mask[counter];
 								// Compute width
 								uint_fast8_t width, height;
-								for (width = 1; quad_texture == local_texture_mask[counter + width] &&
-								                quad_light == local_light_mask[counter + width] && i + width < Chunk::kSize;
+								for (width = 1;
+								     quad_texture == local_texture_mask[counter + width] &&
+								     quad_light == local_light_mask[counter + width] && i + width < Chunk::kSize;
 								     ++width)
 									;
 
@@ -335,7 +337,7 @@ public:
 											goto end_height_loop;
 										}
 									}
-								end_height_loop:
+							end_height_loop:
 
 								// Add quad
 								x[u] = i;
@@ -355,7 +357,7 @@ public:
 								// if (quad_texture.GetRotation() == )
 
 								MeshGenInfo &info =
-									quad_texture.UseTransparentPass() ? transparent_mesh_info : opaque_mesh_info;
+								    quad_texture.UseTransparentPass() ? transparent_mesh_info : opaque_mesh_info;
 								// if indices would exceed, restart
 								uint16_t cur_vertex = info.vertices.size();
 								if (cur_vertex + 4 > UINT16_MAX) {
@@ -365,11 +367,11 @@ public:
 									info.transparent = trans;
 								}
 								info.aabb.Merge({{uint32_t(x[0]) << BlockVertex::kUnitBitOffset,
-									                 uint32_t(x[1]) << BlockVertex::kUnitBitOffset,
-									                 uint32_t(x[2]) << BlockVertex::kUnitBitOffset},
+								                  uint32_t(x[1]) << BlockVertex::kUnitBitOffset,
+								                  uint32_t(x[2]) << BlockVertex::kUnitBitOffset},
 								                 {uint32_t(x[0] + du[0] + dv[0]) << BlockVertex::kUnitBitOffset,
-									                 uint32_t(x[1] + du[1] + dv[1]) << BlockVertex::kUnitBitOffset,
-									                 uint32_t(x[2] + du[2] + dv[2]) << BlockVertex::kUnitBitOffset}});
+								                  uint32_t(x[1] + du[1] + dv[1]) << BlockVertex::kUnitBitOffset,
+								                  uint32_t(x[2] + du[2] + dv[2]) << BlockVertex::kUnitBitOffset}});
 
 								BlockFace quad_face = (axis << 1) | quad_face_inv;
 								info.vertices.emplace_back(uint32_t(x[0]) << BlockVertex::kUnitBitOffset,
@@ -385,11 +387,11 @@ public:
 								                           quad_light.torchlight[1], quad_texture.GetID(),
 								                           quad_texture.GetTransformation());
 								info.vertices.emplace_back(
-									uint32_t(x[0] + du[0] + dv[0]) << BlockVertex::kUnitBitOffset,
-									uint32_t(x[1] + du[1] + dv[1]) << BlockVertex::kUnitBitOffset,
-									uint32_t(x[2] + du[2] + dv[2]) << BlockVertex::kUnitBitOffset, axis, quad_face,
-									quad_light.ao[2], quad_light.sunlight[2], quad_light.torchlight[2],
-									quad_texture.GetID(), quad_texture.GetTransformation());
+								    uint32_t(x[0] + du[0] + dv[0]) << BlockVertex::kUnitBitOffset,
+								    uint32_t(x[1] + du[1] + dv[1]) << BlockVertex::kUnitBitOffset,
+								    uint32_t(x[2] + du[2] + dv[2]) << BlockVertex::kUnitBitOffset, axis, quad_face,
+								    quad_light.ao[2], quad_light.sunlight[2], quad_light.torchlight[2],
+								    quad_texture.GetID(), quad_texture.GetTransformation());
 								info.vertices.emplace_back(uint32_t(x[0] + dv[0]) << BlockVertex::kUnitBitOffset,
 								                           uint32_t(x[1] + dv[1]) << BlockVertex::kUnitBitOffset,
 								                           uint32_t(x[2] + dv[2]) << BlockVertex::kUnitBitOffset, axis,
@@ -449,3 +451,5 @@ public:
 		return ret;
 	}
 };
+
+} // namespace client
