@@ -1,7 +1,7 @@
 #ifndef HYPERCRAFT_RESOURCE_MISC_TEXTURE_HPP
 #define HYPERCRAFT_RESOURCE_MISC_TEXTURE_HPP
 
-namespace texture {
+namespace hc::texture {
 
 #include <generated/misc_texture_png.inl>
 

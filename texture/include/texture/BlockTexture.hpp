@@ -3,7 +3,7 @@
 
 #include <cinttypes>
 
-namespace texture {
+namespace hc::texture {
 
 using BlockTexID = uint16_t;
 using BlockTexTrans = uint8_t;

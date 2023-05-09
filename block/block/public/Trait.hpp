@@ -6,7 +6,7 @@
 #include <texture/BlockTexture.hpp>
 
 using namespace hc::block;
-using namespace texture;
+using namespace hc::texture;
 
 #define BLOCK_TEXTURE_NONE \
 	{ \
