@@ -1,6 +1,7 @@
 #pragma once
 
 #include <block/Block.hpp>
+#include <vector>
 
 namespace hc::client {
 
