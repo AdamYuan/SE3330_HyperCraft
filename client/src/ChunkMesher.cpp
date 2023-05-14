@@ -93,10 +93,10 @@ void ChunkMesher::initial_sunlight_bfs() {
 	}
 }
 
-std::vector<ChunkMesher::MeshGenInfo> ChunkMesher::generate_mesh() const {
-	std::vector<MeshGenInfo> ret;
+std::vector<BlockMesh> ChunkMesher::generate_mesh() const {
+	std::vector<BlockMesh> ret;
 
-	MeshGenInfo opaque_mesh_info, transparent_mesh_info;
+	BlockMesh opaque_mesh_info, transparent_mesh_info;
 	opaque_mesh_info.transparent = false;
 	transparent_mesh_info.transparent = true;
 
@@ -133,13 +133,13 @@ std::vector<ChunkMesher::MeshGenInfo> ChunkMesher::generate_mesh() const {
 					high_light4 = low_light4;
 			}
 
-			MeshGenInfo &info = mesh_face->texture.UseTransparentPass() ? transparent_mesh_info : opaque_mesh_info;
+			BlockMesh &info = mesh_face->texture.UseTransparentPass() ? transparent_mesh_info : opaque_mesh_info;
 			// if indices would exceed, restart
 			uint16_t cur_vertex = info.vertices.size();
 			if (cur_vertex + 4 > UINT16_MAX) {
 				bool trans = info.transparent;
 				ret.push_back(std::move(info));
-				info = MeshGenInfo{};
+				info = BlockMesh{};
 				info.transparent = trans;
 			}
 
@@ -251,14 +251,14 @@ std::vector<ChunkMesher::MeshGenInfo> ChunkMesher::generate_mesh() const {
 							// TODO: process resource rotation
 							// if (quad_texture.GetRotation() == )
 
-							MeshGenInfo &info =
+							BlockMesh &info =
 							    quad_texture.UseTransparentPass() ? transparent_mesh_info : opaque_mesh_info;
 							// if indices would exceed, restart
 							uint16_t cur_vertex = info.vertices.size();
 							if (cur_vertex + 4 > UINT16_MAX) {
 								bool trans = info.transparent;
 								ret.push_back(std::move(info));
-								info = MeshGenInfo{};
+								info = BlockMesh{};
 								info.transparent = trans;
 							}
 							info.aabb.Merge({{uint32_t(x[0]) << BlockVertex::kUnitBitOffset,
@@ -521,7 +521,7 @@ void ChunkMesher::Run() {
 		m_chunk_ptr->PushLight(m_light_version, m_light_buffer);
 	}
 
-	std::vector<MeshGenInfo> meshes = generate_mesh();
+	std::vector<BlockMesh> meshes = generate_mesh();
 	std::shared_ptr<World> world_ptr = m_chunk_ptr->LockWorld();
 	if (!world_ptr)
 		return;

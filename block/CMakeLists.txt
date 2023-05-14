@@ -35,3 +35,6 @@ target_include_directories(HyperCraft_block
         PRIVATE block
         )
 target_link_libraries(HyperCraft_block PUBLIC hc::texture::block hc::dep)
+
+add_executable(HyperCraft_block_test test/test_block.cpp test/catch_amalgamated.cpp)
+target_link_libraries(HyperCraft_block_test PRIVATE hc::block)

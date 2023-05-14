@@ -3,7 +3,9 @@
 #include "BlockVertex.hpp"
 #include <block/Block.hpp>
 #include <common/Light.hpp>
+#include <common/Size.hpp>
 
+#include <glm/gtc/type_ptr.hpp>
 #include <vector>
 
 namespace hc::client {
@@ -39,16 +41,9 @@ private:
 		inline bool operator!=(Light4 f) const { return ao != f.ao || lights != f.lights; }
 	};
 
-	struct MeshGenInfo {
-		std::vector<BlockVertex> vertices;
-		std::vector<uint16_t> indices;
-		AABB<uint32_t> aabb{};
-		bool transparent;
-	};
-
 	template <typename GetBlockFunc, typename GetLightFunc>
-	inline void light4_init(GetBlockFunc &&get_block_func, GetLightFunc &get_light_func, Light4 *light4, BlockFace face,
-	                        int_fast8_t x, int_fast8_t y, int_fast8_t z) const {
+	inline static void light4_init(GetBlockFunc &&get_block_func, GetLightFunc &get_light_func, Light4 *light4,
+	                               block::BlockFace face, int_fast8_t x, int_fast8_t y, int_fast8_t z) {
 		//  structure of the neighbour arrays
 		// y
 		// |
@@ -117,11 +112,14 @@ private:
 				block::Block blk = get_block_func(x + kLookup3v[face][v][b][0], y + kLookup3v[face][v][b][1],
 				                                  z + kLookup3v[face][v][b][2]);
 				indirect_pass[b] = blk.GetIndirectLightPass();
-				direct_pass[b] = blk.GetVerticalLightPass() || blk.GetCollisionMask() != BlockCollisionBits::kSolid;
+				direct_pass[b] =
+				    blk.GetVerticalLightPass() || blk.GetCollisionMask() != block::BlockCollisionBits::kSolid;
 			}
 			{
-				Block blk = get_block_func(x + kLookup1v[face][0], y + kLookup1v[face][1], z + kLookup1v[face][2]);
-				direct_pass[3] = blk.GetVerticalLightPass() || blk.GetCollisionMask() != BlockCollisionBits::kSolid;
+				block::Block blk =
+				    get_block_func(x + kLookup1v[face][0], y + kLookup1v[face][1], z + kLookup1v[face][2]);
+				direct_pass[3] =
+				    blk.GetVerticalLightPass() || blk.GetCollisionMask() != block::BlockCollisionBits::kSolid;
 			}
 
 			uint32_t ao =
@@ -162,8 +160,8 @@ private:
 		}
 	}
 
-	inline void light4_interpolate(const Light4 &low_light, const Light4 &high_light, uint8_t du, uint8_t dv,
-	                               uint8_t dw, uint8_t *ao, uint8_t *sunlight, uint8_t *torchlight) {
+	inline static void light4_interpolate(const Light4 &low_light, const Light4 &high_light, uint8_t du, uint8_t dv,
+	                                      uint8_t dw, uint8_t *ao, uint8_t *sunlight, uint8_t *torchlight) {
 // don't care about the macro cost since this will be optimized
 #define LERP(a, b, t) \
 	((uint32_t)(a)*uint32_t((int32_t)BlockVertex::kUnitOffset - (int32_t)(t)) + (uint32_t)(b) * (uint32_t)(t))
@@ -196,29 +194,29 @@ private:
 	}
 
 public:
-	template <typename GetBlockFunc, typename GetLightFunc, typename Push>
-	std::vector<ChunkMesher::MeshGenInfo> ChunkMesher::generate_mesh() const {
-		std::vector<MeshGenInfo> ret;
+	template <uint32_t SizeX, uint32_t SizeY, uint32_t SizeZ, typename GetBlockFunc, typename GetLightFunc>
+	std::vector<BlockMesh> generate_mesh(GetBlockFunc &&get_block_func, GetLightFunc &&get_light_func) const {
+		std::vector<BlockMesh> ret;
 
-		MeshGenInfo opaque_mesh_info, transparent_mesh_info;
+		BlockMesh opaque_mesh_info, transparent_mesh_info;
 		opaque_mesh_info.transparent = false;
 		transparent_mesh_info.transparent = true;
 
 		// deal with custom block mesh
 		for (uint32_t idx = 0; idx < kChunkSize * kChunkSize * kChunkSize; ++idx) {
-			Block b = m_chunk_ptr->GetBlock(idx);
+			block::Block b = get_block_func(idx);
 			if (!b.HaveCustomMesh())
 				continue;
-			const BlockMesh *mesh = b.GetCustomMesh();
+			const block::BlockMesh *mesh = b.GetCustomMesh();
 			glm::vec<3, int_fast8_t> pos{};
 			ChunkIndex2XYZ(idx, glm::value_ptr(pos));
 			glm::u32vec3 base = (glm::u32vec3)pos << BlockVertex::kUnitBitOffset;
 
-			BlockFace cur_light_face = std::numeric_limits<BlockFace>::max();
+			auto cur_light_face = std::numeric_limits<block::BlockFace>::max();
 			uint8_t cur_light_axis{}, u_light_axis{}, v_light_axis{};
 			Light4 low_light4{}, high_light4{};
 			for (uint32_t i = 0; i < mesh->face_count; ++i) {
-				const BlockMeshFace *mesh_face = mesh->faces + i;
+				const block::BlockMeshFace *mesh_face = mesh->faces + i;
 
 				if (mesh_face->light_face != cur_light_face) {
 					cur_light_face = mesh_face->light_face;
@@ -228,22 +226,23 @@ public:
 					if (cur_light_face & 1u)
 						std::swap(u_light_axis, v_light_axis);
 
-					auto op_nei_pos = BlockFaceProceed(pos, BlockFaceOpposite(cur_light_face)),
-					     nei_pos = BlockFaceProceed(pos, cur_light_face);
-					light4_init(&low_light4, cur_light_face, op_nei_pos.x, op_nei_pos.y, op_nei_pos.z);
-					if (get_block(nei_pos.x, nei_pos.y, nei_pos.z).GetIndirectLightPass())
-						light4_init(&high_light4, cur_light_face, pos.x, pos.y, pos.z);
+					auto op_nei_pos = block::BlockFaceProceed(pos, block::BlockFaceOpposite(cur_light_face)),
+					     nei_pos = block::BlockFaceProceed(pos, cur_light_face);
+					light4_init(get_block_func, get_light_func, &low_light4, cur_light_face, op_nei_pos.x, op_nei_pos.y,
+					            op_nei_pos.z);
+					if (get_block_func(nei_pos.x, nei_pos.y, nei_pos.z).GetIndirectLightPass())
+						light4_init(get_block_func, get_light_func, &high_light4, cur_light_face, pos.x, pos.y, pos.z);
 					else
 						high_light4 = low_light4;
 				}
 
-				MeshGenInfo &info = mesh_face->texture.UseTransparentPass() ? transparent_mesh_info : opaque_mesh_info;
+				BlockMesh &info = mesh_face->texture.UseTransparentPass() ? transparent_mesh_info : opaque_mesh_info;
 				// if indices would exceed, restart
 				uint16_t cur_vertex = info.vertices.size();
 				if (cur_vertex + 4 > UINT16_MAX) {
 					bool trans = info.transparent;
 					ret.push_back(std::move(info));
-					info = MeshGenInfo{};
+					info = BlockMesh{};
 					info.transparent = trans;
 				}
 
@@ -276,7 +275,7 @@ public:
 
 			uint_fast8_t x[3]{0};
 			int_fast8_t q[3]{0};
-			thread_local static BlockTexture texture_mask[2][Chunk::kSize * Chunk::kSize]{};
+			thread_local static texture::BlockTexture texture_mask[2][Chunk::kSize * Chunk::kSize]{};
 			// thread_local static std::bitset<Chunk::kSize * Chunk::kSize> face_inv_mask{};
 			thread_local static Light4 light_mask[2][Chunk::kSize * Chunk::kSize]{};
 
@@ -287,12 +286,12 @@ public:
 			std::fill(texture_mask[0], texture_mask[1] + kChunkSize * kChunkSize, 0);
 			for (x[axis] = 0; x[axis] <= Chunk::kSize; ++x[axis]) {
 				uint32_t counter = 0;
-				for (x[v] = 0; x[v] < Chunk::kSize; ++x[v]) {
-					for (x[u] = 0; x[u] < Chunk::kSize; ++x[u], ++counter) {
-						const Block a = get_block(x[0] + q[0], x[1] + q[1], x[2] + q[2]);
-						const Block b = get_block(x[0], x[1], x[2]);
+				for (x[v] = 0; x[v] < kChunkSize; ++x[v]) {
+					for (x[u] = 0; x[u] < kChunkSize; ++x[u], ++counter) {
+						const block::Block a = get_block_func(x[0] + q[0], x[1] + q[1], x[2] + q[2]);
+						const block::Block b = get_block_func(x[0], x[1], x[2]);
 
-						BlockFace f;
+						block::BlockFace f;
 						if (x[axis] != 0 && a.ShowFace((f = axis << 1), b)) {
 							texture_mask[0][counter] = a.GetTexture(f);
 							face_mask |= 1u;
@@ -317,7 +316,7 @@ public:
 					auto local_light_mask = light_mask[quad_face_inv];
 					for (uint_fast8_t j = 0; j < Chunk::kSize; ++j) {
 						for (uint_fast8_t i = 0; i < Chunk::kSize;) {
-							const BlockTexture quad_texture = local_texture_mask[counter];
+							const texture::BlockTexture quad_texture = local_texture_mask[counter];
 							if (!quad_texture.Empty()) {
 								const Light4 quad_light = local_light_mask[counter];
 								// Compute width
@@ -356,14 +355,14 @@ public:
 								// TODO: process resource rotation
 								// if (quad_texture.GetRotation() == )
 
-								MeshGenInfo &info =
+								BlockMesh &info =
 								    quad_texture.UseTransparentPass() ? transparent_mesh_info : opaque_mesh_info;
 								// if indices would exceed, restart
 								uint16_t cur_vertex = info.vertices.size();
 								if (cur_vertex + 4 > UINT16_MAX) {
 									bool trans = info.transparent;
 									ret.push_back(std::move(info));
-									info = MeshGenInfo{};
+									info = BlockMesh{};
 									info.transparent = trans;
 								}
 								info.aabb.Merge({{uint32_t(x[0]) << BlockVertex::kUnitBitOffset,
@@ -373,7 +372,7 @@ public:
 								                  uint32_t(x[1] + du[1] + dv[1]) << BlockVertex::kUnitBitOffset,
 								                  uint32_t(x[2] + du[2] + dv[2]) << BlockVertex::kUnitBitOffset}});
 
-								BlockFace quad_face = (axis << 1) | quad_face_inv;
+								block::BlockFace quad_face = (axis << 1) | quad_face_inv;
 								info.vertices.emplace_back(uint32_t(x[0]) << BlockVertex::kUnitBitOffset,
 								                           uint32_t(x[1]) << BlockVertex::kUnitBitOffset,
 								                           uint32_t(x[2]) << BlockVertex::kUnitBitOffset, axis,

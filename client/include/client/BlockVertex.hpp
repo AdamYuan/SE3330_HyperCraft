@@ -16,4 +16,11 @@ struct BlockVertex { // Compressed mesh vertex for chunk
 	                                     (sunlight << 18u) | (torchlight << 24u)) {}
 };
 
+struct BlockMesh {
+	std::vector<BlockVertex> vertices;
+	std::vector<uint16_t> indices;
+	AABB<uint32_t> aabb{};
+	bool transparent;
+};
+
 } // namespace hc::client
