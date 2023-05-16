@@ -1,6 +1,8 @@
 #pragma once
 
+#include "BlockAlgo.hpp"
 #include "BlockVertex.hpp"
+
 #include <block/Block.hpp>
 #include <common/Light.hpp>
 #include <common/Size.hpp>
@@ -43,7 +45,7 @@ private:
 
 	template <typename GetBlockFunc, typename GetLightFunc>
 	inline static void light4_init(GetBlockFunc &&get_block_func, GetLightFunc &get_light_func, Light4 *light4,
-	                               block::BlockFace face, int_fast8_t x, int_fast8_t y, int_fast8_t z) {
+	                               block::BlockFace face, int32_t x, int32_t y, int32_t z) {
 		//  structure of the neighbour arrays
 		// y
 		// |
@@ -67,41 +69,41 @@ private:
 		    {{11, 2, 5}, {11, 20, 23}, {17, 26, 23}, {17, 8, 5}},     {{9, 0, 3}, {15, 6, 3}, {15, 24, 21}, {9, 18,
 		21}}}; constexpr uint32_t kLookup1[6] = {22, 4, 16, 10, 14, 12};*/
 
-		constexpr int_fast8_t kLookup1v[6][3] = {{1, 0, 0}, {-1, 0, 0}, {0, 1, 0}, {0, -1, 0}, {0, 0, 1}, {0, 0, -1}};
-		constexpr int_fast8_t kLookup3v[6][4][3][3] = {{
-		                                                   {{1, 0, -1}, {1, -1, -1}, {1, -1, 0}},
-		                                                   {{1, 0, -1}, {1, 1, -1}, {1, 1, 0}},
-		                                                   {{1, 0, 1}, {1, 1, 1}, {1, 1, 0}},
-		                                                   {{1, 0, 1}, {1, -1, 1}, {1, -1, 0}},
-		                                               },
-		                                               {
-		                                                   {{-1, 0, -1}, {-1, -1, -1}, {-1, -1, 0}},
-		                                                   {{-1, 0, 1}, {-1, -1, 1}, {-1, -1, 0}},
-		                                                   {{-1, 0, 1}, {-1, 1, 1}, {-1, 1, 0}},
-		                                                   {{-1, 0, -1}, {-1, 1, -1}, {-1, 1, 0}},
-		                                               },
-		                                               {
-		                                                   {{0, 1, -1}, {-1, 1, -1}, {-1, 1, 0}},
-		                                                   {{0, 1, 1}, {-1, 1, 1}, {-1, 1, 0}},
-		                                                   {{0, 1, 1}, {1, 1, 1}, {1, 1, 0}},
-		                                                   {{0, 1, -1}, {1, 1, -1}, {1, 1, 0}},
-		                                               },
-		                                               {
-		                                                   {{0, -1, -1}, {-1, -1, -1}, {-1, -1, 0}},
-		                                                   {{0, -1, -1}, {1, -1, -1}, {1, -1, 0}},
-		                                                   {{0, -1, 1}, {1, -1, 1}, {1, -1, 0}},
-		                                                   {{0, -1, 1}, {-1, -1, 1}, {-1, -1, 0}},
-		                                               },
-		                                               {
-		                                                   {{0, -1, 1}, {-1, -1, 1}, {-1, 0, 1}},
-		                                                   {{0, -1, 1}, {1, -1, 1}, {1, 0, 1}},
-		                                                   {{0, 1, 1}, {1, 1, 1}, {1, 0, 1}},
-		                                                   {{0, 1, 1}, {-1, 1, 1}, {-1, 0, 1}},
-		                                               },
-		                                               {{{0, -1, -1}, {-1, -1, -1}, {-1, 0, -1}},
-		                                                {{0, 1, -1}, {-1, 1, -1}, {-1, 0, -1}},
-		                                                {{0, 1, -1}, {1, 1, -1}, {1, 0, -1}},
-		                                                {{0, -1, -1}, {1, -1, -1}, {1, 0, -1}}}};
+		constexpr int32_t kLookup1v[6][3] = {{1, 0, 0}, {-1, 0, 0}, {0, 1, 0}, {0, -1, 0}, {0, 0, 1}, {0, 0, -1}};
+		constexpr int32_t kLookup3v[6][4][3][3] = {{
+		                                               {{1, 0, -1}, {1, -1, -1}, {1, -1, 0}},
+		                                               {{1, 0, -1}, {1, 1, -1}, {1, 1, 0}},
+		                                               {{1, 0, 1}, {1, 1, 1}, {1, 1, 0}},
+		                                               {{1, 0, 1}, {1, -1, 1}, {1, -1, 0}},
+		                                           },
+		                                           {
+		                                               {{-1, 0, -1}, {-1, -1, -1}, {-1, -1, 0}},
+		                                               {{-1, 0, 1}, {-1, -1, 1}, {-1, -1, 0}},
+		                                               {{-1, 0, 1}, {-1, 1, 1}, {-1, 1, 0}},
+		                                               {{-1, 0, -1}, {-1, 1, -1}, {-1, 1, 0}},
+		                                           },
+		                                           {
+		                                               {{0, 1, -1}, {-1, 1, -1}, {-1, 1, 0}},
+		                                               {{0, 1, 1}, {-1, 1, 1}, {-1, 1, 0}},
+		                                               {{0, 1, 1}, {1, 1, 1}, {1, 1, 0}},
+		                                               {{0, 1, -1}, {1, 1, -1}, {1, 1, 0}},
+		                                           },
+		                                           {
+		                                               {{0, -1, -1}, {-1, -1, -1}, {-1, -1, 0}},
+		                                               {{0, -1, -1}, {1, -1, -1}, {1, -1, 0}},
+		                                               {{0, -1, 1}, {1, -1, 1}, {1, -1, 0}},
+		                                               {{0, -1, 1}, {-1, -1, 1}, {-1, -1, 0}},
+		                                           },
+		                                           {
+		                                               {{0, -1, 1}, {-1, -1, 1}, {-1, 0, 1}},
+		                                               {{0, -1, 1}, {1, -1, 1}, {1, 0, 1}},
+		                                               {{0, 1, 1}, {1, 1, 1}, {1, 0, 1}},
+		                                               {{0, 1, 1}, {-1, 1, 1}, {-1, 0, 1}},
+		                                           },
+		                                           {{{0, -1, -1}, {-1, -1, -1}, {-1, 0, -1}},
+		                                            {{0, 1, -1}, {-1, 1, -1}, {-1, 0, -1}},
+		                                            {{0, 1, -1}, {1, 1, -1}, {1, 0, -1}},
+		                                            {{0, -1, -1}, {1, -1, -1}, {1, 0, -1}}}};
 
 		bool indirect_pass[3], direct_pass[4];
 
@@ -193,24 +195,18 @@ private:
 #undef LERP
 	}
 
-public:
-	template <uint32_t SizeX, uint32_t SizeY, uint32_t SizeZ, typename GetBlockFunc, typename GetLightFunc>
-	std::vector<BlockMesh> generate_mesh(GetBlockFunc &&get_block_func, GetLightFunc &&get_light_func) const {
-		std::vector<BlockMesh> ret;
+	template <typename Config, typename GetBlockFunc, typename GetLightFunc>
+	void generate_custom_mesh(GetBlockFunc &&get_block_func, GetLightFunc &&get_light_func) {
+		using T = typename Config::Type;
 
-		BlockMesh opaque_mesh_info, transparent_mesh_info;
-		opaque_mesh_info.transparent = false;
-		transparent_mesh_info.transparent = true;
-
-		// deal with custom block mesh
-		for (uint32_t idx = 0; idx < kChunkSize * kChunkSize * kChunkSize; ++idx) {
-			block::Block b = get_block_func(idx);
+		Config::template Loop3([&](T x, T y, T z) {
+			block::Block b = get_block_func(x, y, z);
 			if (!b.HaveCustomMesh())
-				continue;
+				return;
+
 			const block::BlockMesh *mesh = b.GetCustomMesh();
-			glm::vec<3, int_fast8_t> pos{};
-			ChunkIndex2XYZ(idx, glm::value_ptr(pos));
-			glm::u32vec3 base = (glm::u32vec3)pos << BlockVertex::kUnitBitOffset;
+			glm::vec<3, int32_t> pos{x, y, z};
+			glm::u32vec3 base = glm::u32vec3{x, y, z} << BlockVertex::kUnitBitOffset;
 
 			auto cur_light_face = std::numeric_limits<block::BlockFace>::max();
 			uint8_t cur_light_axis{}, u_light_axis{}, v_light_axis{};
@@ -236,12 +232,13 @@ public:
 						high_light4 = low_light4;
 				}
 
-				BlockMesh &info = mesh_face->texture.UseTransparentPass() ? transparent_mesh_info : opaque_mesh_info;
+				BlockMesh &info =
+				    mesh_face->texture.UseTransparentPass() ? m_transparent_mesh_info : m_opaque_mesh_info;
 				// if indices would exceed, restart
 				uint16_t cur_vertex = info.vertices.size();
 				if (cur_vertex + 4 > UINT16_MAX) {
 					bool trans = info.transparent;
-					ret.push_back(std::move(info));
+					m_meshes.push_back(std::move(info));
 					info = BlockMesh{};
 					info.transparent = trans;
 				}
@@ -267,187 +264,212 @@ public:
 				info.indices.push_back(cur_vertex + 2);
 				info.indices.push_back(cur_vertex + 3);
 			}
-		}
+		});
+	}
 
-		for (uint_fast8_t axis = 0; axis < 3; ++axis) {
-			const uint_fast8_t u = (axis + 1) % 3;
-			const uint_fast8_t v = (axis + 2) % 3;
+	template <typename Config, BlockAlgoAxis Axis, typename GetBlockFunc, typename GetLightFunc>
+	void generate_regular_mesh_axis(GetBlockFunc &&get_block_func, GetLightFunc &&get_light_func) {
+		using T = typename Config::Type;
 
-			uint_fast8_t x[3]{0};
-			int_fast8_t q[3]{0};
-			thread_local static texture::BlockTexture texture_mask[2][Chunk::kSize * Chunk::kSize]{};
-			// thread_local static std::bitset<Chunk::kSize * Chunk::kSize> face_inv_mask{};
-			thread_local static Light4 light_mask[2][Chunk::kSize * Chunk::kSize]{};
+		texture::BlockTexture texture_mask[2][Config::template GetArea<Axis, uint32_t>()];
+		Light4 light_mask[2][Config::template GetArea<Axis, uint32_t>()];
 
-			// Compute texture_mask
-			// TODO: enable dual-side textures in a slice
+		for (T xa = Config::template GetMin<Axis>(); xa <= Config::template GetMax<Axis>(); ++xa) {
+			// A slice
 			uint8_t face_mask = 0;
-			q[axis] = -1;
-			std::fill(texture_mask[0], texture_mask[1] + kChunkSize * kChunkSize, 0);
-			for (x[axis] = 0; x[axis] <= Chunk::kSize; ++x[axis]) {
+			{
 				uint32_t counter = 0;
-				for (x[v] = 0; x[v] < kChunkSize; ++x[v]) {
-					for (x[u] = 0; x[u] < kChunkSize; ++x[u], ++counter) {
-						const block::Block a = get_block_func(x[0] + q[0], x[1] + q[1], x[2] + q[2]);
-						const block::Block b = get_block_func(x[0], x[1], x[2]);
+				Config::template Loop2<Axis>(xa, [&](T x, T y, T z) {
+					int32_t nx = Axis == 0 ? (int32_t)x - 1 : (int32_t)x, ny = Axis == 1 ? (int32_t)y - 1 : (int32_t)y,
+					        nz = Axis == 2 ? (int32_t)z - 1 : (int32_t)z;
+					const block::Block blk_a = get_block_func(nx, ny, nz);
+					const block::Block blk_b = get_block_func(x, y, z);
 
-						block::BlockFace f;
-						if (x[axis] != 0 && a.ShowFace((f = axis << 1), b)) {
-							texture_mask[0][counter] = a.GetTexture(f);
-							face_mask |= 1u;
-							light4_init(light_mask[0] + counter, f, (int_fast8_t)(x[0] + q[0]),
-							            (int_fast8_t)(x[1] + q[1]), (int_fast8_t)(x[2] + q[2]));
-						}
-						if (Chunk::kSize != x[axis] && b.ShowFace((f = (axis << 1) | 1), a)) {
-							texture_mask[1][counter] = b.GetTexture(f);
-							face_mask |= 2u;
-							light4_init(light_mask[1] + counter, f, (int_fast8_t)(x[0]), (int_fast8_t)(x[1]),
-							            (int_fast8_t)(x[2]));
-						}
+					block::BlockFace f;
+					if (xa != Config::template GetMin<Axis>() && blk_a.ShowFace((f = Axis << 1), blk_b)) {
+						texture_mask[0][counter] = blk_a.GetTexture(f);
+						light4_init(get_block_func, get_light_func, light_mask[0] + counter, f, nx, ny, nz);
+						face_mask |= 1u;
 					}
-				}
-
-				// Generate mesh for texture_mask using lexicographic ordering
-				for (uint_fast8_t quad_face_inv = 0; quad_face_inv < 2; ++quad_face_inv) {
-					if (!(face_mask & (1u << quad_face_inv)))
-						continue;
-					counter = 0;
-					auto local_texture_mask = texture_mask[quad_face_inv];
-					auto local_light_mask = light_mask[quad_face_inv];
-					for (uint_fast8_t j = 0; j < Chunk::kSize; ++j) {
-						for (uint_fast8_t i = 0; i < Chunk::kSize;) {
-							const texture::BlockTexture quad_texture = local_texture_mask[counter];
-							if (!quad_texture.Empty()) {
-								const Light4 quad_light = local_light_mask[counter];
-								// Compute width
-								uint_fast8_t width, height;
-								for (width = 1;
-								     quad_texture == local_texture_mask[counter + width] &&
-								     quad_light == local_light_mask[counter + width] && i + width < Chunk::kSize;
-								     ++width)
-									;
-
-								// Compute height
-								for (height = 1; j + height < Chunk::kSize; ++height)
-									for (uint_fast8_t k = 0; k < width; ++k) {
-										uint32_t idx = counter + k + height * Chunk::kSize;
-										if (quad_texture != local_texture_mask[idx] ||
-										    quad_light != local_light_mask[idx]) {
-											goto end_height_loop;
-										}
-									}
-							end_height_loop:
-
-								// Add quad
-								x[u] = i;
-								x[v] = j;
-
-								uint_fast8_t du[3] = {0}, dv[3] = {0};
-
-								if (quad_face_inv) {
-									du[v] = height;
-									dv[u] = width;
-								} else {
-									dv[v] = height;
-									du[u] = width;
-								}
-
-								// TODO: process resource rotation
-								// if (quad_texture.GetRotation() == )
-
-								BlockMesh &info =
-								    quad_texture.UseTransparentPass() ? transparent_mesh_info : opaque_mesh_info;
-								// if indices would exceed, restart
-								uint16_t cur_vertex = info.vertices.size();
-								if (cur_vertex + 4 > UINT16_MAX) {
-									bool trans = info.transparent;
-									ret.push_back(std::move(info));
-									info = BlockMesh{};
-									info.transparent = trans;
-								}
-								info.aabb.Merge({{uint32_t(x[0]) << BlockVertex::kUnitBitOffset,
-								                  uint32_t(x[1]) << BlockVertex::kUnitBitOffset,
-								                  uint32_t(x[2]) << BlockVertex::kUnitBitOffset},
-								                 {uint32_t(x[0] + du[0] + dv[0]) << BlockVertex::kUnitBitOffset,
-								                  uint32_t(x[1] + du[1] + dv[1]) << BlockVertex::kUnitBitOffset,
-								                  uint32_t(x[2] + du[2] + dv[2]) << BlockVertex::kUnitBitOffset}});
-
-								block::BlockFace quad_face = (axis << 1) | quad_face_inv;
-								info.vertices.emplace_back(uint32_t(x[0]) << BlockVertex::kUnitBitOffset,
-								                           uint32_t(x[1]) << BlockVertex::kUnitBitOffset,
-								                           uint32_t(x[2]) << BlockVertex::kUnitBitOffset, axis,
-								                           quad_face, quad_light.ao[0], quad_light.sunlight[0],
-								                           quad_light.torchlight[0], quad_texture.GetID(),
-								                           quad_texture.GetTransformation());
-								info.vertices.emplace_back(uint32_t(x[0] + du[0]) << BlockVertex::kUnitBitOffset,
-								                           uint32_t(x[1] + du[1]) << BlockVertex::kUnitBitOffset,
-								                           uint32_t(x[2] + du[2]) << BlockVertex::kUnitBitOffset, axis,
-								                           quad_face, quad_light.ao[1], quad_light.sunlight[1],
-								                           quad_light.torchlight[1], quad_texture.GetID(),
-								                           quad_texture.GetTransformation());
-								info.vertices.emplace_back(
-								    uint32_t(x[0] + du[0] + dv[0]) << BlockVertex::kUnitBitOffset,
-								    uint32_t(x[1] + du[1] + dv[1]) << BlockVertex::kUnitBitOffset,
-								    uint32_t(x[2] + du[2] + dv[2]) << BlockVertex::kUnitBitOffset, axis, quad_face,
-								    quad_light.ao[2], quad_light.sunlight[2], quad_light.torchlight[2],
-								    quad_texture.GetID(), quad_texture.GetTransformation());
-								info.vertices.emplace_back(uint32_t(x[0] + dv[0]) << BlockVertex::kUnitBitOffset,
-								                           uint32_t(x[1] + dv[1]) << BlockVertex::kUnitBitOffset,
-								                           uint32_t(x[2] + dv[2]) << BlockVertex::kUnitBitOffset, axis,
-								                           quad_face, quad_light.ao[3], quad_light.sunlight[3],
-								                           quad_light.torchlight[3], quad_texture.GetID(),
-								                           quad_texture.GetTransformation());
-
-								if (quad_light.GetFlip()) {
-									// 11--------10
-									//|       / |
-									//|    /    |
-									//| /       |
-									// 00--------01
-									info.indices.push_back(cur_vertex);
-									info.indices.push_back(cur_vertex + 1);
-									info.indices.push_back(cur_vertex + 2);
-
-									info.indices.push_back(cur_vertex);
-									info.indices.push_back(cur_vertex + 2);
-									info.indices.push_back(cur_vertex + 3);
-								} else {
-									// 11--------10
-									//| \       |
-									//|    \    |
-									//|       \ |
-									// 00--------01
-									info.indices.push_back(cur_vertex + 1);
-									info.indices.push_back(cur_vertex + 2);
-									info.indices.push_back(cur_vertex + 3);
-
-									info.indices.push_back(cur_vertex);
-									info.indices.push_back(cur_vertex + 1);
-									info.indices.push_back(cur_vertex + 3);
-								}
-
-								for (uint_fast8_t a = 0; a < height; ++a) {
-									auto *base_ptr = local_texture_mask + counter + kChunkSize * a;
-									std::fill(base_ptr, base_ptr + width, 0);
-								}
-
-								// Increase counters
-								i += width;
-								counter += width;
-							} else {
-								++i;
-								++counter;
-							}
-						}
+					if (xa != Config::template GetMax<Axis>() && blk_b.ShowFace((f = (Axis << 1) | 1), blk_a)) {
+						texture_mask[1][counter] = blk_b.GetTexture(f);
+						light4_init(get_block_func, get_light_func, light_mask[1] + counter, f, x, y, z);
+						face_mask |= 2u;
 					}
-				}
+
+					++counter;
+				});
 			}
+
+			const auto push_mesh = [&](uint8_t quad_face_inv) {
+				if (!(face_mask & (1u << quad_face_inv)))
+					return;
+
+				uint32_t counter = 0;
+
+				auto local_texture_mask = texture_mask[quad_face_inv];
+				auto local_light_mask = light_mask[quad_face_inv];
+
+				constexpr BlockAlgoAxis kUAxis = Config::template GetNextAxis<Axis>();
+				constexpr BlockAlgoAxis kVAxis = Config::template GetNextAxis2<Axis>();
+
+				for (T u = Config::template GetMin<kUAxis>(); u < Config::template GetMax<kUAxis>(); ++u) {
+					for (T v = Config::template GetMin<kVAxis>(); v < Config::template GetMax<kVAxis>();) {
+						const texture::BlockTexture quad_texture = local_texture_mask[counter];
+						if (!quad_texture.Empty()) {
+							const Light4 quad_light = local_light_mask[counter];
+							// Compute width
+							uint_fast8_t width, height;
+							for (width = 1; quad_texture == local_texture_mask[counter + width] &&
+							                quad_light == local_light_mask[counter + width] &&
+							                v + width < Config::template GetMax<kVAxis>();
+							     ++width)
+								;
+
+							// Compute height
+							for (height = 1; u + height < Config::template GetMax<kUAxis>(); ++height)
+								for (uint32_t k = 0; k < width; ++k) {
+									uint32_t idx = counter + k + height * Config::template GetSpan<kVAxis, uint32_t>();
+									if (quad_texture != local_texture_mask[idx] ||
+									    quad_light != local_light_mask[idx]) {
+										goto end_height_loop;
+									}
+								}
+						end_height_loop:
+
+							// Add quad
+							auto [x, y, z] = Config::template ToXYZ<Axis, uint32_t>(xa, u, v);
+							uint32_t ux, uy, uz, vx, vy, vz;
+							if (quad_face_inv ^ ((kUAxis + 1) % 3 == kVAxis)) {
+								std::tie(ux, uy, uz) = Config::template ToXYZ<Axis, uint32_t>(0, height, 0);
+								std::tie(vx, vy, vz) = Config::template ToXYZ<Axis, uint32_t>(0, 0, width);
+							} else {
+								std::tie(ux, uy, uz) = Config::template ToXYZ<Axis, uint32_t>(0, 0, width);
+								std::tie(vx, vy, vz) = Config::template ToXYZ<Axis, uint32_t>(0, height, 0);
+							}
+
+							// TODO: process resource rotation
+							// if (quad_texture.GetRotation() == )
+
+							BlockMesh &info =
+							    quad_texture.UseTransparentPass() ? m_transparent_mesh_info : m_opaque_mesh_info;
+							// if indices would exceed, restart
+							uint16_t cur_vertex = info.vertices.size();
+							if (cur_vertex + 4 > UINT16_MAX) {
+								bool trans = info.transparent;
+								m_meshes.push_back(std::move(info));
+								info = BlockMesh{};
+								info.transparent = trans;
+							}
+							info.aabb.Merge({{uint32_t(x) << BlockVertex::kUnitBitOffset,
+							                  uint32_t(y) << BlockVertex::kUnitBitOffset,
+							                  uint32_t(z) << BlockVertex::kUnitBitOffset},
+							                 {uint32_t(x + ux + vx) << BlockVertex::kUnitBitOffset,
+							                  uint32_t(y + uy + vy) << BlockVertex::kUnitBitOffset,
+							                  uint32_t(z + uz + vz) << BlockVertex::kUnitBitOffset}});
+
+							block::BlockFace quad_face = (Axis << 1) | quad_face_inv;
+							info.vertices.emplace_back(
+							    x << BlockVertex::kUnitBitOffset, y << BlockVertex::kUnitBitOffset,
+							    z << BlockVertex::kUnitBitOffset, Axis, quad_face, quad_light.ao[0],
+							    quad_light.sunlight[0], quad_light.torchlight[0], quad_texture.GetID(),
+							    quad_texture.GetTransformation());
+							info.vertices.emplace_back(
+							    (x + ux) << BlockVertex::kUnitBitOffset, (y + uy) << BlockVertex::kUnitBitOffset,
+							    (z + uz) << BlockVertex::kUnitBitOffset, Axis, quad_face, quad_light.ao[1],
+							    quad_light.sunlight[1], quad_light.torchlight[1], quad_texture.GetID(),
+							    quad_texture.GetTransformation());
+							info.vertices.emplace_back((x + ux + vx) << BlockVertex::kUnitBitOffset,
+							                           (y + uy + vy) << BlockVertex::kUnitBitOffset,
+							                           (z + uz + vz) << BlockVertex::kUnitBitOffset, Axis, quad_face,
+							                           quad_light.ao[2], quad_light.sunlight[2],
+							                           quad_light.torchlight[2], quad_texture.GetID(),
+							                           quad_texture.GetTransformation());
+							info.vertices.emplace_back(
+							    (x + vx) << BlockVertex::kUnitBitOffset, (y + vy) << BlockVertex::kUnitBitOffset,
+							    (z + vz) << BlockVertex::kUnitBitOffset, Axis, quad_face, quad_light.ao[3],
+							    quad_light.sunlight[3], quad_light.torchlight[3], quad_texture.GetID(),
+							    quad_texture.GetTransformation());
+
+							if (quad_light.GetFlip()) {
+								// 11--------10
+								//|       / |
+								//|    /    |
+								//| /       |
+								// 00--------01
+								info.indices.push_back(cur_vertex);
+								info.indices.push_back(cur_vertex + 1);
+								info.indices.push_back(cur_vertex + 2);
+
+								info.indices.push_back(cur_vertex);
+								info.indices.push_back(cur_vertex + 2);
+								info.indices.push_back(cur_vertex + 3);
+							} else {
+								// 11--------10
+								//| \       |
+								//|    \    |
+								//|       \ |
+								// 00--------01
+								info.indices.push_back(cur_vertex + 1);
+								info.indices.push_back(cur_vertex + 2);
+								info.indices.push_back(cur_vertex + 3);
+
+								info.indices.push_back(cur_vertex);
+								info.indices.push_back(cur_vertex + 1);
+								info.indices.push_back(cur_vertex + 3);
+							}
+
+							for (uint32_t a = 0; a < height; ++a) {
+								auto *base_ptr =
+								    local_texture_mask + counter + Config::template GetSpan<kVAxis, uint32_t>() * a;
+								std::fill(base_ptr, base_ptr + width, 0);
+							}
+
+							// Increase counters
+							v += width;
+							counter += width;
+						} else {
+							++v;
+							++counter;
+						}
+					}
+				}
+			};
+
+			push_mesh(0);
+			push_mesh(1);
 		}
-		if (!opaque_mesh_info.vertices.empty())
-			ret.push_back(std::move(opaque_mesh_info));
-		if (!transparent_mesh_info.vertices.empty())
-			ret.push_back(std::move(transparent_mesh_info));
-		return ret;
+	}
+
+	std::vector<BlockMesh> m_meshes;
+	BlockMesh m_opaque_mesh_info, m_transparent_mesh_info;
+
+public:
+	template <typename Config, typename GetBlockFunc, typename GetLightFunc>
+	std::vector<BlockMesh> Generate(GetBlockFunc &&get_block_func, GetLightFunc &&get_light_func) {
+		using T = typename Config::Type;
+		static_assert(std::is_integral_v<T> && std::is_unsigned_v<T>);
+
+		// Initialize Mesh
+		m_meshes.clear();
+
+		m_opaque_mesh_info = {};
+		m_opaque_mesh_info.transparent = false;
+
+		m_transparent_mesh_info = {};
+		m_transparent_mesh_info.transparent = true;
+
+		generate_custom_mesh<Config>(get_block_func, get_light_func);
+
+		generate_regular_mesh_axis<Config, 0>(get_block_func, get_light_func);
+		generate_regular_mesh_axis<Config, 1>(get_block_func, get_light_func);
+		generate_regular_mesh_axis<Config, 2>(get_block_func, get_light_func);
+
+		if (!m_opaque_mesh_info.vertices.empty())
+			m_meshes.push_back(std::move(m_opaque_mesh_info));
+		if (!m_transparent_mesh_info.vertices.empty())
+			m_meshes.push_back(std::move(m_transparent_mesh_info));
+		return m_meshes;
 	}
 };
 
