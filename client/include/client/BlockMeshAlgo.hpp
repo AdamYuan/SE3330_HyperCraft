@@ -349,7 +349,6 @@ private:
 							}
 
 							// TODO: process resource rotation
-							// if (quad_texture.GetRotation() == )
 
 							BlockMesh &info =
 							    quad_texture.UseTransparentPass() ? m_transparent_mesh_info : m_opaque_mesh_info;
@@ -469,7 +468,8 @@ public:
 			m_meshes.push_back(std::move(m_opaque_mesh_info));
 		if (!m_transparent_mesh_info.vertices.empty())
 			m_meshes.push_back(std::move(m_transparent_mesh_info));
-		return m_meshes;
+
+		return std::move(m_meshes);
 	}
 };
 
