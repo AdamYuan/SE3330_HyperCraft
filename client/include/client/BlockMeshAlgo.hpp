@@ -449,7 +449,6 @@ public:
 		using T = typename Config::Type;
 		static_assert(std::is_integral_v<T> && std::is_unsigned_v<T>);
 
-		// Initialize Mesh
 		m_meshes.clear();
 
 		m_opaque_mesh_info = {};
