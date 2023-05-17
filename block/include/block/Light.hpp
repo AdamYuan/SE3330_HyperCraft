@@ -3,7 +3,7 @@
 
 #include <cinttypes>
 
-namespace hc {
+namespace hc::block {
 
 using LightLvl = uint8_t;
 

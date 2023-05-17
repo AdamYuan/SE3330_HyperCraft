@@ -2,8 +2,6 @@
 #define HYPERCRAFT_COMMON_CHUNK_MESH_HPP
 
 #include <AABB.hpp>
-#include <block/Block.hpp>
-#include <common/Light.hpp>
 
 #include "BlockVertex.hpp"
 #include "mesh/MeshHandle.hpp"

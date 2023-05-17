@@ -55,10 +55,10 @@ private:
 	uint64_t m_version{}, m_light_version{};
 	struct LightEntry {
 		glm::i8vec3 position;
-		LightLvl light_lvl;
+		block::LightLvl light_lvl;
 	};
 	static_assert(sizeof(LightEntry) == 4);
-	inline static thread_local Light m_light_buffer[(kChunkSize + 30) * (kChunkSize + 30) * (kChunkSize + 30)]{};
+	inline static thread_local block::Light m_light_buffer[(kChunkSize + 30) * (kChunkSize + 30) * (kChunkSize + 30)]{};
 	static thread_local std::queue<LightEntry> m_light_queue;
 
 	void initial_sunlight_bfs();

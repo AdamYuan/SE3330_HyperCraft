@@ -2,7 +2,7 @@
 #define HYPERCRAFT_CLIENT_CHUNK_LIGHTER_HPP
 
 #include <client/ChunkWorkerBase.hpp>
-#include <common/Light.hpp>
+#include <block/Light.hpp>
 
 namespace hc::client {
 

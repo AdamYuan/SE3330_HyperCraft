@@ -48,7 +48,7 @@ static inline constexpr uint32_t chunk_xyz_extended15_to_index(T x, T y, T z) {
 }
 
 template <typename T, typename = std::enable_if_t<std::is_integral_v<T> && std::is_signed_v<T>>>
-static inline constexpr bool light_interfere(T x, T y, T z, LightLvl lvl) {
+static inline constexpr bool light_interfere(T x, T y, T z, block::LightLvl lvl) {
 	if (lvl <= 1)
 		return false;
 	uint32_t dist = 0;
@@ -109,7 +109,7 @@ void ChunkMesher::Run() {
 		for (int8_t y = -15; y < (int8_t)kChunkSize + 15; ++y)
 			for (int8_t z = -15; z < (int8_t)kChunkSize + 15; ++z)
 				for (int8_t x = -15; x < (int8_t)kChunkSize + 15; ++x) {
-					Light light = get_light(x, y, z);
+					block::Light light = get_light(x, y, z);
 					m_light_buffer[chunk_xyz_extended15_to_index(x, y, z)] = light;
 					if (light_interfere(x, y, z, light.GetSunlight()))
 						m_light_queue.push({{x, y, z}, light.GetSunlight()});
@@ -121,11 +121,11 @@ void ChunkMesher::Run() {
 	}
 
 	std::vector<BlockMesh> meshes =
-	    BlockMeshAlgo{}
-	        .Generate<BlockAlgoConfig<uint32_t, BlockAlgoBound<uint32_t>{0, 0, 0, kChunkSize, kChunkSize, kChunkSize},
-	                                  kBlockAlgoSwizzleYZX>>(
+	    BlockMeshAlgo<BlockAlgoConfig<uint32_t, BlockAlgoBound<uint32_t>{0, 0, 0, kChunkSize, kChunkSize, kChunkSize},
+	                                  kBlockAlgoSwizzleYZX>>{}
+	        .Generate(
 	            [this](auto x, auto y, auto z) -> block::Block { return get_block(x, y, z); },
-	            [](auto x, auto y, auto z) -> Light { return m_light_buffer[chunk_xyz_extended15_to_index(x, y, z)]; });
+	            [](auto x, auto y, auto z) -> block::Light { return m_light_buffer[chunk_xyz_extended15_to_index(x, y, z)]; });
 
 	auto world_ptr = m_chunk_ptr->LockWorld();
 	if (!world_ptr)

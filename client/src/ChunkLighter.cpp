@@ -40,7 +40,7 @@ static constexpr uint32_t chunk_xyz_extended14_to_index(T x, T y, T z) {
 }
 
 template <typename T, typename = std::enable_if_t<std::is_integral_v<T> && std::is_signed_v<T>>>
-static constexpr bool light_interfere(T x, T y, T z, LightLvl lvl) {
+static constexpr bool light_interfere(T x, T y, T z, block::LightLvl lvl) {
 	if (lvl <= 1)
 		return false;
 	uint32_t dist = 0;
@@ -55,7 +55,7 @@ static constexpr bool light_interfere(T x, T y, T z, LightLvl lvl) {
 
 struct LightEntry {
 	glm::i16vec3 position;
-	LightLvl light_lvl;
+	block::LightLvl light_lvl;
 };
 class LightQueue {
 private:
@@ -69,7 +69,7 @@ public:
 	inline void Push(const LightEntry &e) { *(m_top++) = e; }
 };
 
-static void initial_sunlight_bfs(Light *light_buffer, LightQueue *queue) {
+static void initial_sunlight_bfs(block::Light *light_buffer, LightQueue *queue) {
 	while (!queue->Empty()) {
 		LightEntry e = queue->Pop();
 		for (block::BlockFace f = 0; f < 6; ++f) {
@@ -91,7 +91,7 @@ void ChunkLighter::Run() {
 	if (!lock())
 		return;
 
-	thread_local static Light light_buffer[(kChunkSize + 28) * (kChunkSize + 28) * (kChunkSize + 28)];
+	thread_local static block::Light light_buffer[(kChunkSize + 28) * (kChunkSize + 28) * (kChunkSize + 28)];
 	thread_local static LightQueue sunlight_queue, torchlight_queue;
 
 	sunlight_queue.Clear();
@@ -108,7 +108,7 @@ void ChunkLighter::Run() {
 		for (int32_t x = -14; x < (int32_t)kChunkSize + 14; ++x)
 			for (int32_t y = -14; y < (int32_t)kChunkSize + 14; ++y)
 				for (int32_t z = -14; z < (int32_t)kChunkSize + 14; ++z) {
-					Light light = get_light(x, y, z);
+					block::Light light = get_light(x, y, z);
 					light_buffer[chunk_xyz_extended14_to_index(x, y, z)] = light;
 					if (light_interfere(x, y, z, light.GetSunlight()))
 						sunlight_queue.Push({{x, y, z}, light.GetSunlight()});

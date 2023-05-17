@@ -4,7 +4,7 @@
 #include "BlockVertex.hpp"
 
 #include <block/Block.hpp>
-#include <common/Light.hpp>
+#include <block/Light.hpp>
 #include <common/Size.hpp>
 
 #include <glm/gtc/type_ptr.hpp>
@@ -12,7 +12,7 @@
 
 namespace hc::client {
 
-class BlockMeshAlgo {
+template <typename Config> class BlockMeshAlgo {
 private:
 	struct AO4 { // compressed ambient occlusion data for 4 vertices (a face)
 		uint8_t m_data;
@@ -132,7 +132,7 @@ private:
 
 			// smooth the LightLvl using the average value
 			uint32_t counter = 1;
-			Light light = get_light_func(x + kLookup1v[face][0], y + kLookup1v[face][1], z + kLookup1v[face][2]);
+			block::Light light = get_light_func(x + kLookup1v[face][0], y + kLookup1v[face][1], z + kLookup1v[face][2]);
 			uint32_t sunlight_sum = light.GetSunlight(), torchlight_sum = light.GetTorchlight();
 			if (indirect_pass[0] || indirect_pass[2]) {
 				if (indirect_pass[0]) {
@@ -195,7 +195,7 @@ private:
 #undef LERP
 	}
 
-	template <typename Config, typename GetBlockFunc, typename GetLightFunc>
+	template <typename GetBlockFunc, typename GetLightFunc>
 	void generate_custom_mesh(GetBlockFunc &&get_block_func, GetLightFunc &&get_light_func) {
 		using T = typename Config::Type;
 
@@ -267,7 +267,7 @@ private:
 		});
 	}
 
-	template <typename Config, BlockAlgoAxis Axis, typename GetBlockFunc, typename GetLightFunc>
+	template <BlockAlgoAxis Axis, typename GetBlockFunc, typename GetLightFunc>
 	void generate_regular_mesh_axis(GetBlockFunc &&get_block_func, GetLightFunc &&get_light_func) {
 		using T = typename Config::Type;
 
@@ -444,7 +444,7 @@ private:
 	BlockMesh m_opaque_mesh_info, m_transparent_mesh_info;
 
 public:
-	template <typename Config, typename GetBlockFunc, typename GetLightFunc>
+	template <typename GetBlockFunc, typename GetLightFunc>
 	std::vector<BlockMesh> Generate(GetBlockFunc &&get_block_func, GetLightFunc &&get_light_func) {
 		using T = typename Config::Type;
 		static_assert(std::is_integral_v<T> && std::is_unsigned_v<T>);
@@ -457,11 +457,11 @@ public:
 		m_transparent_mesh_info = {};
 		m_transparent_mesh_info.transparent = true;
 
-		generate_custom_mesh<Config>(get_block_func, get_light_func);
+		generate_custom_mesh(get_block_func, get_light_func);
 
-		generate_regular_mesh_axis<Config, 0>(get_block_func, get_light_func);
-		generate_regular_mesh_axis<Config, 1>(get_block_func, get_light_func);
-		generate_regular_mesh_axis<Config, 2>(get_block_func, get_light_func);
+		generate_regular_mesh_axis<0>(get_block_func, get_light_func);
+		generate_regular_mesh_axis<1>(get_block_func, get_light_func);
+		generate_regular_mesh_axis<2>(get_block_func, get_light_func);
 
 		if (!m_opaque_mesh_info.vertices.empty())
 			m_meshes.push_back(std::move(m_opaque_mesh_info));

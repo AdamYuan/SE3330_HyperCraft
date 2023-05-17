@@ -24,6 +24,7 @@ public:
 class ChunkWorkerS26Base : public ChunkWorkerBase {
 private:
 	using Block = block::Block;
+	using Light = block::Light;
 
 protected:
 	std::shared_ptr<Chunk> m_neighbour_chunk_ptr[26];
@@ -35,14 +36,12 @@ protected:
 				return false;
 		return true;
 	}
-	template <typename T>
-	inline typename std::enable_if<std::is_integral<T>::value, Block>::type get_block(T x, T y, T z) const {
+	template <typename T> inline Block get_block(T x, T y, T z) const {
 		uint32_t nei_idx = Chunk::GetBlockNeighbourIndex(x, y, z);
 		return nei_idx == 26 ? m_chunk_ptr->GetBlock(x, y, z)
 		                     : m_neighbour_chunk_ptr[nei_idx]->GetBlockFromNeighbour(x, y, z);
 	}
-	template <typename T>
-	inline typename std::enable_if<std::is_integral<T>::value, Light>::type get_light(T x, T y, T z) const {
+	template <typename T> inline Light get_light(T x, T y, T z) const {
 		uint32_t nei_idx = Chunk::GetBlockNeighbourIndex(x, y, z);
 		return nei_idx == 26 ? m_chunk_ptr->GetLight(x, y, z)
 		                     : m_neighbour_chunk_ptr[nei_idx]->GetLightFromNeighbour(x, y, z);

@@ -2,7 +2,7 @@
 #define HYPERCRAFT_CLIENT_CHUNK_HPP
 
 #include <block/Block.hpp>
-#include <common/Light.hpp>
+#include <block/Light.hpp>
 #include <common/Position.hpp>
 #include <common/Size.hpp>
 #include <glm/glm.hpp>
@@ -21,6 +21,7 @@ class World;
 class Chunk : public std::enable_shared_from_this<Chunk> {
 private:
 	using Block = block::Block;
+	using Light = block::Light;
 
 public:
 	static constexpr uint32_t kSize = kChunkSize;
