@@ -17,10 +17,16 @@ constexpr BlockAlgoSwizzle kBlockAlgoSwizzleYZX = {1, 2, 0};
 constexpr BlockAlgoSwizzle kBlockAlgoSwizzleZXY = {2, 0, 1};
 constexpr BlockAlgoSwizzle kBlockAlgoSwizzleZYX = {2, 1, 0};
 
-template <typename T, BlockAlgoBound<T> Bound, BlockAlgoSwizzle Swizzle> struct BlockAlgoConfig {
+template <typename T, BlockAlgoBound<T> Bound, BlockAlgoSwizzle Swizzle = kBlockAlgoSwizzleYZX> struct BlockAlgoConfig {
 	using Type = T;
 	inline static constexpr BlockAlgoAxis kA1 = Swizzle.a1, kA2 = Swizzle.a2, kA3 = Swizzle.a3;
+	inline static constexpr BlockAlgoBound<T> kBound = Bound;
+
 	static_assert(kA1 != kA2 && kA2 != kA3 && kA1 != kA3);
+	inline static constexpr bool XYZInBound(T x, T y, T z) {
+		return Bound.min_x <= x && x < Bound.max_x && Bound.min_y <= y && y < Bound.max_y && Bound.min_z <= z &&
+		       z < Bound.max_z;
+	}
 	template <typename V> inline static constexpr std::tuple<V, V, V> ToXYZ(V a1, V a2, V a3) {
 		return {kA1 == 0 ? a1 : (kA2 == 0 ? a2 : a3), kA1 == 1 ? a1 : (kA2 == 1 ? a2 : a3),
 		        kA1 == 2 ? a1 : (kA2 == 2 ? a2 : a3)};

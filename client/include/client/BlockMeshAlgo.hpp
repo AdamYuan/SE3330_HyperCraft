@@ -196,7 +196,7 @@ private:
 	}
 
 	template <typename GetBlockFunc, typename GetLightFunc>
-	void generate_custom_mesh(GetBlockFunc &&get_block_func, GetLightFunc &&get_light_func) {
+	inline void generate_custom_mesh(GetBlockFunc &&get_block_func, GetLightFunc &&get_light_func) {
 		using T = typename Config::Type;
 
 		Config::template Loop3([&](T x, T y, T z) {
@@ -268,7 +268,7 @@ private:
 	}
 
 	template <BlockAlgoAxis Axis, typename GetBlockFunc, typename GetLightFunc>
-	void generate_regular_mesh_axis(GetBlockFunc &&get_block_func, GetLightFunc &&get_light_func) {
+	inline void generate_regular_mesh_axis(GetBlockFunc &&get_block_func, GetLightFunc &&get_light_func) {
 		using T = typename Config::Type;
 
 		texture::BlockTexture texture_mask[2][Config::template GetArea<Axis, uint32_t>()];
@@ -319,7 +319,7 @@ private:
 						if (!quad_texture.Empty()) {
 							const Light4 quad_light = local_light_mask[counter];
 							// Compute width
-							uint_fast8_t width, height;
+							uint32_t width, height;
 							for (width = 1; quad_texture == local_texture_mask[counter + width] &&
 							                quad_light == local_light_mask[counter + width] &&
 							                v + width < Config::template GetMax<kVAxis>();
@@ -445,7 +445,7 @@ private:
 
 public:
 	template <typename GetBlockFunc, typename GetLightFunc>
-	std::vector<BlockMesh> Generate(GetBlockFunc &&get_block_func, GetLightFunc &&get_light_func) {
+	inline std::vector<BlockMesh> Generate(GetBlockFunc &&get_block_func, GetLightFunc &&get_light_func) {
 		using T = typename Config::Type;
 		static_assert(std::is_integral_v<T> && std::is_unsigned_v<T>);
 

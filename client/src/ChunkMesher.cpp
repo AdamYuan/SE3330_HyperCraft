@@ -2,17 +2,13 @@
 
 #include <client/WorldRenderer.hpp>
 
-#include <bitset>
 #include <queue>
 #include <spdlog/spdlog.h>
 
-#include <glm/gtx/string_cast.hpp>
-
+#include <client/BlockLightAlgo.hpp>
 #include <client/BlockMeshAlgo.hpp>
 
 namespace hc::client {
-
-thread_local std::queue<ChunkMesher::LightEntry> ChunkMesher::m_light_queue;
 
 template <typename T, typename = std::enable_if_t<std::is_integral_v<T> && std::is_signed_v<T>>>
 static inline constexpr uint32_t chunk_xyz_extended15_to_index(T x, T y, T z) {
@@ -61,38 +57,6 @@ static inline constexpr bool light_interfere(T x, T y, T z, block::LightLvl lvl)
 	return (uint32_t)lvl >= dist;
 }
 
-template <typename T, typename = std::enable_if_t<std::is_integral_v<T> && std::is_signed_v<T>>>
-static inline constexpr bool chunk_xyz_extended15_in_bound(T x, T y, T z) {
-	return !(x < -15 || x >= (int32_t)kChunkSize + 15 || y < -15 || y >= (int32_t)kChunkSize + 15 || z < -15 ||
-	         z >= (int32_t)kChunkSize + 15);
-}
-
-void ChunkMesher::initial_sunlight_bfs() {
-	while (!m_light_queue.empty()) {
-		LightEntry e = m_light_queue.front();
-		m_light_queue.pop();
-		if (e.light_lvl <= 1u)
-			continue;
-		--e.light_lvl;
-		for (block::BlockFace f = 0; f < 6; ++f) {
-			LightEntry nei = e;
-			block::BlockFaceProceed(glm::value_ptr(nei.position), f);
-
-			if (!chunk_xyz_extended15_in_bound(nei.position.x, nei.position.y, nei.position.z))
-				continue;
-
-			uint32_t idx = chunk_xyz_extended15_to_index(nei.position.x, nei.position.y, nei.position.z);
-			if (nei.light_lvl > m_light_buffer[idx].GetSunlight() &&
-			    get_block(nei.position.x, nei.position.y, nei.position.z).GetIndirectLightPass()) {
-				m_light_buffer[idx].SetSunlight(nei.light_lvl);
-				if (light_interfere(nei.position.x, nei.position.y, nei.position.z, nei.light_lvl)) {
-					m_light_queue.push(nei);
-				}
-			}
-		}
-	}
-}
-
 void ChunkMesher::Run() {
 	if (!lock())
 		return;
@@ -105,27 +69,51 @@ void ChunkMesher::Run() {
 		}
 
 	if (m_init_light) {
-		// TODO: optimize this
-		for (int8_t y = -15; y < (int8_t)kChunkSize + 15; ++y)
-			for (int8_t z = -15; z < (int8_t)kChunkSize + 15; ++z)
-				for (int8_t x = -15; x < (int8_t)kChunkSize + 15; ++x) {
+		using LightAlgo =
+		    BlockLightAlgo<BlockAlgoConfig<int32_t, BlockAlgoBound<int32_t>(-1, -1, -1, kChunkSize + 1, kChunkSize + 1,
+		                                                                    kChunkSize + 1)>,
+		                   14>;
+
+		LightAlgo::Queue sunlight_entries, torchlight_entries;
+		for (int32_t y = -15; y < (int32_t)kChunkSize + 15; ++y)
+			for (int32_t z = -15; z < (int32_t)kChunkSize + 15; ++z)
+				for (int32_t x = -15; x < (int32_t)kChunkSize + 15; ++x) {
 					block::Light light = get_light(x, y, z);
 					m_light_buffer[chunk_xyz_extended15_to_index(x, y, z)] = light;
-					if (light_interfere(x, y, z, light.GetSunlight()))
-						m_light_queue.push({{x, y, z}, light.GetSunlight()});
-					// if (light_interfere(x, y, z, light.GetTorchlight()))
-					//	torchlight_queue.Push({{x, y, z}, light.GetTorchlight()});
+					if (LightAlgo::IsBorderLightInterfere(x, y, z, light.GetSunlight()))
+						sunlight_entries.push({{x, y, z}, light.GetSunlight()});
+					if (LightAlgo::IsBorderLightInterfere(x, y, z, light.GetTorchlight()))
+						torchlight_entries.push({{x, y, z}, light.GetTorchlight()});
 				}
-		initial_sunlight_bfs();
+
+		LightAlgo algo{};
+		algo.PropagateLight(
+		    std::move(sunlight_entries), [this](auto x, auto y, auto z) -> block::Block { return get_block(x, y, z); },
+		    [](auto x, auto y, auto z) -> block::LightLvl {
+			    return m_light_buffer[chunk_xyz_extended15_to_index(x, y, z)].GetSunlight();
+		    },
+		    [](auto x, auto y, auto z, block::LightLvl lvl) {
+			    m_light_buffer[chunk_xyz_extended15_to_index(x, y, z)].SetSunlight(lvl);
+		    });
+		algo.PropagateLight(
+		    std::move(torchlight_entries),
+		    [this](auto x, auto y, auto z) -> block::Block { return get_block(x, y, z); },
+		    [](auto x, auto y, auto z) -> block::LightLvl {
+			    return m_light_buffer[chunk_xyz_extended15_to_index(x, y, z)].GetTorchlight();
+		    },
+		    [](auto x, auto y, auto z, block::LightLvl lvl) {
+			    m_light_buffer[chunk_xyz_extended15_to_index(x, y, z)].SetTorchlight(lvl);
+		    });
 		m_chunk_ptr->PushLight(m_light_version, m_light_buffer);
 	}
 
 	std::vector<BlockMesh> meshes =
 	    BlockMeshAlgo<BlockAlgoConfig<uint32_t, BlockAlgoBound<uint32_t>{0, 0, 0, kChunkSize, kChunkSize, kChunkSize},
 	                                  kBlockAlgoSwizzleYZX>>{}
-	        .Generate(
-	            [this](auto x, auto y, auto z) -> block::Block { return get_block(x, y, z); },
-	            [](auto x, auto y, auto z) -> block::Light { return m_light_buffer[chunk_xyz_extended15_to_index(x, y, z)]; });
+	        .Generate([this](auto x, auto y, auto z) -> block::Block { return get_block(x, y, z); },
+	                  [](auto x, auto y, auto z) -> block::Light {
+		                  return m_light_buffer[chunk_xyz_extended15_to_index(x, y, z)];
+	                  });
 
 	auto world_ptr = m_chunk_ptr->LockWorld();
 	if (!world_ptr)
