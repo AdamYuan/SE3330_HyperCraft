@@ -70,8 +70,8 @@ void ChunkMesher::Run() {
 
 	if (m_init_light) {
 		using LightAlgo = BlockLightAlgo<
-		    BlockAlgoConfig<int32_t, BlockAlgoBound<int32_t>(-1, -1, -1, (int32_t)kChunkSize + 1,
-		                                                     (int32_t)kChunkSize + 1, (int32_t)kChunkSize + 1)>,
+		    BlockAlgoConfig<int32_t, BlockAlgoBound<int32_t>{-1, -1, -1, (int32_t)kChunkSize + 1,
+		                                                     (int32_t)kChunkSize + 1, (int32_t)kChunkSize + 1}>,
 		    14>;
 
 		LightAlgo::Queue sunlight_entries, torchlight_entries;
