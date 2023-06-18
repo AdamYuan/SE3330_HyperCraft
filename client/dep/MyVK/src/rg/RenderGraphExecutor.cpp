@@ -617,7 +617,7 @@ void RenderGraphExecutor::create_render_passes_and_framebuffers(
 					attachments[att_id].references.push_back({p_input, subpass_id});
 
 					subpass_desc.depth_attachment =
-					    std::optional<VkAttachmentReference2>{VK_STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2};
+					    std::optional<VkAttachmentReference2>{{VK_STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2}};
 					auto &att_ref = subpass_desc.depth_attachment.value();
 					att_ref.attachment = att_id;
 					att_ref.layout = UsageGetImageLayout(p_input->GetUsage());
