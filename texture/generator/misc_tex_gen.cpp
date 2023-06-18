@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <cinttypes>
 
 #include <stb_image.h>
 
